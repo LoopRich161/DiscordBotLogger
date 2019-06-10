@@ -7,6 +7,9 @@ import net.dv8tion.jda.core.entities.TextChannel;
 import javax.security.auth.login.LoginException;
 
 public class DiscordBot {
+
+    private static DiscordBot bot;
+
     private String tokenBot;
     private String channel;
     private TextChannel loggerChannel = null;
@@ -28,6 +31,15 @@ public class DiscordBot {
             e.printStackTrace();
         }
         loggerChannel = jda.getTextChannelById(channel);
+        bot = this;
+        return loggerChannel != null;
+    }
+
+    public static DiscordBot getBot(){
+        return bot;
+    }
+
+    public boolean isEnabled(){
         return loggerChannel != null;
     }
 

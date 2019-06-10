@@ -13,13 +13,15 @@ public class Core extends JavaPlugin {
         plugin = this;
         getServer().getPluginManager().registerEvents(new EventHandlers(), this);
         loadDiscordBot();
+        BotCommand.reg();
     }
 
-    private void loadDiscordBot() {
+    void loadDiscordBot() {
         this.getLogger().info("Developed by " + getDescription().getAuthors());
         String token = getConfig().getString("bot.token");
         String channel = getConfig().getString("bot.channel-id");
         discordBot = new DiscordBot(token, channel);
+        System.out.println("Bot successful loaded!");
         if (!discordBot.createBot()) {
             System.out.println("PLUGIN DISABLE! YOU HAVE PROBLEMS WITH DISCORD BOT!");
             getPluginLoader().disablePlugin(this);

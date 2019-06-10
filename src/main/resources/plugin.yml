@@ -3,3 +3,7 @@ version: ${project.version}
 main: ru.looprich.discordlogger.Core
 authors: [LoopRich161, FrostDelta123]
 description: We look console in the online mode!
+commands:
+  bot:
+    permission: discordlogger.bot
+    permission-message: U dont have permissions!
