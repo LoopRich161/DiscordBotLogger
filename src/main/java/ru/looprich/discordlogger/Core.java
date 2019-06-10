@@ -11,6 +11,7 @@ public class Core extends JavaPlugin {
 
     @Override
     public void onEnable() {
+        this.getLogger().info("Developed by " + getDescription().getAuthors());
         plugin = this;
         getServer().getPluginManager().registerEvents(new EventHandlers(), this);
         isEnabled = getConfig().getBoolean("bot.enabled");
@@ -23,7 +24,6 @@ public class Core extends JavaPlugin {
     }
 
     void loadDiscordBot() {
-        this.getLogger().info("Developed by " + getDescription().getAuthors());
         String token = getConfig().getString("bot.token");
         String channel = getConfig().getString("bot.channel-id");
         discordBot = new DiscordBot(token, channel);
