@@ -1,15 +1,16 @@
-package ru.looprich.discordlogger;
+package ru.frostdelta.discord;
 
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import ru.looprich.discordlogger.Core;
 import ru.looprich.discordlogger.events.EventHandlers;
 import ru.looprich.discordlogger.modules.DiscordBot;
 
 public class BotCommand implements CommandExecutor {
 
-    static void reg(){
+    public static void reg(){
         Core.getInstance().getCommand("bot").setExecutor(new BotCommand());
     }
 

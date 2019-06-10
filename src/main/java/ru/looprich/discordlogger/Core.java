@@ -1,6 +1,7 @@
 package ru.looprich.discordlogger;
 
 import org.bukkit.plugin.java.JavaPlugin;
+import ru.frostdelta.discord.BotCommand;
 import ru.looprich.discordlogger.events.EventHandlers;
 import ru.looprich.discordlogger.modules.DiscordBot;
 
@@ -24,7 +25,7 @@ public class Core extends JavaPlugin {
         }else getLogger().info("DiscordBotLogging disabled!");
     }
 
-    void loadDiscordBot() {
+    public void loadDiscordBot() {
         String token = getConfig().getString("bot.token");
         String channel = getConfig().getString("bot.channel-id");
         discordBot = new DiscordBot(token, channel);
