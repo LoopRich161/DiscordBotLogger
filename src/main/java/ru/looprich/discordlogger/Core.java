@@ -7,13 +7,19 @@ import ru.looprich.discordlogger.modules.DiscordBot;
 public class Core extends JavaPlugin {
     private static Core plugin;
     private DiscordBot discordBot;
+    private boolean isEnabled;
 
     @Override
     public void onEnable() {
         plugin = this;
         getServer().getPluginManager().registerEvents(new EventHandlers(), this);
-        loadDiscordBot();
-        BotCommand.reg();
+        isEnabled = getConfig().getBoolean("bot.enabled");
+        if(isEnabled) {
+            getLogger().info("DiscordBotLogging enabled!");
+            getLogger().info("Loading...");
+            loadDiscordBot();
+            BotCommand.reg();
+        }else getLogger().info("DiscordBotLogging disabled!");
     }
 
     void loadDiscordBot() {
