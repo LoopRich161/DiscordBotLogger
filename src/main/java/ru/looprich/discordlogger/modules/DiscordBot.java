@@ -7,6 +7,9 @@ import net.dv8tion.jda.core.entities.TextChannel;
 import javax.security.auth.login.LoginException;
 
 public class DiscordBot {
+
+    private static DiscordBot bot;
+    private static boolean localEnabled = true;
     private String tokenBot;
     private String channel;
     private TextChannel loggerChannel = null;
@@ -28,8 +31,24 @@ public class DiscordBot {
             e.printStackTrace();
         }
         loggerChannel = jda.getTextChannelById(channel);
-        if (loggerChannel == null) return false;
-        return true;
+        bot = this;
+        return loggerChannel != null;
+    }
+
+    public static DiscordBot getBot(){
+        return bot;
+    }
+
+    public boolean isEnabled(){
+        return loggerChannel != null;
+    }
+
+    public static void setLocalEnabled(boolean localEnabled) {
+        DiscordBot.localEnabled = localEnabled;
+    }
+
+    public static boolean isLocalEnabled() {
+        return localEnabled;
     }
 
     public void sendMessageChannel(String message) {
