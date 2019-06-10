@@ -7,12 +7,13 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.*;
 import ru.looprich.discordlogger.Core;
+import ru.looprich.discordlogger.modules.DiscordBot;
 
 import java.util.Date;
 
 public class EventHandlers implements Listener {
 
-    private void sendMessage(String message) {
+    public static void sendMessage(String message) {
         Date date = new Date();
         String hours, minutes, seconds;
         if (date.getHours() < 10) hours = "0" + date.getHours();
@@ -75,6 +76,10 @@ public class EventHandlers implements Listener {
         char globalChat = '!';
         if (event.getMessage().charAt(0) == globalChat)
             sendMessage("[G]<" + player.getName() + "> " + msg);
-        else sendMessage("[L]<" + player.getName() + "> " + msg);
+        else {
+            if(DiscordBot.isLocalEnabled()) {
+                sendMessage("[L]<" + player.getName() + "> " + msg);
+            }
+        }
     }
 }

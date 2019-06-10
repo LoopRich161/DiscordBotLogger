@@ -9,7 +9,7 @@ import javax.security.auth.login.LoginException;
 public class DiscordBot {
 
     private static DiscordBot bot;
-
+    private static boolean localEnabled = true;
     private String tokenBot;
     private String channel;
     private TextChannel loggerChannel = null;
@@ -41,6 +41,14 @@ public class DiscordBot {
 
     public boolean isEnabled(){
         return loggerChannel != null;
+    }
+
+    public static void setLocalEnabled(boolean localEnabled) {
+        DiscordBot.localEnabled = localEnabled;
+    }
+
+    public static boolean isLocalEnabled() {
+        return localEnabled;
     }
 
     public void sendMessageChannel(String message) {

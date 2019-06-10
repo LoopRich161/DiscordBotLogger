@@ -4,6 +4,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import ru.looprich.discordlogger.events.EventHandlers;
 import ru.looprich.discordlogger.modules.DiscordBot;
 
 public class BotCommand implements CommandExecutor {
@@ -14,7 +15,14 @@ public class BotCommand implements CommandExecutor {
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        if(args.length == 1){
+        if(command.getName().equalsIgnoreCase("toggle") && args.length == 1){
+            if (DiscordBot.isLocalEnabled()) {
+                DiscordBot.setLocalEnabled(false);
+            } else DiscordBot.setLocalEnabled(true);
+            EventHandlers.sendMessage("Чат переключен!");
+            return true;
+        }
+        if(command.getName().equalsIgnoreCase("bot") && args.length == 1){
             switch (args[0]){
                 case "enable":
                     if(!DiscordBot.getBot().isEnabled()) {
