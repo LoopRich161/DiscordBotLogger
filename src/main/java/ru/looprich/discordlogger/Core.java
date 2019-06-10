@@ -16,6 +16,7 @@ public class Core extends JavaPlugin {
     }
 
     private void loadDiscordBot() {
+        this.getLogger().info("Developed by " + getDescription().getAuthors());
         String token = getConfig().getString("bot.token");
         String channel = getConfig().getString("bot.channel-id");
         discordBot = new DiscordBot(token, channel);

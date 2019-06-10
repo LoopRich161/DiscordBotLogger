@@ -28,8 +28,7 @@ public class DiscordBot {
             e.printStackTrace();
         }
         loggerChannel = jda.getTextChannelById(channel);
-        if (loggerChannel == null) return false;
-        return true;
+        return loggerChannel != null;
     }
 
     public void sendMessageChannel(String message) {
