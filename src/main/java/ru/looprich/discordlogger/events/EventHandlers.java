@@ -11,7 +11,6 @@ import ru.looprich.discordlogger.Core;
 import java.util.Date;
 
 public class EventHandlers implements Listener {
-    private char globalChat = '!';
 
     private void sendMessage(String message) {
         Date date = new Date();
@@ -73,6 +72,7 @@ public class EventHandlers implements Listener {
     void onAsyncPlayerChatEvent(AsyncPlayerChatEvent event) {
         Player player = event.getPlayer();
         String msg = event.getMessage().replace("!", "");
+        char globalChat = '!';
         if (event.getMessage().charAt(0) == globalChat)
             sendMessage("[G]<" + player.getName() + "> " + msg);
         else sendMessage("[L]<" + player.getName() + "> " + msg);

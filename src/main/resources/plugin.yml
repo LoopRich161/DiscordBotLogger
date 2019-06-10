@@ -1,5 +1,5 @@
 name: DiscordBotLogger
-version: 1.3
+version: ${project.version}
 main: ru.looprich.discordlogger.Core
-authors: [LoopRich161]
+authors: [LoopRich161, FrostDelta123]
 description: We look console in the online mode!
