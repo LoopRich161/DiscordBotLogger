@@ -13,6 +13,7 @@ public class Core extends JavaPlugin {
     public void onEnable() {
         this.getLogger().info("Developed by " + getDescription().getAuthors());
         plugin = this;
+        this.saveDefaultConfig();
         getServer().getPluginManager().registerEvents(new EventHandlers(), this);
         isEnabled = getConfig().getBoolean("bot.enabled");
         if(isEnabled) {
