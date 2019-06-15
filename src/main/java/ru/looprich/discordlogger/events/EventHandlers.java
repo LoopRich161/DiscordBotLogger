@@ -58,12 +58,12 @@ public class EventHandlers implements Listener {
         sendMessage(player.getName() + " has made the advancement [" + event.getAdvancement().getKey() + "]");
     }
 
-    @EventHandler(priority = EventPriority.MONITOR)
+    @EventHandler(priority = EventPriority.LOWEST)
     void onAsyncPlayerChatEvent(AsyncPlayerChatEvent event) {
         Player player = event.getPlayer();
-        String msg = event.getMessage().replace("!", "");
+        String msg = event.getMessage();
         if (event.getMessage().startsWith("!"))
-            sendMessage("[G]<" + player.getName() + "> " + msg);
+            sendMessage("[G]<" + player.getName() + "> " + msg.replace("!", ""));
         else {
             if (DiscordBot.isLocalEnabled()) {
                 sendMessage("[L]<" + player.getName() + "> " + msg);
