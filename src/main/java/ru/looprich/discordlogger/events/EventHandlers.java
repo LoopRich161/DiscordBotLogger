@@ -49,7 +49,7 @@ public class EventHandlers implements Listener {
     @EventHandler(priority = EventPriority.MONITOR)
     void onPlayerDeathEvent(PlayerDeathEvent event) {
         Player player = event.getEntity();
-        sendMessage(player.getName() + " " + event.getDeathMessage());
+        sendMessage(player.getName() + " died due to:" + event.getDeathMessage());
     }
 
     @EventHandler(priority = EventPriority.MONITOR)
