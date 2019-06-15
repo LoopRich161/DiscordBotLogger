@@ -14,17 +14,7 @@ import java.util.Date;
 public class EventHandlers implements Listener {
 
     public static void sendMessage(String message) {
-        Date date = new Date();
-        String hours, minutes, seconds;
-        if (date.getHours() < 10) hours = "0" + date.getHours();
-        else hours = String.valueOf(date.getHours());
-        if (date.getMinutes() < 10) minutes = "0" + date.getMinutes();
-        else minutes = String.valueOf(date.getMinutes());
-        if (date.getSeconds() < 10) seconds = "0" + date.getSeconds();
-        else seconds = String.valueOf(date.getSeconds());
-        String data = "**[" + hours + ":" + minutes + ":" + seconds + "]:** ";
-        message = "__" + message + "__";
-        Core.getInstance().sendMessageDiscord(data + message);
+        Core.getInstance().sendMessageDiscord(message);
     }
 
 
@@ -66,7 +56,7 @@ public class EventHandlers implements Listener {
     @EventHandler(priority = EventPriority.MONITOR)
     void onPlayerAdvancementDoneEvent(PlayerAdvancementDoneEvent event) {
         Player player = event.getPlayer();
-        sendMessage(player.getName() + " has made the advancement [" + event.getAdvancement().getKey().getKey() + "]");
+        sendMessage(player.getName() + " has made the advancement [" + event.getAdvancement().getKey() + "]");
     }
 
     @EventHandler(priority = EventPriority.MONITOR)
@@ -77,7 +67,7 @@ public class EventHandlers implements Listener {
         if (event.getMessage().charAt(0) == globalChat)
             sendMessage("[G]<" + player.getName() + "> " + msg);
         else {
-            if(DiscordBot.isLocalEnabled()) {
+            if (DiscordBot.isLocalEnabled()) {
                 sendMessage("[L]<" + player.getName() + "> " + msg);
             }
         }

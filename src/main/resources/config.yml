@@ -2,3 +2,4 @@ bot:
   enabled: true
   token: 'NTg2ODIwNjQ1MjIwOTA5MDY2.XPtlaA.8QfVkOAeH1BcTJqvZv-y_jL_ZYg'
   channel-id: '586875380078739487'
+  local-chat: true

@@ -11,7 +11,7 @@ import ru.looprich.discordlogger.modules.DiscordBot;
 
 public class BotCommand implements CommandExecutor {
 
-    public static void reg(){
+    public static void reg() {
         BotCommand botCommand = new BotCommand();
         Core.getInstance().getCommand("bot").setExecutor(botCommand);
         Core.getInstance().getCommand("toggle").setExecutor(botCommand);
@@ -20,36 +20,39 @@ public class BotCommand implements CommandExecutor {
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        if (sender instanceof Player){
-            sender.sendMessage("Only for console!");
+        if (sender instanceof Player) {
+            sender.sendMessage(ChatColor.RED + "Only for console!");
             return true;
         }
-        if(command.getName().equalsIgnoreCase("toggle") && args.length == 1){
+        if (command.getName().equalsIgnoreCase("toggle")) {
             if (DiscordBot.isLocalEnabled()) {
                 DiscordBot.setLocalEnabled(false);
                 EventHandlers.sendMessage("Локальный чат отключен!");
+                Core.getInstance().getLogger().info("Local chat disable!");
             } else {
                 DiscordBot.setLocalEnabled(true);
                 EventHandlers.sendMessage("Локальный чат включен!");
+                Core.getInstance().getLogger().info("Local chat enable!");
             }
             return true;
-        }else sender.sendMessage(ChatColor.RED + "Command usage: " + ChatColor.GOLD + "/toggle <true/false>");
+        }
 
-        if(command.getName().equalsIgnoreCase("bot") && args.length == 1){
-            switch (args[0]){
+        if (command.getName().equalsIgnoreCase("bot") && args.length == 1) {
+            switch (args[0]) {
                 case "enable":
-                    if(!DiscordBot.getBot().isEnabled()) {
+                    if (!DiscordBot.isEnabled()) {
                         Core.getInstance().loadDiscordBot();
                         Core.getInstance().getLogger().info("Bot successful enabled!");
                     } else Core.getInstance().getLogger().info("Bot already enabled!");
                     break;
                 case "disable":
-                    DiscordBot.getBot().getJDA().shutdownNow();
+                    DiscordBot.sendMessageChannel("Bot successful disabled!");
+                    DiscordBot.shutdown();
                     Core.getInstance().getLogger().info("Bot successful disabled!");
                     break;
                 case "restart":
-                    if(DiscordBot.getBot().isEnabled()) {
-                        DiscordBot.getBot().getJDA().shutdownNow();
+                    if (DiscordBot.isEnabled()) {
+                        DiscordBot.shutdown();
                         Core.getInstance().loadDiscordBot();
                         Core.getInstance().getLogger().info("Bot successful restarted!");
                     } else {
@@ -58,7 +61,7 @@ public class BotCommand implements CommandExecutor {
                     }
                     break;
             }
-        }else sender.sendMessage(ChatColor.RED + "Command usage: " + ChatColor.GOLD + "/bot <enable/disable/restart>");
+        } else sender.sendMessage(ChatColor.RED + "Command usage: " + ChatColor.GOLD + "/bot <enable/disable/restart>");
         return true;
     }
 

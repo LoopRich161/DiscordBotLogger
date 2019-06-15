@@ -7,8 +7,8 @@ import ru.looprich.discordlogger.modules.DiscordBot;
 
 public class Core extends JavaPlugin {
     private static Core plugin;
-    private DiscordBot discordBot;
     private boolean isEnabled;
+    public DiscordBot discordBot;
 
     @Override
     public void onEnable() {
@@ -29,7 +29,7 @@ public class Core extends JavaPlugin {
         String token = getConfig().getString("bot.token");
         String channel = getConfig().getString("bot.channel-id");
         discordBot = new DiscordBot(token, channel);
-        System.out.println("Bot successful loaded!");
+        getLogger().info("Bot successful loaded!");
         if (!discordBot.createBot()) {
             System.out.println("PLUGIN DISABLE! YOU HAVE PROBLEMS WITH DISCORD BOT!");
             getPluginLoader().disablePlugin(this);
@@ -41,11 +41,14 @@ public class Core extends JavaPlugin {
     }
 
     public void sendMessageDiscord(String message) {
-        discordBot.sendMessageChannel(message);
+        if (!DiscordBot.isEnabled())return;
+        DiscordBot.sendMessageChannel(message);
     }
 
     @Override
     public void onDisable() {
-        discordBot.getJDA().shutdownNow();
+        if (DiscordBot.isEnabled()){
+            DiscordBot.shutdown();
+        }
     }
 }

@@ -3,21 +3,24 @@ package ru.looprich.discordlogger.modules;
 import net.dv8tion.jda.core.JDA;
 import net.dv8tion.jda.core.JDABuilder;
 import net.dv8tion.jda.core.entities.TextChannel;
+import ru.looprich.discordlogger.Core;
 
 import javax.security.auth.login.LoginException;
+import java.util.Date;
 
 public class DiscordBot {
 
     private static DiscordBot bot;
-    private static boolean localEnabled = true;
-    private String tokenBot;
-    private String channel;
-    private TextChannel loggerChannel = null;
-    private JDA jda = null;
+    private static boolean localEnabled;
+    private static String tokenBot;
+    private static String channel;
+    private static TextChannel loggerChannel = null;
+    private static JDA jda = null;
+    private static boolean enable;
 
     public DiscordBot(String tokenBot, String channel) {
-        this.tokenBot = tokenBot;
-        this.channel = channel;
+        DiscordBot.tokenBot = tokenBot;
+        DiscordBot.channel = channel;
     }
 
     public boolean createBot() {
@@ -32,15 +35,30 @@ public class DiscordBot {
         }
         loggerChannel = jda.getTextChannelById(channel);
         bot = this;
+        localEnabled = Core.getInstance().getConfig().getBoolean("bot.local-chat");
+        enable = true;
+        sendMessageChannel("Bot successful loaded!");
         return loggerChannel != null;
     }
 
-    public static DiscordBot getBot(){
+    public static DiscordBot getBot() {
         return bot;
     }
 
-    public boolean isEnabled(){
-        return loggerChannel != null;
+    public static boolean isEnabled() {
+        return enable;
+    }
+
+    public static void shutdown() {
+        sendMessageChannel("Bot shutdown!");
+        bot = null;
+        localEnabled = true;
+        tokenBot = null;
+        channel = null;
+        loggerChannel = null;
+        enable = false;
+        Core.getInstance().discordBot = null;
+        jda.shutdownNow();
     }
 
     public static void setLocalEnabled(boolean localEnabled) {
@@ -51,8 +69,21 @@ public class DiscordBot {
         return localEnabled;
     }
 
-    public void sendMessageChannel(String message) {
-        loggerChannel.sendMessage(message).queue();
+    public static void sendMessageChannel(String message) {
+        loggerChannel.sendMessage(data() + message).queue();
+    }
+
+    private static String data() {
+        Date date = new Date();
+        String hours, minutes, seconds;
+        if (date.getHours() < 10) hours = "0" + date.getHours();
+        else hours = String.valueOf(date.getHours());
+        if (date.getMinutes() < 10) minutes = "0" + date.getMinutes();
+        else minutes = String.valueOf(date.getMinutes());
+        if (date.getSeconds() < 10) seconds = "0" + date.getSeconds();
+        else seconds = String.valueOf(date.getSeconds());
+        String data = "**[" + hours + ":" + minutes + ":" + seconds + "]:** ";
+        return data;
     }
 
     public JDA getJDA() {

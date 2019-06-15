@@ -7,3 +7,6 @@ commands:
   bot:
     permission: discordlogger.bot
     permission-message: U dont have permissions!
+  toggle:
+    permission: discordlogger.toggle
+    permission-message: U dont have permissions!
