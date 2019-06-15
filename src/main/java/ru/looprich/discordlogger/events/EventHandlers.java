@@ -62,8 +62,7 @@ public class EventHandlers implements Listener {
     void onAsyncPlayerChatEvent(AsyncPlayerChatEvent event) {
         Player player = event.getPlayer();
         String msg = event.getMessage().replace("!", "");
-        char globalChat = '!';
-        if (event.getMessage().charAt(0) == globalChat)
+        if (event.getMessage().startsWith("!"))
             sendMessage("[G]<" + player.getName() + "> " + msg);
         else {
             if (DiscordBot.isLocalEnabled()) {
