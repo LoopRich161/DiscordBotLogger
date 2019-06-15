@@ -8,16 +8,20 @@
     <artifactId>DiscordBotLogger</artifactId>
     <version>1.4.1</version>
 
+
+    <scm>
+        <connection>scm:git:https://github.com/LoopRich161/DiscordBotLogger.git</connection>
+    </scm>
+
     <build>
         <defaultGoal>clean package</defaultGoal>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.7.0</version>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>2.3.2</version>
                 <configuration>
-                    <source>1.8</source>
-                    <target>1.8</target>
+                    <finalName>${project.artifactId}-${project.version}b${buildNumber}</finalName>
                 </configuration>
             </plugin>
             <plugin>
@@ -36,6 +40,27 @@
                     </execution>
                 </executions>
             </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>buildnumber-maven-plugin</artifactId>
+                <version>1.4</version>
+                <executions>
+                    <execution>
+                        <phase>validate</phase>
+                        <goals>
+                            <goal>create</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <format>{0,number}</format>
+                    <items>
+                        <item>buildNumber0</item>
+                    </items>
+                    <doCheck>false</doCheck>
+                    <doUpdate>true</doUpdate>
+                </configuration>
+            </plugin>
         </plugins>
         <resources>
             <resource>
@@ -43,9 +68,12 @@
                 <filtering>true</filtering>
             </resource>
         </resources>
+
     </build>
 
     <properties>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
