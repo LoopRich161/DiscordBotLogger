@@ -29,10 +29,12 @@ public class BotCommand implements CommandExecutor {
                 DiscordBot.setLocalEnabled(false);
                 EventHandlers.sendMessage("Локальный чат отключен!");
                 Core.getInstance().getLogger().info("Local chat disable!");
+                Core.getInstance().getConfig().set("local-chat", false);
             } else {
                 DiscordBot.setLocalEnabled(true);
                 EventHandlers.sendMessage("Локальный чат включен!");
                 Core.getInstance().getLogger().info("Local chat enable!");
+                Core.getInstance().getConfig().set("local-chat", true);
             }
             return true;
         }

@@ -82,11 +82,6 @@ public class DiscordBot {
         else minutes = String.valueOf(date.getMinutes());
         if (date.getSeconds() < 10) seconds = "0" + date.getSeconds();
         else seconds = String.valueOf(date.getSeconds());
-        String data = "**[" + hours + ":" + minutes + ":" + seconds + "]:** ";
-        return data;
-    }
-
-    public JDA getJDA() {
-        return jda;
+        return "**[" + hours + ":" + minutes + ":" + seconds + "]:** ";
     }
 }
