@@ -1,5 +1,9 @@
 package ru.looprich.discordlogger.events;
 
+import org.bukkit.Achievement;
+import org.bukkit.Bukkit;
+import org.bukkit.advancement.Advancement;
+import org.bukkit.advancement.AdvancementProgress;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -48,15 +52,15 @@ public class EventHandlers implements Listener {
 
     @EventHandler(priority = EventPriority.MONITOR)
     void onPlayerDeathEvent(PlayerDeathEvent event) {
-        Player player = event.getEntity();
-        sendMessage(player.getName() + " died due to:" + event.getDeathMessage());
+        sendMessage(event.getDeathMessage());
     }
 
-    @EventHandler(priority = EventPriority.MONITOR)
-    void onPlayerAdvancementDoneEvent(PlayerAdvancementDoneEvent event) {
-        Player player = event.getPlayer();
-        sendMessage(player.getName() + " has made the advancement [" + event.getAdvancement().getKey() + "]");
-    }
+//    @EventHandler(priority = EventPriority.MONITOR)
+//    void onPlayerAchievementAwardedEvent(PlayerAdvancementDoneEvent event) {
+//        Player player = event.getPlayer();
+//        Advancement advancement = event.getAdvancement();
+//        sendMessage(player.getName() + " has made the advancement [" + advancement + "]");
+//    }
 
     @EventHandler(priority = EventPriority.LOWEST)
     void onAsyncPlayerChatEvent(AsyncPlayerChatEvent event) {
