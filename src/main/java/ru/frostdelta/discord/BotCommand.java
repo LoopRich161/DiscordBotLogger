@@ -12,10 +12,8 @@ import ru.looprich.discordlogger.modules.DiscordBot;
 public class BotCommand implements CommandExecutor {
 
     public static void reg() {
-        BotCommand botCommand = new BotCommand();
-        Core.getInstance().getCommand("bot").setExecutor(botCommand);
-        Core.getInstance().getCommand("toggle").setExecutor(botCommand);
-
+        Core.getInstance().getCommand("bot").setExecutor(new BotCommand());
+        Core.getInstance().getCommand("toggle").setExecutor(new BotCommand());
     }
 
     @Override
@@ -40,27 +38,27 @@ public class BotCommand implements CommandExecutor {
             switch (args[0]) {
                 case "reload":
                     Core.getInstance().reloadConfig();
-                    Core.getInstance().getLogger().info("Bot already enabled!");
+                    sender.sendMessage("Bot already enabled!");
                     break;
                 case "enable":
                     if (!DiscordBot.isEnabled()) {
                         Core.getInstance().loadDiscordBot();
-                        Core.getInstance().getLogger().info("Bot successful enabled!");
-                    } else Core.getInstance().getLogger().info("Bot already enabled!");
+                        sender.sendMessage("Bot successful enabled!");
+                    } else  sender.sendMessage("Bot already enabled!");
                     break;
                 case "disable":
                     DiscordBot.sendMessageChannel("Bot successful disabled!");
                     DiscordBot.shutdown();
-                    Core.getInstance().getLogger().info("Bot successful disabled!");
+                    sender.sendMessage("Bot successful disabled!");
                     break;
                 case "restart":
                     if (DiscordBot.isEnabled()) {
                         DiscordBot.shutdown();
                         Core.getInstance().loadDiscordBot();
-                        Core.getInstance().getLogger().info("Bot successful restarted!");
+                        sender.sendMessage("Bot successful restarted!");
                     } else {
                         Core.getInstance().loadDiscordBot();
-                        Core.getInstance().getLogger().info("Bot successful restarted!");
+                        sender.sendMessage("Bot successful restarted!");
                     }
                     break;
             }
