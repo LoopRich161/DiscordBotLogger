@@ -10,7 +10,6 @@ import ru.looprich.discordlogger.modules.DiscordBot;
 
 import static ru.looprich.discordlogger.modules.DiscordBot.sendMessage;
 
-
 public class EventHandlers implements Listener {
 
 

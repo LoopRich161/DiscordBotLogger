@@ -2,7 +2,10 @@ package ru.looprich.discordlogger.modules;
 
 import net.dv8tion.jda.core.JDA;
 import net.dv8tion.jda.core.JDABuilder;
+import net.dv8tion.jda.core.OnlineStatus;
+import net.dv8tion.jda.core.entities.Game;
 import net.dv8tion.jda.core.entities.TextChannel;
+import ru.frostdelta.discord.RemoteConfigControl;
 import ru.looprich.discordlogger.Core;
 
 import javax.security.auth.login.LoginException;
@@ -17,6 +20,7 @@ public class DiscordBot {
     private static TextChannel loggerChannel = null;
     private static JDA jda = null;
     private static boolean enable;
+    public static String prefix = "~";
 
     public DiscordBot(String tokenBot, String channel) {
         DiscordBot.tokenBot = tokenBot;
@@ -31,6 +35,9 @@ public class DiscordBot {
     public boolean createBot() {
         try {
             jda = new JDABuilder(tokenBot).build().awaitReady();
+            jda.getPresence().setStatus(OnlineStatus.IDLE);
+            jda.getPresence().setGame(Game.watching("за вашим сервером."));
+            jda.addEventListener(new RemoteConfigControl());
         } catch (LoginException e) {
             System.out.println("Invalid token!");
             e.printStackTrace();
@@ -78,6 +85,7 @@ public class DiscordBot {
         loggerChannel.sendMessage(data() + message).queue();
     }
 
+    @Deprecated
     private static String data() {
         Date date = new Date();
         String hours, minutes, seconds;
