@@ -1,6 +1,7 @@
 name: DiscordBotLogger
 version: ${project.version}
 main: ru.looprich.discordlogger.Core
+load: STARTUP
 authors: [LoopRich161, FrostDelta123]
 description: We look console in the online mode!
 commands:
