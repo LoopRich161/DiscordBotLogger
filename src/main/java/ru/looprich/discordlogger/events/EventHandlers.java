@@ -1,10 +1,10 @@
 package ru.looprich.discordlogger.events;
 
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.*;
 import ru.looprich.discordlogger.modules.DiscordBot;
 
@@ -44,23 +44,18 @@ public class EventHandlers implements Listener {
     }
 
     @EventHandler(priority = EventPriority.MONITOR)
-    void onPlayerDeathEvent(PlayerDeathEvent event) {
-        sendMessage(event.getDeathMessage());
-    }
-
-    @EventHandler(priority = EventPriority.MONITOR)
     void onPlayerAchievementAwardedEvent(PlayerAdvancementDoneEvent event) {
         Player player = event.getPlayer();
         sendMessage(player.getName() + " has made the advancement!");
     }
 
-    @EventHandler(priority = EventPriority.LOWEST)
+    @EventHandler(priority = EventPriority.MONITOR)
     void onAsyncPlayerChatEvent(AsyncPlayerChatEvent event) {
         Player player = event.getPlayer();
         String msg = event.getMessage();
-        if (event.getMessage().startsWith("!"))
+        if (event.getRecipients().size() == Bukkit.getOnlinePlayers().size()) {
             sendMessage("[G]<" + player.getName() + "> " + msg.replace("!", ""));
-        else {
+        } else {
             if (DiscordBot.isLocalEnabled()) {
                 sendMessage("[L]<" + player.getName() + "> " + msg);
             }
