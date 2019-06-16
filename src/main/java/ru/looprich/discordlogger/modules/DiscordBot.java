@@ -17,7 +17,7 @@ public class DiscordBot {
     private static TextChannel loggerChannel = null;
     private static JDA jda = null;
     private static boolean enable;
-    public static String prefix = "~";
+    public static final String prefix = "~";
 
     public DiscordBot(String tokenBot, String channel) {
         DiscordBot.tokenBot = tokenBot;
