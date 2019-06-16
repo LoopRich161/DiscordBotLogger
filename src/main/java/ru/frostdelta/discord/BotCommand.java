@@ -12,9 +12,8 @@ import ru.looprich.discordlogger.modules.DiscordBot;
 public class BotCommand implements CommandExecutor {
 
     public static void reg() {
-        BotCommand botCommand = new BotCommand();
-        Core.getInstance().getCommand("bot").setExecutor(botCommand);
-        Core.getInstance().getCommand("toggle").setExecutor(botCommand);
+        Core.getInstance().getCommand("bot").setExecutor(new BotCommand());
+        Core.getInstance().getCommand("toggle").setExecutor(new BotCommand());
 
     }
 
