@@ -16,14 +16,13 @@ public class RemoteConfigControl extends ListenerAdapter {
             EmbedBuilder info = new EmbedBuilder();
             info.setTitle("Помощь");
             info.setDescription("Просмотрев данную информацию станет легче что-то там.");
-            info.addField("Creator","LoopRich161, FrostDelta123",false);
+            info.addField("Создатели","LoopRich161, FrostDelta123",false);
             info.setColor(0xf45642);
 
             event.getChannel().sendTyping().queue();
             event.getChannel().sendMessage(info.build()).queue();
             info.clear();
         }
-        //TODO listening commands from discord channel, config editing
     }
 
 }
