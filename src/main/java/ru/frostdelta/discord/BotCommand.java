@@ -43,6 +43,7 @@ public class BotCommand implements CommandExecutor {
                 case "enable":
                     if (!DiscordBot.isEnabled()) {
                         Core.getInstance().loadDiscordBot();
+                        DiscordBot.sendMessage("Bot successful disabled!");
                         sender.sendMessage("Bot successful enabled!");
                     } else  sender.sendMessage("Bot already enabled!");
                     break;
