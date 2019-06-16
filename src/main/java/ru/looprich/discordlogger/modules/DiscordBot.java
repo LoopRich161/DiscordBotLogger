@@ -1,5 +1,6 @@
 package ru.looprich.discordlogger.modules;
 
+import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.JDA;
 import net.dv8tion.jda.core.JDABuilder;
 import net.dv8tion.jda.core.OnlineStatus;
@@ -49,7 +50,8 @@ public class DiscordBot {
         bot = this;
         localEnabled = DiscordLogger.getInstance().getConfig().getBoolean("bot.local-chat");
         enable = true;
-        DiscordBot.sendMessage("Bot successful loaded!");
+        sendImportantMessage("Я включился!");
+
         return loggerChannel != null;
     }
 
@@ -62,7 +64,7 @@ public class DiscordBot {
     }
 
     public static void shutdown() {
-        DiscordBot.sendMessage("Bot shutdown!");
+        sendImportantMessage("Я выключился!");
         bot = null;
         localEnabled = true;
         tokenBot = null;
@@ -84,6 +86,17 @@ public class DiscordBot {
     public static void sendMessageChannel(String message) {
         loggerChannel.sendMessage(data() + message).queue();
     }
+
+    public static void sendImportantMessage(String msg){
+        EmbedBuilder message = new EmbedBuilder();
+        message.setTitle("Что-то произошло с ботом!");
+        message.setDescription(msg);
+        message.setColor(0xf45642);
+        loggerChannel.sendTyping().queue();
+        loggerChannel.sendMessage(message.build()).queue();
+
+    }
+
 
     @Deprecated
     private static String data() {

@@ -51,7 +51,6 @@ public class DiscordLogger extends JavaPlugin {
         if (!DiscordBot.isEnabled()) return;
         DiscordBot.sendMessageChannel(message);
     }
-
     @Override
     public void onDisable() {
         if (DiscordBot.isEnabled()) {
