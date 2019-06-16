@@ -2,7 +2,10 @@ package ru.looprich.discordlogger.modules;
 
 import net.dv8tion.jda.core.JDA;
 import net.dv8tion.jda.core.JDABuilder;
+import net.dv8tion.jda.core.OnlineStatus;
+import net.dv8tion.jda.core.entities.Game;
 import net.dv8tion.jda.core.entities.TextChannel;
+import ru.frostdelta.discord.RemoteConfigControl;
 import ru.looprich.discordlogger.DiscordLogger;
 
 import javax.security.auth.login.LoginException;
@@ -32,6 +35,9 @@ public class DiscordBot {
     public boolean createBot() {
         try {
             jda = new JDABuilder(tokenBot).build().awaitReady();
+            jda.getPresence().setStatus(OnlineStatus.IDLE);
+            jda.getPresence().setGame(Game.watching("за вашим сервером."));
+            jda.addEventListener(new RemoteConfigControl());
         } catch (LoginException e) {
             System.out.println("Invalid token!");
             e.printStackTrace();
