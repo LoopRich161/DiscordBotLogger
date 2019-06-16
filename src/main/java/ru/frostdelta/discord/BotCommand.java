@@ -7,6 +7,8 @@ import org.bukkit.command.CommandSender;
 import ru.looprich.discordlogger.DiscordLogger;
 import ru.looprich.discordlogger.modules.DiscordBot;
 
+import static ru.looprich.discordlogger.modules.DiscordBot.sendImportantMessage;
+
 public class BotCommand implements CommandExecutor {
 
     public static void reg() {
@@ -20,12 +22,12 @@ public class BotCommand implements CommandExecutor {
         if (command.getName().equalsIgnoreCase("toggle")) {
             if (DiscordBot.isLocalEnabled()) {
                 DiscordBot.setLocalEnabled(false);
-                DiscordBot.sendImportantMessage("Локальный чат отключен!");
+                sendImportantMessage("Локальный чат отключен!");
                 sender.sendMessage("Локальный чат отключен!");
                 DiscordLogger.getInstance().getConfig().set("local-chat", false);
             } else {
                 DiscordBot.setLocalEnabled(true);
-                DiscordBot.sendImportantMessage("Локальный чат включен!");
+                sendImportantMessage("Локальный чат включен!");
                 sender.sendMessage("Локальный чат включен!");
                 DiscordLogger.getInstance().getConfig().set("local-chat", true);
             }
@@ -45,11 +47,13 @@ public class BotCommand implements CommandExecutor {
                     } else  sender.sendMessage("Bot already enabled!");
                     break;
                 case "disable":
+                    sendImportantMessage("Я выключился!");
                     DiscordBot.shutdown();
                     sender.sendMessage("Bot successful disabled!");
                     break;
                 case "restart":
                     if (DiscordBot.isEnabled()) {
+                        sendImportantMessage("Я выключился!");
                         DiscordBot.shutdown();
                         DiscordLogger.getInstance().loadDiscordBot();
                         sender.sendMessage("Bot successful restarted!");

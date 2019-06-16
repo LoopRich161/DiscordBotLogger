@@ -64,7 +64,6 @@ public class DiscordBot {
     }
 
     public static void shutdown() {
-        sendImportantMessage("Я выключился!");
         bot = null;
         localEnabled = true;
         tokenBot = null;
