@@ -12,13 +12,8 @@ import static ru.looprich.discordlogger.modules.DiscordBot.sendMessage;
 
 
 public class EventHandlers implements Listener {
-    
 
-    @EventHandler(priority = EventPriority.MONITOR)
-    void onPlayerCommandPreprocessEvent(PlayerCommandPreprocessEvent event) {
-        Player player = event.getPlayer();
-        sendMessage(player.getName() + " issued server command: " + event.getMessage());
-    }
+
 
     @EventHandler(priority = EventPriority.MONITOR)
     void onPlayerAchievementAwardedEvent(PlayerAdvancementDoneEvent event) {

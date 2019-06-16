@@ -2,9 +2,7 @@ package ru.looprich.discordlogger;
 
 import org.bukkit.plugin.java.JavaPlugin;
 import ru.frostdelta.discord.BotCommand;
-import ru.frostdelta.discord.events.AsyncChatEvent;
-import ru.frostdelta.discord.events.PlayerJoinEvent;
-import ru.frostdelta.discord.events.PlayerLoginEvent;
+import ru.frostdelta.discord.events.*;
 import ru.looprich.discordlogger.modules.DiscordBot;
 
 public class DiscordLogger extends JavaPlugin {
@@ -21,6 +19,8 @@ public class DiscordLogger extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new AsyncChatEvent(), this);
         getServer().getPluginManager().registerEvents(new PlayerLoginEvent(), this);
         getServer().getPluginManager().registerEvents(new PlayerJoinEvent(), this);
+        getServer().getPluginManager().registerEvents(new PlayerQuitEvent(), this);
+        getServer().getPluginManager().registerEvents(new PlayerCommandPreprocessEvent(), this);
         isEnabled = getConfig().getBoolean("bot.enabled");
         if (isEnabled) {
             getLogger().info("DiscordBotLogging enabled!");
