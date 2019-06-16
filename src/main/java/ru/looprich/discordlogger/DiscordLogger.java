@@ -2,11 +2,12 @@ package ru.looprich.discordlogger;
 
 import org.bukkit.plugin.java.JavaPlugin;
 import ru.frostdelta.discord.BotCommand;
-import ru.looprich.discordlogger.events.EventHandlers;
+import ru.frostdelta.discord.events.*;
 import ru.looprich.discordlogger.modules.DiscordBot;
 
-public class Core extends JavaPlugin {
-    private static Core plugin;
+public class DiscordLogger extends JavaPlugin {
+
+    private static DiscordLogger plugin;
     private boolean isEnabled;
     public DiscordBot discordBot;
 
@@ -15,7 +16,13 @@ public class Core extends JavaPlugin {
         this.getLogger().info("Developed by " + getDescription().getAuthors());
         plugin = this;
         this.saveDefaultConfig();
-        getServer().getPluginManager().registerEvents(new EventHandlers(), this);
+        getServer().getPluginManager().registerEvents(new AsyncChatEvent(), this);
+        getServer().getPluginManager().registerEvents(new PlayerLoginEvent(), this);
+        getServer().getPluginManager().registerEvents(new PlayerJoinEvent(), this);
+        getServer().getPluginManager().registerEvents(new PlayerQuitEvent(), this);
+        getServer().getPluginManager().registerEvents(new PlayerCommandPreprocessEvent(), this);
+        getServer().getPluginManager().registerEvents(new AchievementEvent(), this);
+
         isEnabled = getConfig().getBoolean("bot.enabled");
         if (isEnabled) {
             getLogger().info("DiscordBotLogging enabled!");
@@ -36,7 +43,7 @@ public class Core extends JavaPlugin {
         }
     }
 
-    public static Core getInstance() {
+    public static DiscordLogger getInstance() {
         return plugin;
     }
 
