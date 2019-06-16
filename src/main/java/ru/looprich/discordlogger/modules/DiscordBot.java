@@ -3,7 +3,7 @@ package ru.looprich.discordlogger.modules;
 import net.dv8tion.jda.core.JDA;
 import net.dv8tion.jda.core.JDABuilder;
 import net.dv8tion.jda.core.entities.TextChannel;
-import ru.looprich.discordlogger.Core;
+import ru.looprich.discordlogger.DiscordLogger;
 
 import javax.security.auth.login.LoginException;
 import java.util.Date;
@@ -25,7 +25,7 @@ public class DiscordBot {
 
     public static void sendMessage(String message) {
         message.replace("*", "$").replace("_", "$").replace("~", "$");
-        Core.getInstance().sendMessageDiscord(message);
+        DiscordLogger.getInstance().sendMessageDiscord(message);
     }
 
     public boolean createBot() {
@@ -40,7 +40,7 @@ public class DiscordBot {
         }
         loggerChannel = jda.getTextChannelById(channel);
         bot = this;
-        localEnabled = Core.getInstance().getConfig().getBoolean("bot.local-chat");
+        localEnabled = DiscordLogger.getInstance().getConfig().getBoolean("bot.local-chat");
         enable = true;
         DiscordBot.sendMessage("Bot successful loaded!");
         return loggerChannel != null;
@@ -62,7 +62,7 @@ public class DiscordBot {
         channel = null;
         loggerChannel = null;
         enable = false;
-        Core.getInstance().discordBot = null;
+        DiscordLogger.getInstance().discordBot = null;
         jda.shutdownNow();
     }
 

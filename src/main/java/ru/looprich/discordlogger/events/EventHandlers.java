@@ -48,17 +48,4 @@ public class EventHandlers implements Listener {
         Player player = event.getPlayer();
         sendMessage(player.getName() + " has made the advancement!");
     }
-
-    @EventHandler(priority = EventPriority.MONITOR)
-    void onAsyncPlayerChatEvent(AsyncPlayerChatEvent event) {
-        Player player = event.getPlayer();
-        String msg = event.getMessage();
-        if (event.getRecipients().size() == Bukkit.getOnlinePlayers().size()) {
-            sendMessage("[G]<" + player.getName() + "> " + msg.replace("!", ""));
-        } else {
-            if (DiscordBot.isLocalEnabled()) {
-                sendMessage("[L]<" + player.getName() + "> " + msg);
-            }
-        }
-    }
 }
