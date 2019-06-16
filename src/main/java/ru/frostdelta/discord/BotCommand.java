@@ -20,10 +20,7 @@ public class BotCommand implements CommandExecutor {
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        if (sender instanceof Player) {
-            sender.sendMessage(ChatColor.RED + "Only for console!");
-            return true;
-        }
+
         if (command.getName().equalsIgnoreCase("toggle")) {
             if (DiscordBot.isLocalEnabled()) {
                 DiscordBot.setLocalEnabled(false);
@@ -41,6 +38,10 @@ public class BotCommand implements CommandExecutor {
 
         if (command.getName().equalsIgnoreCase("bot") && args.length == 1) {
             switch (args[0]) {
+                case "reload":
+                    Core.getInstance().reloadConfig();
+                    Core.getInstance().getLogger().info("Bot already enabled!");
+                    break;
                 case "enable":
                     if (!DiscordBot.isEnabled()) {
                         Core.getInstance().loadDiscordBot();
