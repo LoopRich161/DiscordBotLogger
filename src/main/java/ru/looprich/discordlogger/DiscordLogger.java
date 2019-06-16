@@ -21,6 +21,8 @@ public class DiscordLogger extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new PlayerJoinEvent(), this);
         getServer().getPluginManager().registerEvents(new PlayerQuitEvent(), this);
         getServer().getPluginManager().registerEvents(new PlayerCommandPreprocessEvent(), this);
+        getServer().getPluginManager().registerEvents(new AchivementEvent(), this);
+
         isEnabled = getConfig().getBoolean("bot.enabled");
         if (isEnabled) {
             getLogger().info("DiscordBotLogging enabled!");
