@@ -14,11 +14,7 @@ import static ru.looprich.discordlogger.modules.DiscordBot.sendMessage;
 public class EventHandlers implements Listener {
 
 
-    @EventHandler(priority = EventPriority.MONITOR)
-    void onPlayerLoginEvent(PlayerLoginEvent event) {
-        Player player = event.getPlayer();
-        sendMessage("UUID of player " + player.getName() + " is " + player.getUniqueId());
-    }
+
 
     @EventHandler(priority = EventPriority.MONITOR)
     void PlayerJoinEvent(PlayerJoinEvent event) {
