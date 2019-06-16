@@ -23,12 +23,12 @@ public class BotCommand implements CommandExecutor {
             if (DiscordBot.isLocalEnabled()) {
                 DiscordBot.setLocalEnabled(false);
                 DiscordBot.sendMessage("Локальный чат отключен!");
-                Core.getInstance().getLogger().info("Local chat disable!");
+                sender.sendMessage("Локальный чат отключен!");
                 Core.getInstance().getConfig().set("local-chat", false);
             } else {
                 DiscordBot.setLocalEnabled(true);
                 DiscordBot.sendMessage("Локальный чат включен!");
-                Core.getInstance().getLogger().info("Local chat enable!");
+                sender.sendMessage("Локальный чат включен!");
                 Core.getInstance().getConfig().set("local-chat", true);
             }
             return true;
