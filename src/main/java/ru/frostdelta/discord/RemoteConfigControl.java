@@ -12,7 +12,7 @@ public class RemoteConfigControl extends ListenerAdapter {
     public void onMessageReceived(MessageReceivedEvent event) {
 
         String [] args = event.getMessage().getContentRaw().split(" ");
-        if (args[0].equalsIgnoreCase(DiscordBot.prefix+"help")){
+        if (args[1].equalsIgnoreCase("help")){
             EmbedBuilder info = new EmbedBuilder();
             info.setTitle("Помощь");
             info.setDescription("Просмотрев данную информацию станет легче что-то там.");
