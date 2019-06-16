@@ -7,12 +7,13 @@ import org.bukkit.event.Listener;
 
 import static ru.looprich.discordlogger.modules.DiscordBot.sendMessage;
 
-public class PlayerLoginEvent implements Listener {
+public class PlayerQuitEvent implements Listener {
 
     @EventHandler(priority = EventPriority.MONITOR)
-    void onPlayerLogin(org.bukkit.event.player.PlayerLoginEvent event) {
+    void quit(org.bukkit.event.player.PlayerQuitEvent event) {
         Player player = event.getPlayer();
-        sendMessage("UUID of player " + player.getName() + " is " + player.getUniqueId());
+        sendMessage(player.getName() + " lost connection: Disconnected");
+        sendMessage(player.getName() + " left the game");
     }
 
 }

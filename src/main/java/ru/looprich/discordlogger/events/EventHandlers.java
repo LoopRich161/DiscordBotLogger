@@ -12,26 +12,7 @@ import static ru.looprich.discordlogger.modules.DiscordBot.sendMessage;
 
 
 public class EventHandlers implements Listener {
-
-
-
-
-    @EventHandler(priority = EventPriority.MONITOR)
-    void PlayerJoinEvent(PlayerJoinEvent event) {
-        Player player = event.getPlayer();
-        sendMessage(player.getName() + "[" + player.getAddress().getAddress() + ":" + player.getAddress().getPort() + "] logged at (["
-                + player.getLocation().getWorld().getName() + "]"
-                + player.getLocation().getX() + ", "
-                + player.getLocation().getY() + ", "
-                + player.getLocation().getZ() + ")");
-    }
-
-    @EventHandler(priority = EventPriority.MONITOR)
-    void onPlayerQuitEvent(PlayerQuitEvent event) {
-        Player player = event.getPlayer();
-        sendMessage(player.getName() + " lost connection: Disconnected");
-        sendMessage(player.getName() + " left the game");
-    }
+    
 
     @EventHandler(priority = EventPriority.MONITOR)
     void onPlayerCommandPreprocessEvent(PlayerCommandPreprocessEvent event) {

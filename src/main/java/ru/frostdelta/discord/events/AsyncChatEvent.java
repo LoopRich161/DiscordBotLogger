@@ -13,7 +13,7 @@ import static ru.looprich.discordlogger.modules.DiscordBot.sendMessage;
 public class AsyncChatEvent implements Listener {
 
     @EventHandler(priority = EventPriority.MONITOR)
-    void onAsyncPlayerChatEvent(AsyncPlayerChatEvent event) {
+    void chat(AsyncPlayerChatEvent event) {
         Player player = event.getPlayer();
         String msg = event.getMessage();
         if (event.getRecipients().size() == Bukkit.getOnlinePlayers().size()) {
