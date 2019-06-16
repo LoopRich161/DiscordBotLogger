@@ -8,7 +8,7 @@ import org.bukkit.event.player.PlayerAdvancementDoneEvent;
 
 import static ru.looprich.discordlogger.modules.DiscordBot.sendMessage;
 
-public class AchivementEvent implements Listener {
+public class AchievementEvent implements Listener {
 
     @EventHandler(priority = EventPriority.MONITOR)
     void achivement(PlayerAdvancementDoneEvent event) {
