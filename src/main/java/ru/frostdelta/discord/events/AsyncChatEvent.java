@@ -16,6 +16,9 @@ public class AsyncChatEvent implements Listener {
     void chat(AsyncPlayerChatEvent event) {
         Player player = event.getPlayer();
         String msg = event.getMessage();
+        if(event.isCancelled()){
+            return;
+        }
         if (event.getRecipients().size() == Bukkit.getOnlinePlayers().size()) {
             sendMessage("[G]<" + player.getName() + "> " + msg.replace("!", ""));
         } else {
