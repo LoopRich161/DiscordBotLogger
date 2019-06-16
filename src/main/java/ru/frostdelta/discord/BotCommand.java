@@ -22,12 +22,12 @@ public class BotCommand implements CommandExecutor {
         if (command.getName().equalsIgnoreCase("toggle")) {
             if (DiscordBot.isLocalEnabled()) {
                 DiscordBot.setLocalEnabled(false);
-                EventHandlers.sendMessage("Локальный чат отключен!");
+                DiscordBot.sendMessage("Локальный чат отключен!");
                 Core.getInstance().getLogger().info("Local chat disable!");
                 Core.getInstance().getConfig().set("local-chat", false);
             } else {
                 DiscordBot.setLocalEnabled(true);
-                EventHandlers.sendMessage("Локальный чат включен!");
+                DiscordBot.sendMessage("Локальный чат включен!");
                 Core.getInstance().getLogger().info("Local chat enable!");
                 Core.getInstance().getConfig().set("local-chat", true);
             }
@@ -47,7 +47,7 @@ public class BotCommand implements CommandExecutor {
                     } else  sender.sendMessage("Bot already enabled!");
                     break;
                 case "disable":
-                    DiscordBot.sendMessageChannel("Bot successful disabled!");
+                    DiscordBot.sendMessage("Bot successful disabled!");
                     DiscordBot.shutdown();
                     sender.sendMessage("Bot successful disabled!");
                     break;

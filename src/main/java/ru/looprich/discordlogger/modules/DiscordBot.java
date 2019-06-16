@@ -23,6 +23,11 @@ public class DiscordBot {
         DiscordBot.channel = channel;
     }
 
+    public static void sendMessage(String message) {
+        message.replace("*", "$").replace("_", "$").replace("~", "$");
+        Core.getInstance().sendMessageDiscord(message);
+    }
+
     public boolean createBot() {
         try {
             jda = new JDABuilder(tokenBot).build().awaitReady();

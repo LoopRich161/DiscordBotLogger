@@ -6,16 +6,12 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.*;
-import ru.looprich.discordlogger.Core;
 import ru.looprich.discordlogger.modules.DiscordBot;
+
+import static ru.looprich.discordlogger.modules.DiscordBot.sendMessage;
 
 
 public class EventHandlers implements Listener {
-
-    public static void sendMessage(String message) {
-        message.replace("*", "$").replace("_", "$").replace("~", "$");
-        Core.getInstance().sendMessageDiscord(message);
-    }
 
 
     @EventHandler(priority = EventPriority.MONITOR)
