@@ -3,6 +3,7 @@ package ru.frostdelta.discord;
 import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.core.hooks.ListenerAdapter;
+import ru.looprich.discordlogger.DiscordLogger;
 import ru.looprich.discordlogger.modules.DiscordBot;
 
 public class RemoteConfigControl extends ListenerAdapter {
@@ -17,7 +18,7 @@ public class RemoteConfigControl extends ListenerAdapter {
             EmbedBuilder info = new EmbedBuilder();
             info.setTitle("Помощь");
             info.setDescription("Просмотрев данную информацию станет легче что-то там.");
-            info.addField("Создатели", "LoopRich161, FrostDelta123", false);
+            info.addField("Создатели", DiscordLogger.getInstance().getDescription().getAuthors().toString(), false);
             info.setColor(0xf45642);
 
             event.getChannel().sendTyping().queue();
