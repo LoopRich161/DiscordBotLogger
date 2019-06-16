@@ -42,7 +42,7 @@ public class DiscordBot {
         bot = this;
         localEnabled = Core.getInstance().getConfig().getBoolean("bot.local-chat");
         enable = true;
-        sendMessageChannel("Bot successful loaded!");
+        DiscordBot.sendMessage("Bot successful loaded!");
         return loggerChannel != null;
     }
 
@@ -55,7 +55,7 @@ public class DiscordBot {
     }
 
     public static void shutdown() {
-        sendMessageChannel("Bot shutdown!");
+        DiscordBot.sendMessage("Bot shutdown!");
         bot = null;
         localEnabled = true;
         tokenBot = null;
