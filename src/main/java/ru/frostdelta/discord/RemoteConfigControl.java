@@ -2,13 +2,15 @@ package ru.frostdelta.discord;
 
 import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
-import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.core.hooks.ListenerAdapter;
 import ru.looprich.discordlogger.modules.DiscordBot;
 
 public class RemoteConfigControl extends ListenerAdapter {
 
-    public void onGuildMessageReceivedEvent(GuildMessageReceivedEvent event){
+
+    @Override
+    public void onMessageReceived(MessageReceivedEvent event) {
+
         String [] args = event.getMessage().getContentRaw().split(" ");
         if (args[0].equalsIgnoreCase(DiscordBot.prefix+"help")){
             EmbedBuilder info = new EmbedBuilder();
@@ -21,10 +23,6 @@ public class RemoteConfigControl extends ListenerAdapter {
             event.getChannel().sendMessage(info.build()).queue();
             info.clear();
         }
-    }
-
-    @Override
-    public void onMessageReceived(MessageReceivedEvent event) {
         //TODO listening commands from discord channel, config editing
     }
 
