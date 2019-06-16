@@ -7,11 +7,12 @@ import ru.looprich.discordlogger.modules.DiscordBot;
 
 public class RemoteConfigControl extends ListenerAdapter {
 
-
     @Override
     public void onMessageReceived(MessageReceivedEvent event) {
-
         String [] args = event.getMessage().getContentRaw().split(" ");
+        if(args.length == 0 || !(args[0].equalsIgnoreCase(DiscordBot.prefix))){
+            return;
+        }
         if (args.length == 2 && args[1].equalsIgnoreCase("help")){
             EmbedBuilder info = new EmbedBuilder();
             info.setTitle("Помощь");
