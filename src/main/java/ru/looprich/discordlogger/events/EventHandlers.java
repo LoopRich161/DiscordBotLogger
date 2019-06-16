@@ -1,9 +1,5 @@
 package ru.looprich.discordlogger.events;
 
-import org.bukkit.Achievement;
-import org.bukkit.Bukkit;
-import org.bukkit.advancement.Advancement;
-import org.bukkit.advancement.AdvancementProgress;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -17,7 +13,7 @@ import ru.looprich.discordlogger.modules.DiscordBot;
 public class EventHandlers implements Listener {
 
     public static void sendMessage(String message) {
-        message.replace("*","$").replace("_","$").replace("~","$");
+        message.replace("*", "$").replace("_", "$").replace("~", "$");
         Core.getInstance().sendMessageDiscord(message);
     }
 

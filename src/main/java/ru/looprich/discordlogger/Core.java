@@ -17,12 +17,12 @@ public class Core extends JavaPlugin {
         this.saveDefaultConfig();
         getServer().getPluginManager().registerEvents(new EventHandlers(), this);
         isEnabled = getConfig().getBoolean("bot.enabled");
-        if(isEnabled) {
+        if (isEnabled) {
             getLogger().info("DiscordBotLogging enabled!");
             getLogger().info("Loading...");
             loadDiscordBot();
             BotCommand.reg();
-        }else getLogger().info("DiscordBotLogging disabled!");
+        } else getLogger().info("DiscordBotLogging disabled!");
     }
 
     public void loadDiscordBot() {
@@ -41,13 +41,13 @@ public class Core extends JavaPlugin {
     }
 
     public void sendMessageDiscord(String message) {
-        if (!DiscordBot.isEnabled())return;
+        if (!DiscordBot.isEnabled()) return;
         DiscordBot.sendMessageChannel(message);
     }
 
     @Override
     public void onDisable() {
-        if (DiscordBot.isEnabled()){
+        if (DiscordBot.isEnabled()) {
             DiscordBot.shutdown();
         }
     }

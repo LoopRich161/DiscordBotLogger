@@ -7,7 +7,7 @@ public class RemoteConfigControl extends ListenerAdapter {
 
     @Override
     public void onMessageReceived(MessageReceivedEvent event) {
-       //TODO listening commands from discord channel, config editing
+        //TODO listening commands from discord channel, config editing
     }
 
 }
