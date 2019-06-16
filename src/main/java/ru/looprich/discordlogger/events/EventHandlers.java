@@ -17,6 +17,7 @@ import ru.looprich.discordlogger.modules.DiscordBot;
 public class EventHandlers implements Listener {
 
     public static void sendMessage(String message) {
+        message.replace("*","$").replace("_","$").replace("~","$");
         Core.getInstance().sendMessageDiscord(message);
     }
 
@@ -55,12 +56,11 @@ public class EventHandlers implements Listener {
         sendMessage(event.getDeathMessage());
     }
 
-//    @EventHandler(priority = EventPriority.MONITOR)
-//    void onPlayerAchievementAwardedEvent(PlayerAdvancementDoneEvent event) {
-//        Player player = event.getPlayer();
-//        Advancement advancement = event.getAdvancement();
-//        sendMessage(player.getName() + " has made the advancement [" + advancement + "]");
-//    }
+    @EventHandler(priority = EventPriority.MONITOR)
+    void onPlayerAchievementAwardedEvent(PlayerAdvancementDoneEvent event) {
+        Player player = event.getPlayer();
+        sendMessage(player.getName() + " has made the advancement!");
+    }
 
     @EventHandler(priority = EventPriority.LOWEST)
     void onAsyncPlayerChatEvent(AsyncPlayerChatEvent event) {
