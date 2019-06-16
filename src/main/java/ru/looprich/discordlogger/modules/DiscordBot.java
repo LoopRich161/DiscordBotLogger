@@ -85,6 +85,7 @@ public class DiscordBot {
         loggerChannel.sendMessage(data() + message).queue();
     }
 
+    @Deprecated
     private static String data() {
         Date date = new Date();
         String hours, minutes, seconds;
