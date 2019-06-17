@@ -10,6 +10,7 @@ import ru.frostdelta.discord.RemoteConfigControl;
 import ru.looprich.discordlogger.DiscordLogger;
 
 import javax.security.auth.login.LoginException;
+import java.util.Arrays;
 import java.util.Date;
 
 public class DiscordBot {
@@ -29,7 +30,6 @@ public class DiscordBot {
     }
 
     public static void sendMessage(String message) {
-        message.replace("*", "$").replace("_", "$").replace("~", "$");
         DiscordLogger.getInstance().sendMessageDiscord(message);
     }
 
@@ -83,7 +83,10 @@ public class DiscordBot {
     }
 
     public static void sendMessageChannel(String message) {
-        loggerChannel.sendMessage(data() + message).queue();
+        String[] array = message.split(" ");
+        String msg = "";
+        for (int i = 0;i<=array.length-1;i++)msg+="\\"+array[i];
+        loggerChannel.sendMessage(data()+msg).queue();
     }
 
     public static void sendImportantMessage(String msg){
@@ -95,6 +98,7 @@ public class DiscordBot {
         loggerChannel.sendMessage(message.build()).queue();
 
     }
+
 
 
     @Deprecated
@@ -109,4 +113,5 @@ public class DiscordBot {
         else seconds = String.valueOf(date.getSeconds());
         return "**[" + hours + ":" + minutes + ":" + seconds + "]:** ";
     }
+
 }
