@@ -82,10 +82,21 @@ public class DiscordBot {
     }
 
     public static void sendMessageChannel(String message) {
-        //String[] array = message.split(" ");
-        //String msg = "";
-        //for (int i = 0; i <= array.length - 1; i++) msg += "\\" + array[i]+" ";
-        loggerChannel.sendMessage(data() + message).queue();
+        String[] array = message.split(" ");
+        String msg = "";
+        for (int i = 0; i <= array.length - 1; i++)
+            if (isFormatArg(array[i])) {
+                msg += "\\" + array[i] + " ";
+            } else msg += array[i] + " ";
+        loggerChannel.sendMessage(data() + msg).queue();
+    }
+
+    private static boolean isFormatArg(String arg) {
+        if (arg.startsWith("*") && arg.endsWith("*")) return true;
+        if (arg.startsWith("_") && arg.endsWith("_")) return true;
+        if (arg.startsWith("~") && arg.endsWith("~")) return true;
+        //todo check char format in word!
+        return false;
     }
 
     public static void sendImportantMessage(String msg) {
