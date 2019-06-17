@@ -10,7 +10,6 @@ import ru.frostdelta.discord.RemoteConfigControl;
 import ru.looprich.discordlogger.DiscordLogger;
 
 import javax.security.auth.login.LoginException;
-import java.util.Arrays;
 import java.util.Date;
 
 public class DiscordBot {
@@ -83,13 +82,13 @@ public class DiscordBot {
     }
 
     public static void sendMessageChannel(String message) {
-        String[] array = message.split(" ");
-        String msg = "";
-        for (int i = 0;i<=array.length-1;i++)msg+="\\"+array[i];
-        loggerChannel.sendMessage(data()+msg).queue();
+        //String[] array = message.split(" ");
+        //String msg = "";
+        //for (int i = 0; i <= array.length - 1; i++) msg += "\\" + array[i]+" ";
+        loggerChannel.sendMessage(data() + message).queue();
     }
 
-    public static void sendImportantMessage(String msg){
+    public static void sendImportantMessage(String msg) {
         EmbedBuilder message = new EmbedBuilder();
         message.setTitle("Что-то произошло с ботом!");
         message.setDescription(msg);
@@ -98,7 +97,6 @@ public class DiscordBot {
         loggerChannel.sendMessage(message.build()).queue();
 
     }
-
 
 
     @Deprecated
