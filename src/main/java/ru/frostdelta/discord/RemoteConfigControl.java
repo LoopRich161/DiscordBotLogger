@@ -46,7 +46,7 @@ public class RemoteConfigControl extends ListenerAdapter {
             return;
         }
 
-        String who = event.getAuthor().getName()+"#"+event.getAuthor().getAsTag();
+        String who = event.getAuthor().getAsTag();
 
         if (command.equalsIgnoreCase(DiscordBot.prefix + "toggle")) {
             if (DiscordBot.isLocalEnabled()) {
@@ -65,20 +65,20 @@ public class RemoteConfigControl extends ListenerAdapter {
             switch (args[1]) {
                 case "reload":
                     DiscordLogger.getInstance().reloadConfig();
-                    event.getChannel().sendMessage("Bot already enabled! (" + who + ")");
+                    event.getChannel().sendMessage("Bot already enabled! (" + who + ")").queue();
                     break;
                 case "disable":
-                    event.getChannel().sendMessage("Bot successful disabled!(" + who + ")");
+                    event.getChannel().sendMessage("Bot successful disabled!(" + who + ")").queue();
                     DiscordBot.shutdown();
                     break;
                 case "restart":
                     if (DiscordBot.isEnabled()) {
-                        DiscordBot.shutdown();
+                        DiscordBot.getJDA().shutdownNow();
                         DiscordLogger.getInstance().loadDiscordBot();
-                        event.getChannel().sendMessage("Bot successful restarted!(" + who + ")");
+                        event.getChannel().sendMessage("Bot successful restarted!(" + who + ")").queue();
                     } else {
                         DiscordLogger.getInstance().loadDiscordBot();
-                        event.getChannel().sendMessage("Bot successful restarted!(" + who + ")");
+                        event.getChannel().sendMessage("Bot successful restarted!(" + who + ")").queue();
                     }
                     break;
             }

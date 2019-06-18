@@ -59,7 +59,7 @@ public class BotCommand implements CommandExecutor {
                 case "restart":
                     if (DiscordBot.isEnabled()) {
                         sendImportantMessage("Я выключился!");
-                        DiscordBot.shutdown();
+                        DiscordBot.getJDA().shutdownNow();
                         DiscordLogger.getInstance().loadDiscordBot();
                         sender.sendMessage("Bot successful restarted!");
                     } else {

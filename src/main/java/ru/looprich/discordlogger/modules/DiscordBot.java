@@ -32,6 +32,10 @@ public class DiscordBot {
         DiscordLogger.getInstance().sendMessageDiscord(message);
     }
 
+    public static JDA getJDA(){
+        return jda;
+    }
+
     public boolean createBot() {
         try {
             jda = new JDABuilder(tokenBot).build().awaitReady();
@@ -70,7 +74,7 @@ public class DiscordBot {
         loggerChannel = null;
         enable = false;
         DiscordLogger.getInstance().discordBot = null;
-        jda.shutdownNow();
+        jda.shutdown();
     }
 
     public static void setLocalEnabled(boolean localEnabled) {
