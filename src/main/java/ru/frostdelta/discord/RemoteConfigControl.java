@@ -3,6 +3,7 @@ package ru.frostdelta.discord;
 import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.core.hooks.ListenerAdapter;
+import org.bukkit.Color;
 import ru.looprich.discordlogger.DiscordLogger;
 import ru.looprich.discordlogger.modules.DiscordBot;
 
@@ -20,9 +21,14 @@ public class RemoteConfigControl extends ListenerAdapter {
         if (command.equalsIgnoreCase(DiscordBot.prefix+"help")) {
             EmbedBuilder info = new EmbedBuilder();
             info.setTitle("Помощь");
-            info.setDescription("Просмотрев данную информацию станет легче что-то там.");
-            info.addField("Создатели", DiscordLogger.getInstance().getDescription().getAuthors().toString(), false);
-            info.setColor(0xf45642);
+            info.setDescription("Доступные команды:\n" +
+                    "~toggle - *переключение локального чата.*\n" +
+                    "~bot reload - *перезагрузка конфига.*\n" +
+                    "~bot disable - *выключение бота.*\n" +
+                    "~bot restart - *перезагрузка бота.*\n" +
+                    "~developers - *информация о разработчиках.*");
+            info.addField("Создатели", Arrays.toString(DiscordLogger.getInstance().getDescription().getAuthors().toArray()), false);
+            info.setColor(0x008000);
 
             event.getChannel().sendTyping().queue();
             event.getChannel().sendMessage(info.build()).queue();
@@ -38,6 +44,18 @@ public class RemoteConfigControl extends ListenerAdapter {
                 DiscordBot.sendImportantMessage("Локальный чат включен!");
                 DiscordLogger.getInstance().getConfig().set("local-chat", true);
             }
+            return;
+        }
+
+        if (command.equalsIgnoreCase(DiscordBot.prefix+"developers")){
+            EmbedBuilder developers = new EmbedBuilder();
+            developers.setTitle("Разработчики");
+            developers.setDescription("LoopRich161 - *.*\n" +
+                    "FrostDelta123 - *.*");
+            developers.setColor(0x0000ff);
+
+            event.getChannel().sendTyping().queue();
+            event.getChannel().sendMessage(developers.build()).queue();
             return;
         }
 
