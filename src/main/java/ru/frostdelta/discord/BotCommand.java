@@ -19,15 +19,16 @@ public class BotCommand implements CommandExecutor {
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
 
+        String who = sender.getName();
         if (command.getName().equalsIgnoreCase("toggle")) {
             if (DiscordBot.isLocalEnabled()) {
                 DiscordBot.setLocalEnabled(false);
-                sendImportantMessage("Локальный чат отключен!");
+                sendImportantMessage("Локальный чат отключен!(" + who + ")");
                 sender.sendMessage("Локальный чат отключен!");
                 DiscordLogger.getInstance().getConfig().set("local-chat", false);
             } else {
                 DiscordBot.setLocalEnabled(true);
-                sendImportantMessage("Локальный чат включен!");
+                sendImportantMessage("Локальный чат включен!(" + who + ")");
                 sender.sendMessage("Локальный чат включен!");
                 DiscordLogger.getInstance().getConfig().set("local-chat", true);
             }
@@ -44,10 +45,14 @@ public class BotCommand implements CommandExecutor {
                     if (!DiscordBot.isEnabled()) {
                         DiscordLogger.getInstance().loadDiscordBot();
                         sender.sendMessage("Bot successful enabled!");
-                    } else  sender.sendMessage("Bot already enabled!");
+                    } else sender.sendMessage("Bot already enabled!");
                     break;
                 case "disable":
-                    sendImportantMessage("Я выключился!");
+                    if (!DiscordBot.isEnabled()){
+                        DiscordLogger.getInstance().getLogger().info("Bot already disable!");
+                        return true;
+                    }
+                    sendImportantMessage("Я выключился!(" + who + ")");
                     DiscordBot.shutdown();
                     sender.sendMessage("Bot successful disabled!");
                     break;
