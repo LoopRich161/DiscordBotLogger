@@ -68,8 +68,8 @@ public class RemoteConfigControl extends ListenerAdapter {
                     event.getChannel().sendMessage("Bot already enabled! (" + who + ")");
                     break;
                 case "disable":
-                    DiscordBot.shutdown();
                     event.getChannel().sendMessage("Bot successful disabled!(" + who + ")");
+                    DiscordBot.shutdown();
                     break;
                 case "restart":
                     if (DiscordBot.isEnabled()) {
