@@ -3,7 +3,6 @@ package ru.frostdelta.discord;
 import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.core.hooks.ListenerAdapter;
-import org.bukkit.Color;
 import ru.looprich.discordlogger.DiscordLogger;
 import ru.looprich.discordlogger.modules.DiscordBot;
 
@@ -18,7 +17,7 @@ public class RemoteConfigControl extends ListenerAdapter {
             return;
         }
         String command = args[0];
-        if (command.equalsIgnoreCase(DiscordBot.prefix+"help")) {
+        if (command.equalsIgnoreCase(DiscordBot.prefix + "help")) {
             EmbedBuilder info = new EmbedBuilder();
             info.setTitle("Помощь");
             info.setDescription("Доступные команды:\n" +
@@ -34,20 +33,8 @@ public class RemoteConfigControl extends ListenerAdapter {
             event.getChannel().sendMessage(info.build()).queue();
             return;
         }
-        if (command.equalsIgnoreCase(DiscordBot.prefix+"toggle")) {
-            if (DiscordBot.isLocalEnabled()) {
-                DiscordBot.setLocalEnabled(false);
-                DiscordBot.sendImportantMessage("Локальный чат отключен!");
-                DiscordLogger.getInstance().getConfig().set("local-chat", false);
-            } else {
-                DiscordBot.setLocalEnabled(true);
-                DiscordBot.sendImportantMessage("Локальный чат включен!");
-                DiscordLogger.getInstance().getConfig().set("local-chat", true);
-            }
-            return;
-        }
 
-        if (command.equalsIgnoreCase(DiscordBot.prefix+"developers")){
+        if (command.equalsIgnoreCase(DiscordBot.prefix + "developers")) {
             EmbedBuilder developers = new EmbedBuilder();
             developers.setTitle("Разработчики");
             developers.setDescription("LoopRich161 - *.*\n" +
@@ -59,24 +46,39 @@ public class RemoteConfigControl extends ListenerAdapter {
             return;
         }
 
-        if (command.equalsIgnoreCase(DiscordBot.prefix+"bot") && args.length == 2) {
+        String who = event.getAuthor().getName()+"#"+event.getAuthor().getAsTag();
+
+        if (command.equalsIgnoreCase(DiscordBot.prefix + "toggle")) {
+            if (DiscordBot.isLocalEnabled()) {
+                DiscordBot.setLocalEnabled(false);
+                DiscordBot.sendImportantMessage("Локальный чат отключен!(" + who + ")");
+                DiscordLogger.getInstance().getConfig().set("local-chat", false);
+            } else {
+                DiscordBot.setLocalEnabled(true);
+                DiscordBot.sendImportantMessage("Локальный чат включен!(" + who + ")");
+                DiscordLogger.getInstance().getConfig().set("local-chat", true);
+            }
+            return;
+        }
+
+        if (command.equalsIgnoreCase(DiscordBot.prefix + "bot") && args.length == 2) {
             switch (args[1]) {
                 case "reload":
                     DiscordLogger.getInstance().reloadConfig();
-                    event.getChannel().sendMessage("Bot already enabled!");
+                    event.getChannel().sendMessage("Bot already enabled! (" + who + ")");
                     break;
                 case "disable":
                     DiscordBot.shutdown();
-                    event.getChannel().sendMessage("Bot successful disabled!");
+                    event.getChannel().sendMessage("Bot successful disabled!(" + who + ")");
                     break;
                 case "restart":
                     if (DiscordBot.isEnabled()) {
                         DiscordBot.shutdown();
                         DiscordLogger.getInstance().loadDiscordBot();
-                        event.getChannel().sendMessage("Bot successful restarted!");
+                        event.getChannel().sendMessage("Bot successful restarted!(" + who + ")");
                     } else {
                         DiscordLogger.getInstance().loadDiscordBot();
-                        event.getChannel().sendMessage("Bot successful restarted!");
+                        event.getChannel().sendMessage("Bot successful restarted!(" + who + ")");
                     }
                     break;
             }
