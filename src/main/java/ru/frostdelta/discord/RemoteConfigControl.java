@@ -6,16 +6,18 @@ import net.dv8tion.jda.core.hooks.ListenerAdapter;
 import ru.looprich.discordlogger.DiscordLogger;
 import ru.looprich.discordlogger.modules.DiscordBot;
 
+import java.util.Arrays;
+
 public class RemoteConfigControl extends ListenerAdapter {
 
     @Override
     public void onMessageReceived(MessageReceivedEvent event) {
         String[] args = event.getMessage().getContentRaw().split(" ");
-        if (args.length == 0 || !(args[0].equalsIgnoreCase(DiscordBot.prefix))) {
+        if (args.length == 0) {
             return;
         }
-        String command = args[1];
-        if (args.length == 2 && command.equalsIgnoreCase("help")) {
+        String command = args[0];
+        if (command.equalsIgnoreCase(DiscordBot.prefix+"help")) {
             EmbedBuilder info = new EmbedBuilder();
             info.setTitle("Помощь");
             info.setDescription("Просмотрев данную информацию станет легче что-то там.");
@@ -26,7 +28,7 @@ public class RemoteConfigControl extends ListenerAdapter {
             event.getChannel().sendMessage(info.build()).queue();
             return;
         }
-        if (command.equalsIgnoreCase("toggle")&& args.length == 2) {
+        if (command.equalsIgnoreCase(DiscordBot.prefix+"toggle")) {
             if (DiscordBot.isLocalEnabled()) {
                 DiscordBot.setLocalEnabled(false);
                 DiscordBot.sendImportantMessage("Локальный чат отключен!");
@@ -39,8 +41,8 @@ public class RemoteConfigControl extends ListenerAdapter {
             return;
         }
 
-        if (command.equalsIgnoreCase("bot") && args.length == 3) {
-            switch (args[2]) {
+        if (command.equalsIgnoreCase(DiscordBot.prefix+"bot") && args.length == 2) {
+            switch (args[1]) {
                 case "reload":
                     DiscordLogger.getInstance().reloadConfig();
                     event.getChannel().sendMessage("Bot already enabled!");
