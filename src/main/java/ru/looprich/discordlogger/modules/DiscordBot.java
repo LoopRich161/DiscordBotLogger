@@ -28,11 +28,7 @@ public class DiscordBot {
         DiscordBot.channel = channel;
     }
 
-    public static void sendMessage(String message) {
-        DiscordLogger.getInstance().sendMessageDiscord(message);
-    }
-
-    public static JDA getJDA(){
+    public static JDA getJDA() {
         return jda;
     }
 
@@ -53,13 +49,7 @@ public class DiscordBot {
         bot = this;
         localEnabled = DiscordLogger.getInstance().getConfig().getBoolean("bot.local-chat");
         enable = true;
-        sendImportantMessage("Я включился!");
-
         return loggerChannel != null;
-    }
-
-    public static DiscordBot getBot() {
-        return bot;
     }
 
     public static boolean isEnabled() {
@@ -86,6 +76,7 @@ public class DiscordBot {
     }
 
     public static void sendMessageChannel(String message) {
+        if (!isEnabled()) return;
         String[] array = message.split(" ");
         String msg = "";
         for (int i = 0; i <= array.length - 1; i++)
