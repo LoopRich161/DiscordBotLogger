@@ -5,8 +5,6 @@ import ru.frostdelta.discord.BotCommand;
 import ru.frostdelta.discord.events.*;
 import ru.looprich.discordlogger.modules.DiscordBot;
 
-import static ru.looprich.discordlogger.modules.DiscordBot.sendImportantMessage;
-
 public class DiscordLogger extends JavaPlugin {
 
     private static DiscordLogger plugin;
@@ -32,6 +30,7 @@ public class DiscordLogger extends JavaPlugin {
             getLogger().info("Loading...");
             loadDiscordBot();
             BotCommand.reg();
+            DiscordBot.sendImportantMessage("Я включился!");
         } else getLogger().info("DiscordBotLogging disabled!");
     }
 
@@ -50,15 +49,11 @@ public class DiscordLogger extends JavaPlugin {
         return plugin;
     }
 
-    public void sendMessageDiscord(String message) {
-        if (!DiscordBot.isEnabled()) return;
-        DiscordBot.sendMessageChannel(message);
-    }
     @Override
     public void onDisable() {
-        if (DiscordBot.isEnabled()) {
-            sendImportantMessage("Я выключился!");
+        DiscordBot.sendImportantMessage("Я выключился!");
+        if (DiscordBot.isEnabled())
             DiscordBot.shutdown();
-        }
+
     }
 }
