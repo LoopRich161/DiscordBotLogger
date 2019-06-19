@@ -49,7 +49,7 @@ public class BotCommand implements CommandExecutor {
                     } else sender.sendMessage("Бот уже включен!");
                     break;
                 case "disable":
-                    if (!DiscordBot.isEnabled()){
+                    if (!DiscordBot.isEnabled()) {
                         DiscordLogger.getInstance().getLogger().info("Бот уже выключен!");
                         return true;
                     }
@@ -59,7 +59,6 @@ public class BotCommand implements CommandExecutor {
                     break;
                 case "restart":
                     if (DiscordBot.isEnabled()) {
-                        sendImportantMessage("Я выключился!");
                         DiscordBot.getJDA().shutdownNow();
                         DiscordLogger.getInstance().loadDiscordBot();
                         sender.sendMessage("Бот успешно перезагружен!");
@@ -67,9 +66,11 @@ public class BotCommand implements CommandExecutor {
                         DiscordLogger.getInstance().loadDiscordBot();
                         sender.sendMessage("Бот успешно перезагружен!");
                     }
+                    sendImportantMessage("Я перезагрузился! (" + who + ")");
                     break;
             }
-        } else sender.sendMessage(ChatColor.RED + "Доступные команды: " + ChatColor.GOLD + "/bot <enable/disable/restart>");
+        } else
+            sender.sendMessage(ChatColor.RED + "Доступные команды: " + ChatColor.GOLD + "/bot <enable/disable/restart>");
         return true;
     }
 
