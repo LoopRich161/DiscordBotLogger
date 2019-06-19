@@ -51,11 +51,11 @@ public class RemoteConfigControl extends ListenerAdapter {
         if (command.equalsIgnoreCase(DiscordBot.prefix + "toggle")) {
             if (DiscordBot.isLocalEnabled()) {
                 DiscordBot.setLocalEnabled(false);
-                DiscordBot.sendImportantMessage("Локальный чат отключен!(" + who + ")");
+                DiscordBot.sendImportantMessage("Локальный чат отключен! (" + who + ")");
                 DiscordLogger.getInstance().getConfig().set("local-chat", false);
             } else {
                 DiscordBot.setLocalEnabled(true);
-                DiscordBot.sendImportantMessage("Локальный чат включен!(" + who + ")");
+                DiscordBot.sendImportantMessage("Локальный чат включен! (" + who + ")");
                 DiscordLogger.getInstance().getConfig().set("local-chat", true);
             }
             return;
@@ -65,24 +65,24 @@ public class RemoteConfigControl extends ListenerAdapter {
             switch (args[1]) {
                 case "reload":
                     DiscordLogger.getInstance().reloadConfig();
-                    event.getChannel().sendMessage("Bot already enabled! (" + who + ")").queue();
+                    DiscordBot.sendImportantMessage("Я перезагрузил конфиг! (" + who + ")");
                     break;
                 case "disable":
-                    event.getChannel().sendMessage("Bot successful disabled!(" + who + ")").queue();
+                    DiscordBot.sendImportantMessage("Я выключился!");
                     DiscordBot.shutdown();
                     break;
                 case "restart":
                     if (DiscordBot.isEnabled()) {
                         DiscordBot.getJDA().shutdownNow();
                         DiscordLogger.getInstance().loadDiscordBot();
-                        event.getChannel().sendMessage("Bot successful restarted!(" + who + ")").queue();
+                        DiscordBot.sendImportantMessage("Я перезагрузился! (" + who + ")");
                     } else {
                         DiscordLogger.getInstance().loadDiscordBot();
-                        event.getChannel().sendMessage("Bot successful restarted!(" + who + ")").queue();
+                        DiscordBot.sendImportantMessage("Я перезагрузился! (" + who + ")");
                     }
                     break;
             }
-        } else event.getChannel().sendMessage("Command usage: /bot <disable/restart>");
+        } else event.getChannel().sendMessage("Доступные команды: ~bot <disable/restart>");
 
 
     }
