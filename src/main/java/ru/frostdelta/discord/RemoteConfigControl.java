@@ -63,7 +63,7 @@ public class RemoteConfigControl extends ListenerAdapter {
                 DiscordLogger.getInstance().getConfig().set("local-chat", true);
             }
             event.getMessage().delete().queue();
-            DiscordLogger.getInstance().getLogger().info("<"+who+"> issued server command: ~toggle");
+            DiscordLogger.getInstance().getLogger().info("<" + who + "> issued server command: ~toggle");
             return;
         }
 
@@ -75,7 +75,7 @@ public class RemoteConfigControl extends ListenerAdapter {
                     break;
                 case "disable":
                     sendImportantMessage("Я выключился!");
-                    DiscordLogger.getInstance().getLogger().info("<"+who+"> issued server command: ~bot disable");
+                    DiscordLogger.getInstance().getLogger().info("<" + who + "> issued server command: ~bot disable");
                     DiscordBot.shutdown();
                     break;
                 case "restart":
@@ -85,7 +85,7 @@ public class RemoteConfigControl extends ListenerAdapter {
                     } else {
                         DiscordLogger.getInstance().loadDiscordBot();
                     }
-                    DiscordLogger.getInstance().getLogger().info("<"+who+"> issued server command: ~bot restart");
+                    DiscordLogger.getInstance().getLogger().info("<" + who + "> issued server command: ~bot restart");
                     sendImportantMessage("Я перезагрузился! (" + who + ")");
 
                     break;

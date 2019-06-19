@@ -5,12 +5,9 @@ import ru.frostdelta.discord.BotCommand;
 import ru.frostdelta.discord.events.*;
 import ru.looprich.discordlogger.modules.DiscordBot;
 
-import java.util.logging.Logger;
-
 public class DiscordLogger extends JavaPlugin {
 
     private static DiscordLogger plugin;
-    private boolean isEnabled;
     public DiscordBot discordBot;
 
     @Override
@@ -26,7 +23,7 @@ public class DiscordLogger extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new BroadcastEvent(),this);
         //getServer().getPluginManager().registerEvents(new AchievementEvent(), this);
 
-        isEnabled = getConfig().getBoolean("bot.enabled");
+        boolean isEnabled = getConfig().getBoolean("bot.enabled");
         if (isEnabled) {
             getLogger().info("DiscordBotLogging enabled!");
             getLogger().info("Loading...");
