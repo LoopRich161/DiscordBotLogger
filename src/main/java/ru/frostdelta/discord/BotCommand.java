@@ -23,12 +23,12 @@ public class BotCommand implements CommandExecutor {
         if (command.getName().equalsIgnoreCase("toggle")) {
             if (DiscordBot.isLocalEnabled()) {
                 DiscordBot.setLocalEnabled(false);
-                sendImportantMessage("Локальный чат отключен!(" + who + ")");
+                sendImportantMessage("Локальный чат отключен! (" + who + ")");
                 sender.sendMessage("Локальный чат отключен!");
                 DiscordLogger.getInstance().getConfig().set("local-chat", false);
             } else {
                 DiscordBot.setLocalEnabled(true);
-                sendImportantMessage("Локальный чат включен!(" + who + ")");
+                sendImportantMessage("Локальный чат включен! (" + who + ")");
                 sender.sendMessage("Локальный чат включен!");
                 DiscordLogger.getInstance().getConfig().set("local-chat", true);
             }
@@ -39,36 +39,37 @@ public class BotCommand implements CommandExecutor {
             switch (args[0]) {
                 case "reload":
                     DiscordLogger.getInstance().reloadConfig();
-                    sender.sendMessage("Bot already enabled!");
+                    sender.sendMessage("Бот перезагрузил конфиг!");
                     break;
                 case "enable":
                     if (!DiscordBot.isEnabled()) {
                         DiscordLogger.getInstance().loadDiscordBot();
-                        sender.sendMessage("Bot successful enabled!");
-                    } else sender.sendMessage("Bot already enabled!");
+                        DiscordBot.sendImportantMessage("Я включился! (" + who + ")");
+                        sender.sendMessage("Бот успешно включен");
+                    } else sender.sendMessage("Бот уже включен!");
                     break;
                 case "disable":
                     if (!DiscordBot.isEnabled()){
-                        DiscordLogger.getInstance().getLogger().info("Bot already disable!");
+                        DiscordLogger.getInstance().getLogger().info("Бот уже выключен!");
                         return true;
                     }
-                    sendImportantMessage("Я выключился!(" + who + ")");
+                    sendImportantMessage("Я выключился! (" + who + ")");
                     DiscordBot.shutdown();
-                    sender.sendMessage("Bot successful disabled!");
+                    sender.sendMessage("Бот успешно выключен!");
                     break;
                 case "restart":
                     if (DiscordBot.isEnabled()) {
                         sendImportantMessage("Я выключился!");
                         DiscordBot.getJDA().shutdownNow();
                         DiscordLogger.getInstance().loadDiscordBot();
-                        sender.sendMessage("Bot successful restarted!");
+                        sender.sendMessage("Бот успешно перезагружен!");
                     } else {
                         DiscordLogger.getInstance().loadDiscordBot();
-                        sender.sendMessage("Bot successful restarted!");
+                        sender.sendMessage("Бот успешно перезагружен!");
                     }
                     break;
             }
-        } else sender.sendMessage(ChatColor.RED + "Command usage: " + ChatColor.GOLD + "/bot <enable/disable/restart>");
+        } else sender.sendMessage(ChatColor.RED + "Доступные команды: " + ChatColor.GOLD + "/bot <enable/disable/restart>");
         return true;
     }
 
