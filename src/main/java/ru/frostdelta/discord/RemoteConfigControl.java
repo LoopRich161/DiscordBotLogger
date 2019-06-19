@@ -8,6 +8,8 @@ import ru.looprich.discordlogger.modules.DiscordBot;
 
 import java.util.Arrays;
 
+import static ru.looprich.discordlogger.modules.DiscordBot.sendImportantMessage;
+
 public class RemoteConfigControl extends ListenerAdapter {
 
     @Override
@@ -31,6 +33,7 @@ public class RemoteConfigControl extends ListenerAdapter {
 
             event.getChannel().sendTyping().queue();
             event.getChannel().sendMessage(info.build()).queue();
+            event.getMessage().delete().queue();
             return;
         }
 
@@ -43,6 +46,7 @@ public class RemoteConfigControl extends ListenerAdapter {
 
             event.getChannel().sendTyping().queue();
             event.getChannel().sendMessage(developers.build()).queue();
+            event.getMessage().delete().queue();
             return;
         }
 
@@ -51,13 +55,15 @@ public class RemoteConfigControl extends ListenerAdapter {
         if (command.equalsIgnoreCase(DiscordBot.prefix + "toggle")) {
             if (DiscordBot.isLocalEnabled()) {
                 DiscordBot.setLocalEnabled(false);
-                DiscordBot.sendImportantMessage("Локальный чат отключен! (" + who + ")");
+                sendImportantMessage("Локальный чат отключен! (" + who + ")");
                 DiscordLogger.getInstance().getConfig().set("local-chat", false);
             } else {
                 DiscordBot.setLocalEnabled(true);
-                DiscordBot.sendImportantMessage("Локальный чат включен! (" + who + ")");
+                sendImportantMessage("Локальный чат включен! (" + who + ")");
                 DiscordLogger.getInstance().getConfig().set("local-chat", true);
             }
+            event.getMessage().delete().queue();
+            DiscordLogger.getInstance().getLogger().info("<"+who+"> issued server command: ~toggle");
             return;
         }
 
@@ -65,24 +71,27 @@ public class RemoteConfigControl extends ListenerAdapter {
             switch (args[1]) {
                 case "reload":
                     DiscordLogger.getInstance().reloadConfig();
-                    DiscordBot.sendImportantMessage("Я перезагрузил конфиг! (" + who + ")");
+                    sendImportantMessage("Я перезагрузил конфиг! (" + who + ")");
                     break;
                 case "disable":
-                    DiscordBot.sendImportantMessage("Я выключился!");
+                    sendImportantMessage("Я выключился!");
+                    DiscordLogger.getInstance().getLogger().info("<"+who+"> issued server command: ~bot disable");
                     DiscordBot.shutdown();
                     break;
                 case "restart":
                     if (DiscordBot.isEnabled()) {
                         DiscordBot.getJDA().shutdownNow();
                         DiscordLogger.getInstance().loadDiscordBot();
-                        DiscordBot.sendImportantMessage("Я перезагрузился! (" + who + ")");
                     } else {
                         DiscordLogger.getInstance().loadDiscordBot();
-                        DiscordBot.sendImportantMessage("Я перезагрузился! (" + who + ")");
                     }
+                    DiscordLogger.getInstance().getLogger().info("<"+who+"> issued server command: ~bot restart");
+                    sendImportantMessage("Я перезагрузился! (" + who + ")");
+
                     break;
             }
         } else event.getChannel().sendMessage("Доступные команды: ~bot <disable/restart>");
+        event.getMessage().delete().queue();
 
 
     }
