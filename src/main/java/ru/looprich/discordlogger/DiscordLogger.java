@@ -9,6 +9,7 @@ public class DiscordLogger extends JavaPlugin {
 
     private static DiscordLogger plugin;
     public DiscordBot discordBot;
+    private Network network;
 
     @Override
     public void onEnable() {
@@ -44,6 +45,27 @@ public class DiscordLogger extends JavaPlugin {
         }
     }
 
+    private void checkDatabase() {
+        String url = getConfig().getString("network.url");
+        String username = getConfig().getString("network.username");
+        String password = getConfig().getString("network.password");
+
+        network = new Network(getLogger(), url, username, password);
+        if (network.init()) {
+            getLogger().info("Database find!");
+        } else {
+            getLogger().severe("Database not find!");
+            plugin.setEnabled(false);
+        }
+        network.createDB();
+
+
+    }
+
+    Network getNetwork() {
+        return network;
+    }
+
     public static DiscordLogger getInstance() {
         return plugin;
     }
@@ -54,6 +76,7 @@ public class DiscordLogger extends JavaPlugin {
             DiscordBot.sendImportantMessage("Я выключился!");
             DiscordBot.shutdown();
         }
+        network.close();
 
     }
 }
