@@ -14,6 +14,9 @@ public class RemoteConfigControl extends ListenerAdapter {
 
     @Override
     public void onMessageReceived(MessageReceivedEvent event) {
+        if (DiscordBot.commandOnlyOneChannel)
+            if (!event.getTextChannel().equals(DiscordBot.getLoggerChannel())) return;
+
         String[] args = event.getMessage().getContentRaw().split(" ");
         if (args.length == 0) {
             return;
@@ -33,7 +36,6 @@ public class RemoteConfigControl extends ListenerAdapter {
 
             event.getChannel().sendTyping().queue();
             event.getChannel().sendMessage(info.build()).queue();
-            event.getMessage().delete().queue();
             return;
         }
 
@@ -46,7 +48,6 @@ public class RemoteConfigControl extends ListenerAdapter {
 
             event.getChannel().sendTyping().queue();
             event.getChannel().sendMessage(developers.build()).queue();
-            event.getMessage().delete().queue();
             return;
         }
 
@@ -62,7 +63,6 @@ public class RemoteConfigControl extends ListenerAdapter {
                 sendImportantMessage("Локальный чат включен! (" + who + ")");
                 DiscordLogger.getInstance().getConfig().set("local-chat", true);
             }
-            event.getMessage().delete().queue();
             DiscordLogger.getInstance().getLogger().info("<" + who + "> issued server command: ~toggle");
             return;
         }
@@ -91,8 +91,6 @@ public class RemoteConfigControl extends ListenerAdapter {
                     break;
             }
         } else event.getChannel().sendMessage("Доступные команды: ~bot <disable/restart>");
-        event.getMessage().delete().queue();
-
 
     }
 
