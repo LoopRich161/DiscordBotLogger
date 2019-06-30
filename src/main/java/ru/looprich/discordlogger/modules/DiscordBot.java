@@ -33,12 +33,6 @@ public class DiscordBot {
         return jda;
     }
 
-    private static boolean isFormatArg(String arg) {
-        if (arg.startsWith("*") && arg.endsWith("*")) return true;
-        if (arg.startsWith("_") && arg.endsWith("_")) return true;
-        return arg.startsWith("~") && arg.endsWith("~");
-        //todo check char format in word!
-    }
 
     public static boolean isEnabled() {
         return enable;
@@ -65,14 +59,86 @@ public class DiscordBot {
 
     public static void sendMessageChannel(String message) {
         if (!isEnabled()) return;
+        String msg = cancelFormatMessage(message);
+        loggerChannel.sendMessage(data() + msg).queue();
+    }
+
+    private static String cancelFormatMessage(String message) {
         String[] array = message.split(" ");
         String msg = "";
         for (int i = 0; i <= array.length - 1; i++)
-            if (isFormatArg(array[i])) {
-                msg += "\\" + array[i] + " ";
-            } else msg += array[i] + " ";
-        loggerChannel.sendMessage(data() + msg).queue();
+            if (checkWord(array[i].toCharArray())) msg += "\\" + array[i] + " ";
+            else msg += array[i] + " ";
+
+        return msg;
     }
+
+    private static boolean checkWord(char[] argToCharArray) {
+        boolean first = false, second = false;
+        int pos1 = 666, pos2 = 999;
+        for (int j = 0; j <= argToCharArray.length - 1; j++) {
+            char c = argToCharArray[j];
+            if (c == '*') {
+                first = true;
+                pos1 = j;
+                break;
+            }
+        }
+        for (int j = argToCharArray.length - 1; j != 0; j--) {
+            char c = argToCharArray[j];
+            if (c == '*') {
+                second = true;
+                pos2 = j;
+                break;
+            }
+        }
+        if (first && second && (pos1 != pos2)) return true;
+
+        pos1 = 666;
+        pos2 = 999;
+        first = false;
+        second = false;
+        for (int j = 0; j <= argToCharArray.length - 1; j++) {
+            char c = argToCharArray[j];
+            if (c == '_') {
+                first = true;
+                pos1 = j;
+                break;
+            }
+        }
+        for (int j = argToCharArray.length - 1; j != 0; j--) {
+            char c = argToCharArray[j];
+            if (c == '_') {
+                second = true;
+                pos2 = j;
+                break;
+            }
+        }
+        if (first && second && (pos1 != pos2)) return true;
+
+        pos1 = 666;
+        pos2 = 999;
+        first = false;
+        second = false;
+        for (int j = 0; j <= argToCharArray.length - 1; j++) {
+            char c = argToCharArray[j];
+            if (c == '~') {
+                first = true;
+                pos1 = j;
+                break;
+            }
+        }
+        for (int j = argToCharArray.length - 1; j != 0; j--) {
+            char c = argToCharArray[j];
+            if (c == '~') {
+                second = true;
+                pos2 = j;
+                break;
+            }
+        }
+        return first && second && (pos1 != pos2);
+    }
+
 
     public static TextChannel getLoggerChannel() {
         return loggerChannel;
