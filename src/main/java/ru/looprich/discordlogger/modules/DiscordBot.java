@@ -34,7 +34,6 @@ public class DiscordBot {
     }
 
 
-    //ГОВНО НА ПАЛКЕ, ПЕРЕДЕЛАТЬ
     public static boolean isEnabled() {
         return jda.getStatus().isInit();
     }
