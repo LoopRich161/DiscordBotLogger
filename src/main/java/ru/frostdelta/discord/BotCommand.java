@@ -13,30 +13,35 @@ public class BotCommand implements CommandExecutor {
 
     public static void reg() {
         DiscordLogger.getInstance().getCommand("bot").setExecutor(new BotCommand());
-        DiscordLogger.getInstance().getCommand("toggle").setExecutor(new BotCommand());
     }
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
 
         String who = sender.getName();
-        if (command.getName().equalsIgnoreCase("toggle")) {
-            if (DiscordBot.isLocalEnabled()) {
-                DiscordBot.setLocalEnabled(false);
-                sendImportantMessage("Локальный чат отключен! (" + who + ")");
-                sender.sendMessage("Локальный чат отключен!");
-                DiscordLogger.getInstance().getConfig().set("local-chat", false);
-            } else {
-                DiscordBot.setLocalEnabled(true);
-                sendImportantMessage("Локальный чат включен! (" + who + ")");
-                sender.sendMessage("Локальный чат включен!");
-                DiscordLogger.getInstance().getConfig().set("local-chat", true);
-            }
-            return true;
-        }
-
         if (command.getName().equalsIgnoreCase("bot") && args.length == 1) {
             switch (args[0]) {
+                case "help":
+                    sender.sendMessage("Доступные команды:\n" +
+                            "~toggle - *переключение локального чата.*\n" +
+                            "~bot reload - *перезагрузка конфига.*\n" +
+                            "~bot disable - *выключение бота.*\n" +
+                            "~bot restart - *перезагрузка бота.*\n" +
+                            "~developers - *информация о разработчиках.*");
+                    break;
+                case "toggle":
+                    if (DiscordBot.isLocalEnabled()) {
+                        DiscordBot.setLocalEnabled(false);
+                        sendImportantMessage("Локальный чат отключен! (" + who + ")");
+                        sender.sendMessage("Локальный чат отключен!");
+                        DiscordLogger.getInstance().getConfig().set("local-chat", false);
+                    } else {
+                        DiscordBot.setLocalEnabled(true);
+                        sendImportantMessage("Локальный чат включен! (" + who + ")");
+                        sender.sendMessage("Локальный чат включен!");
+                        DiscordLogger.getInstance().getConfig().set("local-chat", true);
+                    }
+                    break;
                 case "reload":
                     DiscordLogger.getInstance().reloadConfig();
                     sender.sendMessage("Бот перезагрузил конфиг!");
@@ -70,7 +75,7 @@ public class BotCommand implements CommandExecutor {
                     break;
             }
         } else
-            sender.sendMessage(ChatColor.RED + "Доступные команды: " + ChatColor.GOLD + "/bot <enable/disable/restart>");
+            sender.sendMessage(ChatColor.RED + "Доступные команды: " + ChatColor.GOLD + "/bot <help/enable/disable/restart>");
         return true;
     }
 
