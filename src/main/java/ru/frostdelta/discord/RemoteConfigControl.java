@@ -80,6 +80,7 @@ public class RemoteConfigControl extends ListenerAdapter {
                     break;
                 case "restart":
                     if (DiscordBot.isEnabled()) {
+                        sendImportantMessage("Я выключился!");
                         DiscordBot.getJDA().shutdownNow();
                         DiscordLogger.getInstance().loadDiscordBot();
                     } else {
