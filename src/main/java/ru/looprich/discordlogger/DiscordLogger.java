@@ -30,19 +30,20 @@ public class DiscordLogger extends JavaPlugin {
             getLogger().info("Loading...");
             loadDiscordBot();
             BotCommand.reg();
-            DiscordBot.sendImportantMessage("Я включился!");
         } else getLogger().info("DiscordBotLogging disabled!");
     }
 
     public void loadDiscordBot() {
         String token = getConfig().getString("bot.token");
         String channel = getConfig().getString("bot.channel-id");
+        if (token == null || channel == null) {
+            getLogger().severe("Token or channel is null!");
+        }
         discordBot = new DiscordBot(token, channel);
-        getLogger().info("Bot successful loaded!");
         if (!discordBot.createBot()) {
             getLogger().warning("PLUGIN DISABLE! YOU HAVE PROBLEMS WITH DISCORD BOT!");
             getPluginLoader().disablePlugin(this);
-        }
+        } else getLogger().info("Bot successful loaded!");
     }
 
     private void checkDatabase() {
@@ -76,7 +77,7 @@ public class DiscordLogger extends JavaPlugin {
             DiscordBot.sendImportantMessage("Я выключился!");
             DiscordBot.shutdown();
         }
-        network.close();
+        //network.close();
 
     }
 }
