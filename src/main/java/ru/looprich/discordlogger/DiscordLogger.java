@@ -36,9 +36,6 @@ public class DiscordLogger extends JavaPlugin {
     public void loadDiscordBot() {
         String token = getConfig().getString("bot.token");
         String channel = getConfig().getString("bot.channel-id");
-        if (token == null || channel == null) {
-            getLogger().severe("Token or channel is null!");
-        }
         discordBot = new DiscordBot(token, channel);
         if (!discordBot.createBot()) {
             getLogger().warning("PLUGIN DISABLE! YOU HAVE PROBLEMS WITH DISCORD BOT!");
