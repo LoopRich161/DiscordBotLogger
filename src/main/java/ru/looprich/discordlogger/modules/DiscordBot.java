@@ -22,6 +22,7 @@ public class DiscordBot {
     private static JDA jda = null;
     private static boolean enable;
     public static final String prefix = "~";
+    public static boolean commandOnlyOneChannel;
 
     public DiscordBot(String tokenBot, String channel) {
         DiscordBot.tokenBot = tokenBot;
@@ -32,24 +33,11 @@ public class DiscordBot {
         return jda;
     }
 
-    public boolean createBot() {
-        try {
-            jda = new JDABuilder(tokenBot).build().awaitReady();
-            jda.getPresence().setStatus(OnlineStatus.IDLE);
-            jda.getPresence().setGame(Game.watching("за вашим сервером."));
-            jda.addEventListener(new RemoteConfigControl());
-        } catch (LoginException e) {
-            System.out.println("Invalid token!");
-            e.printStackTrace();
-            return false;
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        loggerChannel = jda.getTextChannelById(channel);
-        bot = this;
-        localEnabled = DiscordLogger.getInstance().getConfig().getBoolean("bot.local-chat");
-        enable = true;
-        return loggerChannel != null;
+    private static boolean isFormatArg(String arg) {
+        if (arg.startsWith("*") && arg.endsWith("*")) return true;
+        if (arg.startsWith("_") && arg.endsWith("_")) return true;
+        return arg.startsWith("~") && arg.endsWith("~");
+        //todo check char format in word!
     }
 
     public static boolean isEnabled() {
@@ -86,12 +74,8 @@ public class DiscordBot {
         loggerChannel.sendMessage(data() + msg).queue();
     }
 
-    private static boolean isFormatArg(String arg) {
-        if (arg.startsWith("*") && arg.endsWith("*")) return true;
-        if (arg.startsWith("_") && arg.endsWith("_")) return true;
-        if (arg.startsWith("~") && arg.endsWith("~")) return true;
-        //todo check char format in word!
-        return false;
+    public static TextChannel getLoggerChannel() {
+        return loggerChannel;
     }
 
     public static void sendImportantMessage(String msg) {
@@ -116,6 +100,32 @@ public class DiscordBot {
         if (date.getSeconds() < 10) seconds = "0" + date.getSeconds();
         else seconds = String.valueOf(date.getSeconds());
         return "**[" + hours + ":" + minutes + ":" + seconds + "]:** ";
+    }
+
+    public boolean createBot() {
+        try {
+            jda = new JDABuilder(tokenBot).build().awaitReady();
+            jda.getPresence().setStatus(OnlineStatus.IDLE);
+            jda.getPresence().setGame(Game.watching("за вашим сервером."));
+            jda.addEventListener(new RemoteConfigControl());
+        } catch (LoginException e) {
+            DiscordLogger.getInstance().getLogger().severe("Invalid token!");
+            e.printStackTrace();
+            return false;
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        loggerChannel = jda.getTextChannelById(channel);
+        if (loggerChannel == null) {
+            DiscordLogger.getInstance().getLogger().severe("Invalid channel!");
+            return false;
+        }
+        bot = this;
+        localEnabled = DiscordLogger.getInstance().getConfig().getBoolean("bot.local-chat");
+        commandOnlyOneChannel = DiscordLogger.getInstance().getConfig().getBoolean("bot.command-only-channel");
+        enable = true;
+        sendImportantMessage("Я включился!");
+        return true;
     }
 
 }
