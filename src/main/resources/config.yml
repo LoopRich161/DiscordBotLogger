@@ -4,7 +4,13 @@ network:
   password: ''
 
 bot:
+  #Статус бота: true - включен, false - выключен
   enabled: true
+  #Токен бота
   token: ''
+  #ID канала для логгирования сообщений
   channel-id: ''
+  #Использование команд только в указаном канале
+  command-only-channel: true
+  #Логгировать локал-чат
   local-chat: true
