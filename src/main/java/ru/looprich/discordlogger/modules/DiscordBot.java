@@ -35,7 +35,7 @@ public class DiscordBot {
 
 
     public static boolean isEnabled() {
-        return enable;
+        return jda.getStatus().isInit();
     }
 
     public static void shutdown() {
