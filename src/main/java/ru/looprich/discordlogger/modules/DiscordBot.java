@@ -66,77 +66,32 @@ public class DiscordBot {
     private static String cancelFormatMessage(String message) {
         String[] array = message.split(" ");
         String msg = "";
-        for (int i = 0; i <= array.length - 1; i++)
-            if (checkWord(array[i].toCharArray())) msg += "\\" + array[i] + " ";
-            else msg += array[i] + " ";
+        int pos1, pos2, difference;
+        for (int i = 0; i <= array.length - 1; i++) {
+            StringBuffer buff = new StringBuffer(" " + array[i]);
+            pos1 = buff.toString().indexOf('_');
+            pos2 = buff.toString().lastIndexOf('_');
+            difference = Math.max(pos1, pos2) - Math.min(pos1, pos2);
+            if (pos1 != pos2 && difference != 1) {
+                buff.insert(pos1, "\\");
+            }
+            pos1 = buff.toString().indexOf('*');
+            pos2 = buff.toString().lastIndexOf('*');
+            difference = Math.max(pos1, pos2) - Math.min(pos1, pos2);
+            if (pos1 != pos2 && difference != 1) {
+                buff.insert(pos1, "\\");
+            }
 
+            pos1 = buff.toString().indexOf('~');
+            pos2 = buff.toString().lastIndexOf('~');
+            difference = Math.max(pos1, pos2) - Math.min(pos1, pos2);
+            if (pos1 != pos2 && difference != 1) {
+                buff.insert(pos1, " \\");
+            }
+
+            msg += buff.toString();
+        }
         return msg;
-    }
-
-    private static boolean checkWord(char[] argToCharArray) {
-        boolean first = false, second = false;
-        int pos1 = 666, pos2 = 999;
-        for (int j = 0; j <= argToCharArray.length - 1; j++) {
-            char c = argToCharArray[j];
-            if (c == '*') {
-                first = true;
-                pos1 = j;
-                break;
-            }
-        }
-        for (int j = argToCharArray.length - 1; j != 0; j--) {
-            char c = argToCharArray[j];
-            if (c == '*') {
-                second = true;
-                pos2 = j;
-                break;
-            }
-        }
-        if (first && second && (pos1 != pos2)) return true;
-
-        pos1 = 666;
-        pos2 = 999;
-        first = false;
-        second = false;
-        for (int j = 0; j <= argToCharArray.length - 1; j++) {
-            char c = argToCharArray[j];
-            if (c == '_') {
-                first = true;
-                pos1 = j;
-                break;
-            }
-        }
-        for (int j = argToCharArray.length - 1; j != 0; j--) {
-            char c = argToCharArray[j];
-            if (c == '_') {
-                second = true;
-                pos2 = j;
-                break;
-            }
-        }
-        if (first && second && (pos1 != pos2)) return true;
-
-        pos1 = 666;
-        pos2 = 999;
-        first = false;
-        second = false;
-        for (int j = 0; j <= argToCharArray.length - 1; j++) {
-            char c = argToCharArray[j];
-            if (c == '~') {
-                first = true;
-                pos1 = j;
-                break;
-            }
-        }
-        for (int j = argToCharArray.length - 1; j != 0; j--) {
-            char c = argToCharArray[j];
-            if (c == '~') {
-                second = true;
-                pos2 = j;
-                break;
-            }
-        }
-        return first && second && (pos1 != pos2);
     }
 
 
