@@ -27,7 +27,7 @@ public class BotCommand implements CommandExecutor {
                             "~bot reload - *перезагрузка конфига.*\n" +
                             "~bot disable - *выключение бота.*\n" +
                             "~bot restart - *перезагрузка бота.*\n" +
-                            "~developers - *информация о разработчиках.*");
+                            "~bot developers - *информация о разработчиках.*");
                     break;
                 case "toggle":
                     if (DiscordBot.isLocalEnabled()) {
@@ -73,6 +73,9 @@ public class BotCommand implements CommandExecutor {
                     }
                     sendImportantMessage("Я перезагрузился! (" + who + ")");
                     break;
+                case "developers":
+                    sender.sendMessage("LoopRich161 - создатель плагина.\n" +
+                            "                 FrostDelta123 - человек-идея, а так же фиксящий ошибки и исправляющий костыли.");
             }
         } else
             sender.sendMessage(ChatColor.RED + "Доступные команды: " + ChatColor.GOLD + "/bot <help/enable/disable/restart>");
