@@ -29,13 +29,13 @@ public class DiscordBot {
         DiscordBot.channel = channel;
     }
 
-    public static JDA getJDA() {
-        return jda;
-    }
-
-
-    public static boolean isEnabled() {
-        return jda.getStatus().isInit();
+    public static void sendImportantMessage(String msg) {
+        EmbedBuilder message = new EmbedBuilder();
+        message.setTitle("Что-то произошло с ботом!");
+        message.setDescription(msg);
+        message.setColor(0xf45642);
+        loggerChannel.sendTyping().queue();
+        loggerChannel.sendMessage(message.build()).queue();
     }
 
     public static void shutdown() {
@@ -47,14 +47,6 @@ public class DiscordBot {
         enable = false;
         DiscordLogger.getInstance().discordBot = null;
         jda.shutdown();
-    }
-
-    public static void setLocalEnabled(boolean localEnabled) {
-        DiscordBot.localEnabled = localEnabled;
-    }
-
-    public static boolean isLocalEnabled() {
-        return localEnabled;
     }
 
     public static void sendMessageChannel(String message) {
@@ -96,21 +88,22 @@ public class DiscordBot {
         return msg;
     }
 
+    public static void sendVerifyMessage(String msg) {
+        EmbedBuilder message = new EmbedBuilder();
+        message.setTitle("Связание аккаунтов.");
+        message.setDescription(msg);
+        message.setColor(0x800080);
+        loggerChannel.sendTyping().queue();
+        loggerChannel.sendMessage(message.build()).queue();
+    }
 
     public static TextChannel getLoggerChannel() {
         return loggerChannel;
     }
 
-    public static void sendImportantMessage(String msg) {
-        EmbedBuilder message = new EmbedBuilder();
-        message.setTitle("Что-то произошло с ботом!");
-        message.setDescription(msg);
-        message.setColor(0xf45642);
-        loggerChannel.sendTyping().queue();
-        loggerChannel.sendMessage(message.build()).queue();
-
+    public static JDA getJDA() {
+        return jda;
     }
-
 
     @Deprecated
     private static String data() {
@@ -123,6 +116,18 @@ public class DiscordBot {
         if (date.getSeconds() < 10) seconds = "0" + date.getSeconds();
         else seconds = String.valueOf(date.getSeconds());
         return "**[" + hours + ":" + minutes + ":" + seconds + "]:** ";
+    }
+
+    public static boolean isEnabled() {
+        return jda.getStatus().isInit();
+    }
+
+    public static boolean isLocalEnabled() {
+        return localEnabled;
+    }
+
+    public static void setLocalEnabled(boolean localEnabled) {
+        DiscordBot.localEnabled = localEnabled;
     }
 
     public boolean createBot() {
