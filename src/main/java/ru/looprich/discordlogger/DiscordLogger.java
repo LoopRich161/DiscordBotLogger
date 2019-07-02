@@ -1,6 +1,5 @@
 package ru.looprich.discordlogger;
 
-import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 import ru.frostdelta.discord.BotCommand;
 import ru.frostdelta.discord.events.*;
@@ -47,7 +46,7 @@ public class DiscordLogger extends JavaPlugin {
         discordBot = new DiscordBot(token, channel);
         if (!discordBot.createBot()) {
             getLogger().severe("PLUGIN DISABLE! YOU HAVE PROBLEMS WITH DISCORD BOT!");
-            plugin.setEnabled(false);
+            getPluginLoader().disablePlugin(this);
         } else getLogger().info("Bot successful loaded!");
     }
 
@@ -55,19 +54,14 @@ public class DiscordLogger extends JavaPlugin {
         String url = getConfig().getString("network.url");
         String username = getConfig().getString("network.username");
         String password = getConfig().getString("network.password");
-        Bukkit.getScheduler().runTaskAsynchronously(this, () -> {
-            network = new Network(getLogger(), url, username, password);
-            if (network.init()) {
-                getLogger().info("Database find!");
-                network.createDB();
-            } else {
-                getLogger().severe("Database not find!");
-                plugin.setEnabled(false);
-            }
-
-        });
-
-
+        network = new Network(getLogger(), url, username, password);
+        if (network.init()) {
+            getLogger().info("Database find!");
+            network.createDB();
+        } else {
+            getLogger().severe("Database not find!");
+            getPluginLoader().disablePlugin(this);
+        }
     }
 
     public Network getNetwork() {
