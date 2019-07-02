@@ -1,5 +1,6 @@
 package ru.looprich.discordlogger;
 
+import net.dv8tion.jda.core.entities.User;
 import org.bukkit.entity.Player;
 
 import java.sql.*;
@@ -9,7 +10,7 @@ public class Network {
 
     private static final long autoReconnect = 28700L;
 
-    private final String INSERT_QUERY, SELECT_QUERY, CREATE_DB;
+    private final String INSERT_QUERY, SELECT_QUERY_PLAYER, SELECT_QUERY_USER, CREATE_DB;
     private final String url, user, password;
     private Connection connection;
     private long lastExecute = 0L;
@@ -21,9 +22,10 @@ public class Network {
         this.user = user;
         this.password = password;
 
-        this.CREATE_DB = "CREATE TABLE IF NOT EXISTS `DiscordLogger` (discord varchar(200), username varchar(200), data varchar(200)) CHARACTER SET utf8 COLLATE utf8_general_ci;";
-        this.INSERT_QUERY = "INSERT INTO `DiscordLogger` (discord, username, data) VALUES (?, ?, ?);";
-        this.SELECT_QUERY = "SELECT * FROM `DiscordLogger` WHERE `username` = ? ;";
+        this.CREATE_DB = "CREATE TABLE IF NOT EXISTS `DiscordLogger` (player varchar(200),playerUUID varchar(200),  discord varchar(200), code varchar(200)) CHARACTER SET utf8 COLLATE utf8_general_ci;";
+        this.INSERT_QUERY = "INSERT INTO `DiscordLogger` (player, playerUUID, discord, code) VALUES (?, ?, ?, ?);";
+        this.SELECT_QUERY_PLAYER = "SELECT * FROM `DiscordLogger` WHERE `player` = ? ;";
+        this.SELECT_QUERY_USER = "SELECT * FROM `DiscordLogger` WHERE `discord` = ? ;";
     }
 
 
@@ -40,19 +42,32 @@ public class Network {
 
     }
 
-    public void addPlayer() {
-        /// TODO: 25.06.2019
-        flushLastExecute();
-    }
-
-    boolean existPlayer(Player player) {
+    public void verifyPlayer(Player player, User user, String code) {
         this.connection = getConnection();
         if (this.connection != null) {
-            try (PreparedStatement preparedStatement = this.connection.prepareStatement(SELECT_QUERY)) {
+            try (PreparedStatement preparedStatement = this.connection.prepareStatement(INSERT_QUERY)) {
+                preparedStatement.setString(1, player.getName());
+                preparedStatement.setString(2, player.getUniqueId().toString());
+                preparedStatement.setString(3, user.getAsTag());
+                preparedStatement.setString(4, code);
+                preparedStatement.executeUpdate();
+                flushLastExecute();
+            } catch (SQLException e) {
+                logger.severe("Error verifyPlayer.");
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public boolean existPlayer(Player player) {
+        this.connection = getConnection();
+        if (this.connection != null) {
+            try (PreparedStatement preparedStatement = this.connection.prepareStatement(SELECT_QUERY_PLAYER)) {
                 preparedStatement.setString(1, player.getName());
                 try (ResultSet rs = preparedStatement.executeQuery()) {
                     while (rs.next()) {
-                        if (rs.getString("data") != null) return true;
+                        String code = rs.getString("code");
+                        if (code != null) return true;
                     }
                 }
             } catch (SQLException ex) {
@@ -64,6 +79,25 @@ public class Network {
         return false;
     }
 
+    public boolean existUser(User user) {
+        this.connection = getConnection();
+        if (this.connection != null) {
+            try (PreparedStatement preparedStatement = this.connection.prepareStatement(SELECT_QUERY_USER)) {
+                preparedStatement.setString(1, user.getAsTag());
+                try (ResultSet rs = preparedStatement.executeQuery()) {
+                    while (rs.next()) {
+                        String code = rs.getString("code");
+                        if (code != null) return true;
+                    }
+                }
+            } catch (SQLException ex) {
+                logger.severe("Error existUser.");
+                ex.printStackTrace();
+            }
+        }
+        flushLastExecute();
+        return false;
+    }
 
     //others
     public boolean init() {
