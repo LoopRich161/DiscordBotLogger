@@ -1,15 +1,21 @@
 package ru.looprich.discordlogger;
 
+import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 import ru.frostdelta.discord.BotCommand;
 import ru.frostdelta.discord.events.*;
 import ru.looprich.discordlogger.modules.DiscordBot;
+import ru.looprich.discordlogger.snapping.GameSnapping;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class DiscordLogger extends JavaPlugin {
 
     private static DiscordLogger plugin;
     public DiscordBot discordBot;
     private Network network;
+    public List<GameSnapping> verifyUsers;
 
     @Override
     public void onEnable() {
@@ -21,15 +27,17 @@ public class DiscordLogger extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new PlayerJoinEvent(), this);
         getServer().getPluginManager().registerEvents(new PlayerQuitEvent(), this);
         getServer().getPluginManager().registerEvents(new PlayerCommandPreprocessEvent(), this);
-        getServer().getPluginManager().registerEvents(new BroadcastEvent(),this);
-        //getServer().getPluginManager().registerEvents(new AchievementEvent(), this);
+        getServer().getPluginManager().registerEvents(new BroadcastEvent(), this);
+        getServer().getPluginManager().registerEvents(new AchievementEvent(), this);
 
         boolean isEnabled = getConfig().getBoolean("bot.enabled");
         if (isEnabled) {
+            checkDatabase();
             getLogger().info("DiscordBotLogging enabled!");
             getLogger().info("Loading...");
             loadDiscordBot();
             BotCommand.reg();
+            verifyUsers = new ArrayList<>();
         } else getLogger().info("DiscordBotLogging disabled!");
     }
 
@@ -38,8 +46,8 @@ public class DiscordLogger extends JavaPlugin {
         String channel = getConfig().getString("bot.channel-id");
         discordBot = new DiscordBot(token, channel);
         if (!discordBot.createBot()) {
-            getLogger().warning("PLUGIN DISABLE! YOU HAVE PROBLEMS WITH DISCORD BOT!");
-            getPluginLoader().disablePlugin(this);
+            getLogger().severe("PLUGIN DISABLE! YOU HAVE PROBLEMS WITH DISCORD BOT!");
+            plugin.setEnabled(false);
         } else getLogger().info("Bot successful loaded!");
     }
 
@@ -47,20 +55,22 @@ public class DiscordLogger extends JavaPlugin {
         String url = getConfig().getString("network.url");
         String username = getConfig().getString("network.username");
         String password = getConfig().getString("network.password");
+        Bukkit.getScheduler().runTaskAsynchronously(this, () -> {
+            network = new Network(getLogger(), url, username, password);
+            if (network.init()) {
+                getLogger().info("Database find!");
+                network.createDB();
+            } else {
+                getLogger().severe("Database not find!");
+                plugin.setEnabled(false);
+            }
 
-        network = new Network(getLogger(), url, username, password);
-        if (network.init()) {
-            getLogger().info("Database find!");
-        } else {
-            getLogger().severe("Database not find!");
-            plugin.setEnabled(false);
-        }
-        network.createDB();
+        });
 
 
     }
 
-    Network getNetwork() {
+    public Network getNetwork() {
         return network;
     }
 
@@ -70,11 +80,11 @@ public class DiscordLogger extends JavaPlugin {
 
     @Override
     public void onDisable() {
-        if (DiscordBot.isEnabled()){
+        if (DiscordBot.isEnabled()) {
             DiscordBot.sendImportantMessage("Я выключился!");
             DiscordBot.shutdown();
         }
-        //network.close();
+        network.close();
 
     }
 }
