@@ -4,8 +4,10 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 import ru.looprich.discordlogger.DiscordLogger;
 import ru.looprich.discordlogger.modules.DiscordBot;
+import ru.looprich.discordlogger.snapping.GameSnapping;
 
 import static ru.looprich.discordlogger.modules.DiscordBot.sendImportantMessage;
 
@@ -13,12 +15,36 @@ public class BotCommand implements CommandExecutor {
 
     public static void reg() {
         DiscordLogger.getInstance().getCommand("bot").setExecutor(new BotCommand());
+        DiscordLogger.getInstance().getCommand("verify").setExecutor(new BotCommand());
     }
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-
         String who = sender.getName();
+
+        if (command.getName().equalsIgnoreCase("verify") && args.length == 2) {
+            if (sender instanceof Player) {
+                Player player = (Player) sender;
+                for (GameSnapping snapping : DiscordLogger.getInstance().verifyUsers) {
+                    if (snapping.getPlayer().getUniqueId().equals(player.getUniqueId())) {
+                        switch (args[1]) {
+                            case "accept":
+                                snapping.accept();
+                                break;
+                            case "reject":
+                                snapping.reject();
+                                break;
+                            default:
+                                player.sendMessage(ChatColor.RED + "Доступные ответы: " + ChatColor.GOLD + "/verify <accept <code>/reject>");
+                                break;
+                        }
+                        return true;
+                    }
+                }
+            } else sender.sendMessage("Только для игроков!");
+            return true;
+        }
+
         if (command.getName().equalsIgnoreCase("bot") && args.length == 1) {
             switch (args[0]) {
                 case "help":
