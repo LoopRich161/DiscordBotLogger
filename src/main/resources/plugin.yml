@@ -8,3 +8,4 @@ commands:
   bot:
     permission: discordlogger.bot
     permission-message: U dont have permissions!
+  verify:
