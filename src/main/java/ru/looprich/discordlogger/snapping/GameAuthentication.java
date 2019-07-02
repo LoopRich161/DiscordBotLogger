@@ -10,7 +10,7 @@ import ru.looprich.discordlogger.modules.DiscordBot;
 
 import java.util.Random;
 
-public class GameSnapping {
+public class GameAuthentication {
 
     private Player player = null;
     private String playerName;
@@ -19,7 +19,7 @@ public class GameSnapping {
     private String code;
     private boolean confirm;
 
-    public GameSnapping(User user, String playerName) {
+    public GameAuthentication(User user, String playerName) {
         this.playerName = playerName;
         this.user = user;
         DiscordLogger.getInstance().verifyUsers.add(this);
@@ -64,7 +64,7 @@ public class GameSnapping {
             DiscordBot.sendVerifyMessage("Пользователь " + user.getAsTag() + " уже связал свои аккаунты!");
             return;
         }
-        SnappingTimer timer = new SnappingTimer(this);
+        AuthenticationTimer timer = new AuthenticationTimer(this);
         sendCode();
         player.sendMessage(ChatColor.GOLD + "Вы или кто-то за Вас, пытались связать аккаунты Discord и Minecraft");
         player.sendMessage(ChatColor.AQUA + "/verify accept <code>" + ChatColor.GREEN + "- принять предложение");

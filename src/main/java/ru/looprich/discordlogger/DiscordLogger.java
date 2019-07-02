@@ -5,7 +5,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import ru.frostdelta.discord.BotCommand;
 import ru.frostdelta.discord.events.*;
 import ru.looprich.discordlogger.modules.DiscordBot;
-import ru.looprich.discordlogger.snapping.GameSnapping;
+import ru.looprich.discordlogger.snapping.GameAuthentication;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,7 +15,7 @@ public class DiscordLogger extends JavaPlugin {
     private static DiscordLogger plugin;
     public DiscordBot discordBot;
     private Network network;
-    public List<GameSnapping> verifyUsers;
+    public List<GameAuthentication> verifyUsers;
 
     @Override
     public void onEnable() {

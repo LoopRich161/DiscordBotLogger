@@ -7,7 +7,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import ru.looprich.discordlogger.DiscordLogger;
 import ru.looprich.discordlogger.modules.DiscordBot;
-import ru.looprich.discordlogger.snapping.GameSnapping;
+import ru.looprich.discordlogger.snapping.GameAuthentication;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -64,8 +64,8 @@ public class RemoteConfigControl extends ListenerAdapter {
 
         if (command.equalsIgnoreCase(DiscordBot.prefix + "verify") && args.length == 2) {
             String nickname = args[1];
-            GameSnapping snapping = new GameSnapping(event.getAuthor(), nickname);
-            for (GameSnapping gameSnapping : DiscordLogger.getInstance().verifyUsers)
+            GameAuthentication snapping = new GameAuthentication(event.getAuthor(), nickname);
+            for (GameAuthentication gameSnapping : DiscordLogger.getInstance().verifyUsers)
                 if (gameSnapping.getPlayerName().equalsIgnoreCase(nickname)) return;
 
             snapping.regPlayer();

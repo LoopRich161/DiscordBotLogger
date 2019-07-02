@@ -3,12 +3,12 @@ package ru.looprich.discordlogger.snapping;
 import org.bukkit.scheduler.BukkitRunnable;
 import ru.looprich.discordlogger.DiscordLogger;
 
-public class SnappingTimer extends BukkitRunnable {
+public class AuthenticationTimer extends BukkitRunnable {
     private int verifyTime = DiscordLogger.getInstance().getConfig().getInt("bot.verify-time");
     private int time = 0;
-    private GameSnapping snapping;
+    private GameAuthentication snapping;
 
-    public SnappingTimer(GameSnapping snapping) {
+    public AuthenticationTimer(GameAuthentication snapping) {
         this.snapping = snapping;
     }
 

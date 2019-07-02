@@ -7,7 +7,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import ru.looprich.discordlogger.DiscordLogger;
 import ru.looprich.discordlogger.modules.DiscordBot;
-import ru.looprich.discordlogger.snapping.GameSnapping;
+import ru.looprich.discordlogger.snapping.GameAuthentication;
 
 import static ru.looprich.discordlogger.modules.DiscordBot.sendImportantMessage;
 
@@ -25,7 +25,7 @@ public class BotCommand implements CommandExecutor {
         if (command.getName().equalsIgnoreCase("verify") && args.length == 2) {
             if (sender instanceof Player) {
                 Player player = (Player) sender;
-                for (GameSnapping snapping : DiscordLogger.getInstance().verifyUsers) {
+                for (GameAuthentication snapping : DiscordLogger.getInstance().verifyUsers) {
                     if (snapping.getPlayer().getUniqueId().equals(player.getUniqueId())) {
                         switch (args[1]) {
                             case "accept":
