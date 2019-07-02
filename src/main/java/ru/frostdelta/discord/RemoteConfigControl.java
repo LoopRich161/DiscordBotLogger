@@ -7,6 +7,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import ru.looprich.discordlogger.DiscordLogger;
 import ru.looprich.discordlogger.modules.DiscordBot;
+import ru.looprich.discordlogger.snapping.GameSnapping;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -35,7 +36,8 @@ public class RemoteConfigControl extends ListenerAdapter {
                     "~bot disable - *выключение бота.*\n" +
                     "~bot restart - *перезагрузка бота.*\n" +
                     "~bot developers - *информация о разработчиках.*\n" +
-                    "~bot online - *просмотреть кто находится на сервере.");
+                    "~bot online - *просмотреть кто находится на сервере.\n" +
+                    "~bot verify <nickname> - *связать Discord к Minecraft аккаунты.*");
             info.addField("Создатели", Arrays.toString(DiscordLogger.getInstance().getDescription().getAuthors().toArray()), false);
             info.setColor(0x008000);
 
@@ -57,6 +59,16 @@ public class RemoteConfigControl extends ListenerAdapter {
                 DiscordLogger.getInstance().getConfig().set("local-chat", true);
             }
             DiscordLogger.getInstance().getLogger().info("<" + who + "> issued discord command: ~toggle");
+            return;
+        }
+
+        if (command.equalsIgnoreCase(DiscordBot.prefix + "verify") && args.length == 2) {
+            String nickname = args[1];
+            GameSnapping snapping = new GameSnapping(event.getAuthor(), nickname);
+            for (GameSnapping gameSnapping : DiscordLogger.getInstance().verifyUsers)
+                if (gameSnapping.getPlayerName().equalsIgnoreCase(nickname)) return;
+
+            snapping.regPlayer();
             return;
         }
 
