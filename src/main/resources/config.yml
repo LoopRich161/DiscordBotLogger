@@ -14,3 +14,5 @@ bot:
   command-only-channel: true
   #Логгировать локал-чат
   local-chat: true
+  #Время для подтверждения связки аккаунтов (в секундах)
+  verify-time: 60
