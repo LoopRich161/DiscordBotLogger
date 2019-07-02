@@ -13,7 +13,7 @@ public class AchievementEvent implements Listener {
     @EventHandler(priority = EventPriority.MONITOR)
     void achivement(PlayerAdvancementDoneEvent event) {
         Player player = event.getPlayer();
-        sendMessageChannel(player.getName() + " has made the achievement " + event.getAdvancement().toString());
+        sendMessageChannel(player.getName() + " has made the new achievement!");
     }
 
 }
