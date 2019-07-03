@@ -9,8 +9,6 @@ import ru.looprich.discordlogger.DiscordLogger;
 import ru.looprich.discordlogger.modules.DiscordBot;
 import ru.looprich.discordlogger.snapping.GameAuthentication;
 
-import static ru.looprich.discordlogger.modules.DiscordBot.sendImportantMessage;
-
 public class BotCommand implements CommandExecutor {
 
     public static void reg() {
@@ -21,22 +19,20 @@ public class BotCommand implements CommandExecutor {
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         String who = sender.getName();
-
         if (command.getName().equalsIgnoreCase("verify") && args.length >= 1) {
             if (sender instanceof Player) {
-                Player player = (Player) sender;
                 for (GameAuthentication snapping : DiscordLogger.getInstance().verifyUsers) {
-                    if (snapping.getPlayerName().equalsIgnoreCase(player.getName())) {
+                    if (snapping.getPlayerName().equalsIgnoreCase(sender.getName())) {
                         switch (args[0]) {
                             case "accept":
                                 if (args[1].equalsIgnoreCase(snapping.getCode())) snapping.accept();
-                                else player.sendMessage(ChatColor.RED + "Вы ввели неверный код!");
+                                else sender.sendMessage(ChatColor.RED + "Вы ввели неверный код!");
                                 break;
                             case "reject":
                                 snapping.reject();
                                 break;
                             default:
-                                player.sendMessage(ChatColor.RED + "Доступные ответы: " + ChatColor.GOLD + "/verify <accept <code>/reject>");
+                                sender.sendMessage(ChatColor.RED + "Доступные ответы: " + ChatColor.GOLD + "/verify <accept <code>/reject>");
                                 break;
                         }
                         return true;
@@ -59,12 +55,12 @@ public class BotCommand implements CommandExecutor {
                 case "toggle":
                     if (DiscordBot.isLocalEnabled()) {
                         DiscordBot.setLocalEnabled(false);
-                        sendImportantMessage("Локальный чат отключен! (" + who + ")");
+                        DiscordBot.sendImportantMessage("Локальный чат отключен! (" + who + ")");
                         sender.sendMessage("Локальный чат отключен!");
                         DiscordLogger.getInstance().getConfig().set("local-chat", false);
                     } else {
                         DiscordBot.setLocalEnabled(true);
-                        sendImportantMessage("Локальный чат включен! (" + who + ")");
+                        DiscordBot.sendImportantMessage("Локальный чат включен! (" + who + ")");
                         sender.sendMessage("Локальный чат включен!");
                         DiscordLogger.getInstance().getConfig().set("local-chat", true);
                     }
@@ -85,7 +81,7 @@ public class BotCommand implements CommandExecutor {
                         DiscordLogger.getInstance().getLogger().info("Бот уже выключен!");
                         return true;
                     }
-                    sendImportantMessage("Я выключился! (" + who + ")");
+                    DiscordBot.sendImportantMessage("Я выключился! (" + who + ")");
                     DiscordBot.shutdown();
                     sender.sendMessage("Бот успешно выключен!");
                     break;
@@ -98,7 +94,7 @@ public class BotCommand implements CommandExecutor {
                         DiscordLogger.getInstance().loadDiscordBot();
                         sender.sendMessage("Бот успешно перезагружен!");
                     }
-                    sendImportantMessage("Я перезагрузился! (" + who + ")");
+                    DiscordBot.sendImportantMessage("Я перезагрузился! (" + who + ")");
                     break;
                 case "developers":
                     sender.sendMessage("LoopRich161 - создатель плагина.\n" +
