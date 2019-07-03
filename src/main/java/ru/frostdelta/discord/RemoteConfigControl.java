@@ -20,14 +20,15 @@ public class RemoteConfigControl extends ListenerAdapter {
     @Override
     public void onMessageReceived(MessageReceivedEvent event) {
         if (DiscordBot.commandOnlyOneChannel)
-            if (!event.getTextChannel().equals(DiscordBot.getLoggerChannel())) return;
+            if (!event.getTextChannel().getId().equalsIgnoreCase(DiscordBot.getLoggerChannel().getId()) && event.getTextChannel() != null)
+                return;
 
         String[] args = event.getMessage().getContentRaw().split(" ");
         if (args.length == 0) {
             return;
         }
         String command = args[0];
-        if (command.equalsIgnoreCase(DiscordBot.prefix + "help")) {
+        if (command.equalsIgnoreCase(DiscordBot.prefix + "bot") && args[1].equalsIgnoreCase("help")) {
             EmbedBuilder info = new EmbedBuilder();
             info.setTitle("Помощь");
             info.setDescription("Доступные команды:\n" +
@@ -37,7 +38,7 @@ public class RemoteConfigControl extends ListenerAdapter {
                     "~bot restart - *перезагрузка бота.*\n" +
                     "~bot developers - *информация о разработчиках.*\n" +
                     "~bot online - *просмотреть кто находится на сервере.\n" +
-                    "~bot verify <nickname> - *связать Discord к Minecraft аккаунты.*");
+                    "~verify <nickname> - *привязать Discord к Minecraft аккаунту. Необходимо открыть личные сообщения от участников сервера!*");
             info.addField("Создатели", Arrays.toString(DiscordLogger.getInstance().getDescription().getAuthors().toArray()), false);
             info.setColor(0x008000);
 
@@ -64,11 +65,14 @@ public class RemoteConfigControl extends ListenerAdapter {
 
         if (command.equalsIgnoreCase(DiscordBot.prefix + "verify") && args.length == 2) {
             String nickname = args[1];
-            GameAuthentication snapping = new GameAuthentication(event.getAuthor(), nickname);
             for (GameAuthentication gameSnapping : DiscordLogger.getInstance().verifyUsers)
-                if (gameSnapping.getPlayerName().equalsIgnoreCase(nickname)) return;
-
+                if (gameSnapping.getPlayerName().equalsIgnoreCase(nickname)) {
+                    DiscordBot.sendVerifyMessage("Данному участнику уже выслан код! Ожидайте пока закончится время для подтверждения кода.");
+                    return;
+                }
+            GameAuthentication snapping = new GameAuthentication(event.getAuthor(), nickname);
             snapping.regPlayer();
+            DiscordLogger.getInstance().getLogger().info("<" + who + "> issued discord command: ~verify " + nickname);
             return;
         }
 
@@ -116,8 +120,11 @@ public class RemoteConfigControl extends ListenerAdapter {
                     event.getChannel().sendTyping().queue();
                     event.getChannel().sendMessage(online.build()).queue();
                     break;
+                default:
+                    event.getChannel().sendMessage("Доступные команды: ~bot <disable/restart/developers/online>");
+                    break;
             }
-        } else event.getChannel().sendMessage("Доступные команды: ~bot <disable/restart/developers/online>");
+        }
 
     }
 

@@ -90,7 +90,7 @@ public class DiscordBot {
 
     public static void sendVerifyMessage(String msg) {
         EmbedBuilder message = new EmbedBuilder();
-        message.setTitle("Связание аккаунтов.");
+        message.setTitle("Верификация аккаунтов.");
         message.setDescription(msg);
         message.setColor(0x800080);
         loggerChannel.sendTyping().queue();

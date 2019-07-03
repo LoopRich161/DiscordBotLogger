@@ -22,14 +22,15 @@ public class BotCommand implements CommandExecutor {
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         String who = sender.getName();
 
-        if (command.getName().equalsIgnoreCase("verify") && args.length == 2) {
+        if (command.getName().equalsIgnoreCase("verify") && args.length >= 1) {
             if (sender instanceof Player) {
                 Player player = (Player) sender;
                 for (GameAuthentication snapping : DiscordLogger.getInstance().verifyUsers) {
-                    if (snapping.getPlayer().getUniqueId().equals(player.getUniqueId())) {
-                        switch (args[1]) {
+                    if (snapping.getPlayerName().equalsIgnoreCase(player.getName())) {
+                        switch (args[0]) {
                             case "accept":
-                                snapping.accept();
+                                if (args[1].equalsIgnoreCase(snapping.getCode())) snapping.accept();
+                                else player.sendMessage(ChatColor.RED + "Вы ввели неверный код!");
                                 break;
                             case "reject":
                                 snapping.reject();
@@ -102,9 +103,11 @@ public class BotCommand implements CommandExecutor {
                 case "developers":
                     sender.sendMessage("LoopRich161 - создатель плагина.\n" +
                             "                 FrostDelta123 - человек-идея, а так же фиксящий ошибки и исправляющий костыли.");
+                default:
+                    sender.sendMessage(ChatColor.RED + "Доступные команды: " + ChatColor.GOLD + "/bot <help/enable/disable/restart>");
+                    break;
             }
-        } else
-            sender.sendMessage(ChatColor.RED + "Доступные команды: " + ChatColor.GOLD + "/bot <help/enable/disable/restart>");
+        }
         return true;
     }
 
