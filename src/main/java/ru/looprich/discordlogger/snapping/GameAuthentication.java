@@ -17,10 +17,9 @@ public class GameAuthentication {
     private Player player = null;
     private String playerName;
     private User user;
-    private Random random = new Random();
+    private final Random random = new Random();
     private String code;
     private boolean confirm;
-
 
     public GameAuthentication(User user, String playerName) {
         this.playerName = playerName;
@@ -31,7 +30,6 @@ public class GameAuthentication {
         StringBuilder newCode = new StringBuilder();
         for (int i = 1; i < 7; i++)
             newCode.append(allLetter[random.nextInt(allLetter.length)]);
-
         code = newCode.toString();
         user.openPrivateChannel().queue((channel) ->
                 channel.sendMessage("Код подтверждения: " + code +
@@ -39,7 +37,6 @@ public class GameAuthentication {
                         "\nЕсли это не Вы обратитесь к администрации сервера!").queue());
         DiscordBot.sendVerifyMessage("Код подтверждения отправлен!" +
                 "\nЕсли код подтверждения не пришел, необходимо разрешить личные сообщения от участников сервера.");
-
         confirm = false;
     }
 
@@ -87,18 +84,14 @@ public class GameAuthentication {
         DiscordLogger.getInstance().verifyUsers.remove(this);
     }
 
-    public void fail() {
+    void fail() {
         DiscordBot.sendVerifyMessage("Игрок " + player.getName() + " не успел подтвердить код в игре!");
         player.sendMessage(ChatColor.RED + "Вы не успели подтвердить код!");
         DiscordLogger.getInstance().verifyUsers.remove(this);
     }
 
-    public boolean isConfirm() {
+    boolean isConfirm() {
         return confirm;
-    }
-
-    public Player getPlayer() {
-        return player;
     }
 
     public String getPlayerName() {
