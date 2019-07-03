@@ -10,7 +10,7 @@ import ru.frostdelta.discord.RemoteConfigControl;
 import ru.looprich.discordlogger.DiscordLogger;
 
 import javax.security.auth.login.LoginException;
-import java.util.Date;
+import java.time.LocalDateTime;
 
 public class DiscordBot {
 
@@ -29,15 +29,6 @@ public class DiscordBot {
         DiscordBot.channel = channel;
     }
 
-    public static void sendImportantMessage(String msg) {
-        EmbedBuilder message = new EmbedBuilder();
-        message.setTitle("Что-то произошло с ботом!");
-        message.setDescription(msg);
-        message.setColor(0xf45642);
-        loggerChannel.sendTyping().queue();
-        loggerChannel.sendMessage(message.build()).queue();
-    }
-
     public static void shutdown() {
         bot = null;
         localEnabled = true;
@@ -52,40 +43,55 @@ public class DiscordBot {
     public static void sendMessageChannel(String message) {
         if (!isEnabled()) return;
         String msg = cancelFormatMessage(message);
-        loggerChannel.sendMessage(data() + msg).queue();
+        loggerChannel.sendMessage(getDate() + msg).queue();
+    }
+
+    public static void sendImportantMessage(String msg) {
+        EmbedBuilder message = new EmbedBuilder();
+        message.setTitle("Что-то произошло с ботом!");
+        message.setDescription(msg);
+        message.setColor(0xf45642);
+        loggerChannel.sendTyping().queue();
+        loggerChannel.sendMessage(message.build()).queue();
     }
 
     private static String cancelFormatMessage(String message) {
         String[] array = message.split(" ");
-        String msg = "";
+        StringBuilder msg = new StringBuilder();
         int pos1, pos2, difference;
         for (int i = 0; i <= array.length - 1; i++) {
-            StringBuffer buff = new StringBuffer(" " + array[i]);
+            StringBuilder buff = new StringBuilder(" " + array[i]);
 
             pos1 = buff.toString().indexOf('_');
             pos2 = buff.toString().lastIndexOf('_');
             difference = Math.max(pos1, pos2) - Math.min(pos1, pos2);
-            if (pos1 != pos2 && difference != 1) {
-                buff.insert(pos1, "\\");
-            }
+            if (pos1 != pos2 && difference != 1) buff.insert(pos1, "\\");
 
             pos1 = buff.toString().indexOf('*');
             pos2 = buff.toString().lastIndexOf('*');
             difference = Math.max(pos1, pos2) - Math.min(pos1, pos2);
-            if (pos1 != pos2 && difference != 1) {
-                buff.insert(pos1, "\\");
-            }
+            if (pos1 != pos2 && difference != 1) buff.insert(pos1, "\\");
 
             pos1 = buff.toString().indexOf('~');
             pos2 = buff.toString().lastIndexOf('~');
             difference = Math.max(pos1, pos2) - Math.min(pos1, pos2);
-            if (pos1 != pos2 && difference != 1) {
-                buff.insert(pos1, " \\");
-            }
+            if (pos1 != pos2 && difference != 1) buff.insert(pos1, " \\");
 
-            msg += buff.toString();
+            msg.append(buff.toString());
         }
-        return msg;
+        return msg.toString();
+    }
+
+    private static String getDate() {
+        LocalDateTime time = LocalDateTime.now();
+        String hours, minutes, seconds;
+        if (time.getHour() < 10) hours = "0" + time.getHour();
+        else hours = String.valueOf(time.getHour());
+        if (time.getMinute() < 10) minutes = "0" + time.getMinute();
+        else minutes = String.valueOf(time.getMinute());
+        if (time.getSecond() < 10) seconds = "0" + time.getSecond();
+        else seconds = String.valueOf(time.getSecond());
+        return "**[" + hours + ":" + minutes + ":" + seconds + "]:** ";
     }
 
     public static void sendVerifyMessage(String msg) {
@@ -103,31 +109,6 @@ public class DiscordBot {
 
     public static JDA getJDA() {
         return jda;
-    }
-
-    @Deprecated
-    private static String data() {
-        Date date = new Date();
-        String hours, minutes, seconds;
-        if (date.getHours() < 10) hours = "0" + date.getHours();
-        else hours = String.valueOf(date.getHours());
-        if (date.getMinutes() < 10) minutes = "0" + date.getMinutes();
-        else minutes = String.valueOf(date.getMinutes());
-        if (date.getSeconds() < 10) seconds = "0" + date.getSeconds();
-        else seconds = String.valueOf(date.getSeconds());
-        return "**[" + hours + ":" + minutes + ":" + seconds + "]:** ";
-    }
-
-    public static boolean isEnabled() {
-        return jda.getStatus().isInit();
-    }
-
-    public static boolean isLocalEnabled() {
-        return localEnabled;
-    }
-
-    public static void setLocalEnabled(boolean localEnabled) {
-        DiscordBot.localEnabled = localEnabled;
     }
 
     public boolean createBot() {
@@ -155,5 +136,18 @@ public class DiscordBot {
         sendImportantMessage("Я включился!");
         return true;
     }
+
+    public static boolean isEnabled() {
+        return jda.getStatus().isInit();
+    }
+
+    public static boolean isLocalEnabled() {
+        return localEnabled;
+    }
+
+    public static void setLocalEnabled(boolean localEnabled) {
+        DiscordBot.localEnabled = localEnabled;
+    }
+
 
 }
