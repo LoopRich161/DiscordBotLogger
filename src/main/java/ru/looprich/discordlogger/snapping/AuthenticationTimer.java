@@ -8,7 +8,7 @@ public class AuthenticationTimer extends BukkitRunnable {
     private int time = 0;
     private GameAuthentication snapping;
 
-    public AuthenticationTimer(GameAuthentication snapping) {
+    AuthenticationTimer(GameAuthentication snapping) {
         this.snapping = snapping;
     }
 
