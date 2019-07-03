@@ -2,6 +2,7 @@ enable-whitelist: false
 blacklist:
   - sosi
   - admin
+
 whitelist:
   - test
   - fuck

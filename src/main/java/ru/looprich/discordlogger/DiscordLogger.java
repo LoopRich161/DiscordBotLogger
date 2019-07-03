@@ -41,6 +41,7 @@ public class DiscordLogger extends JavaPlugin {
         } else getLogger().info("DiscordBotLogging disabled!");
         getServer().getConsoleSender().sendMessage(ChatColor.WHITE + "Authors: " + getDescription().getAuthors());
         getServer().getConsoleSender().sendMessage(ChatColor.WHITE + "WebSite: " + getDescription().getWebsite());
+        DiscordBot.setIsWhitelistEnabled(getConfig().getBoolean("enable-whitelist"));
     }
 
     public void loadDiscordBot() {

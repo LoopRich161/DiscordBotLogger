@@ -24,6 +24,7 @@ public class DiscordBot {
     private static boolean enable;
     public static final String prefix = "~";
     public static boolean commandOnlyOneChannel;
+    private static boolean isWhitelistEnabled;
 
     public DiscordBot(String tokenBot, String channel) {
         DiscordBot.tokenBot = tokenBot;
@@ -137,6 +138,14 @@ public class DiscordBot {
         enable = true;
         sendImportantMessage("Я включился!");
         return true;
+    }
+
+    public static boolean isIsWhitelistEnabled() {
+        return isWhitelistEnabled;
+    }
+
+    public static void setIsWhitelistEnabled(boolean isWhitelistEnabled) {
+        DiscordBot.isWhitelistEnabled = isWhitelistEnabled;
     }
 
     public static boolean isEnabled() {
