@@ -6,6 +6,7 @@ import net.dv8tion.jda.core.JDABuilder;
 import net.dv8tion.jda.core.OnlineStatus;
 import net.dv8tion.jda.core.entities.Game;
 import net.dv8tion.jda.core.entities.TextChannel;
+import ru.frostdelta.discord.BotCommandAdapter;
 import ru.frostdelta.discord.RemoteConfigControl;
 import ru.looprich.discordlogger.DiscordLogger;
 
@@ -117,6 +118,7 @@ public class DiscordBot {
             jda.getPresence().setStatus(OnlineStatus.IDLE);
             jda.getPresence().setGame(Game.watching("за вашим сервером."));
             jda.addEventListener(new RemoteConfigControl());
+            jda.addEventListener(new BotCommandAdapter());
         } catch (LoginException e) {
             DiscordLogger.getInstance().getLogger().severe("Invalid token!");
             e.printStackTrace();
