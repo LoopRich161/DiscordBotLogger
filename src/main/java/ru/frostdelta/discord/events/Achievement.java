@@ -7,6 +7,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerAdvancementDoneEvent;
 import ru.looprich.discordlogger.modules.DiscordBot;
 
+@Deprecated
 public class Achievement implements Listener {
 
     @EventHandler(priority = EventPriority.MONITOR)
