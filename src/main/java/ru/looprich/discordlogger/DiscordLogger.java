@@ -1,5 +1,6 @@
 package ru.looprich.discordlogger;
 
+import org.bukkit.ChatColor;
 import org.bukkit.plugin.java.JavaPlugin;
 import ru.frostdelta.discord.BotCommand;
 import ru.frostdelta.discord.events.*;
@@ -21,13 +22,13 @@ public class DiscordLogger extends JavaPlugin {
         this.getLogger().info("Developed by " + getDescription().getAuthors());
         plugin = this;
         this.saveDefaultConfig();
-        getServer().getPluginManager().registerEvents(new AsyncChatEvent(), this);
-        getServer().getPluginManager().registerEvents(new PlayerLoginEvent(), this);
-        getServer().getPluginManager().registerEvents(new PlayerJoinEvent(), this);
-        getServer().getPluginManager().registerEvents(new PlayerQuitEvent(), this);
-        getServer().getPluginManager().registerEvents(new PlayerCommandPreprocessEvent(), this);
-        getServer().getPluginManager().registerEvents(new BroadcastEvent(), this);
-        getServer().getPluginManager().registerEvents(new AchievementEvent(), this);
+        getServer().getPluginManager().registerEvents(new AsyncPlayerChat(), this);
+        getServer().getPluginManager().registerEvents(new PlayerLogin(), this);
+        getServer().getPluginManager().registerEvents(new PlayerJoin(), this);
+        getServer().getPluginManager().registerEvents(new PlayerQuit(), this);
+        getServer().getPluginManager().registerEvents(new PlayerCommandPreprocess(), this);
+        getServer().getPluginManager().registerEvents(new Broadcast(), this);
+        getServer().getPluginManager().registerEvents(new Achievement(), this);
 
         boolean isEnabled = getConfig().getBoolean("bot.enabled");
         if (isEnabled) {
@@ -38,6 +39,8 @@ public class DiscordLogger extends JavaPlugin {
             BotCommand.reg();
             verifyUsers = new ArrayList<>();
         } else getLogger().info("DiscordBotLogging disabled!");
+        getServer().getConsoleSender().sendMessage(ChatColor.WHITE + "Authors: " + getDescription().getAuthors());
+        getServer().getConsoleSender().sendMessage(ChatColor.WHITE + "WebSite: " + getDescription().getWebsite());
     }
 
     public void loadDiscordBot() {
@@ -79,6 +82,7 @@ public class DiscordLogger extends JavaPlugin {
             DiscordBot.shutdown();
         }
         network.close();
-
+        getServer().getConsoleSender().sendMessage(ChatColor.WHITE + "Authors: " + getDescription().getAuthors());
+        getServer().getConsoleSender().sendMessage(ChatColor.WHITE + "WebSite: " + getDescription().getWebsite());
     }
 }
