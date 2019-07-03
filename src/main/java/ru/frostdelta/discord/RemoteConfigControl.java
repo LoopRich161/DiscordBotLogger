@@ -10,10 +10,7 @@ import ru.looprich.discordlogger.modules.DiscordBot;
 import ru.looprich.discordlogger.snapping.GameAuthentication;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-
-import static ru.looprich.discordlogger.modules.DiscordBot.sendImportantMessage;
 
 public class RemoteConfigControl extends ListenerAdapter {
 
@@ -39,24 +36,22 @@ public class RemoteConfigControl extends ListenerAdapter {
                     "~bot developers - *информация о разработчиках.*\n" +
                     "~bot online - *просмотреть кто находится на сервере.\n" +
                     "~verify <nickname> - *привязать Discord к Minecraft аккаунту. Необходимо открыть личные сообщения от участников сервера!*");
-            info.addField("Создатели", Arrays.toString(DiscordLogger.getInstance().getDescription().getAuthors().toArray()), false);
+            info.addField("Создатели", String.valueOf(DiscordLogger.getInstance().getDescription().getAuthors()), false);
             info.setColor(0x008000);
-
             event.getChannel().sendTyping().queue();
             event.getChannel().sendMessage(info.build()).queue();
             return;
         }
 
         String who = event.getAuthor().getAsTag();
-
         if (command.equalsIgnoreCase(DiscordBot.prefix + "toggle")) {
             if (DiscordBot.isLocalEnabled()) {
                 DiscordBot.setLocalEnabled(false);
-                sendImportantMessage("Локальный чат отключен! (" + who + ")");
+                DiscordBot.sendImportantMessage("Локальный чат отключен! (" + who + ")");
                 DiscordLogger.getInstance().getConfig().set("local-chat", false);
             } else {
                 DiscordBot.setLocalEnabled(true);
-                sendImportantMessage("Локальный чат включен! (" + who + ")");
+                DiscordBot.sendImportantMessage("Локальный чат включен! (" + who + ")");
                 DiscordLogger.getInstance().getConfig().set("local-chat", true);
             }
             DiscordLogger.getInstance().getLogger().info("<" + who + "> issued discord command: ~toggle");
@@ -80,23 +75,22 @@ public class RemoteConfigControl extends ListenerAdapter {
             switch (args[1]) {
                 case "reload":
                     DiscordLogger.getInstance().reloadConfig();
-                    sendImportantMessage("Я перезагрузил конфиг! (" + who + ")");
+                    DiscordBot.sendImportantMessage("Я перезагрузил конфиг! (" + who + ")");
                     break;
                 case "disable":
-                    sendImportantMessage("Я выключился!");
+                    DiscordBot.sendImportantMessage("Я выключился!");
                     DiscordLogger.getInstance().getLogger().info("<" + who + "> issued discord command: ~bot disable");
                     DiscordBot.shutdown();
                     break;
                 case "restart":
                     if (DiscordBot.isEnabled()) {
-                        sendImportantMessage("Я выключился!");
+                        DiscordBot.sendImportantMessage("Я выключился!");
                         DiscordBot.getJDA().shutdownNow();
                         DiscordLogger.getInstance().loadDiscordBot();
-                    } else {
-                        DiscordLogger.getInstance().loadDiscordBot();
-                    }
+                    } else DiscordLogger.getInstance().loadDiscordBot();
+
                     DiscordLogger.getInstance().getLogger().info("<" + who + "> issued discord command: ~bot restart");
-                    sendImportantMessage("Я перезагрузился! (" + who + ")");
+                    DiscordBot.sendImportantMessage("Я перезагрузился! (" + who + ")");
                     break;
                 case "developers":
                     EmbedBuilder developers = new EmbedBuilder();
@@ -104,7 +98,6 @@ public class RemoteConfigControl extends ListenerAdapter {
                     developers.setDescription("LoopRich161 - *создатель плагина.*\n" +
                             "FrostDelta123 - *человек-идея, а так же фиксящий ошибки и исправляющий костыли.*");
                     developers.setColor(0x0000ff);
-
                     event.getChannel().sendTyping().queue();
                     event.getChannel().sendMessage(developers.build()).queue();
                     break;
@@ -116,12 +109,11 @@ public class RemoteConfigControl extends ListenerAdapter {
                     online.setDescription(Bukkit.getServer().getOnlinePlayers().size() + "/" + Bukkit.getServer().getMaxPlayers()
                             + "\nИгроки: " + onlinePlayers.toString().replace("[", "").replace("]", ""));
                     online.setColor(0xFFFF00);
-
                     event.getChannel().sendTyping().queue();
                     event.getChannel().sendMessage(online.build()).queue();
                     break;
                 default:
-                    event.getChannel().sendMessage("Доступные команды: ~bot <disable/restart/developers/online>");
+                    event.getChannel().sendMessage("Доступные команды: ~bot <disable/restart/developers/online>").queue();
                     break;
             }
         }
