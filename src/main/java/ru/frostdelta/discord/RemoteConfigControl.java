@@ -17,7 +17,7 @@ public class RemoteConfigControl extends ListenerAdapter {
     @Override
     public void onMessageReceived(MessageReceivedEvent event) {
         if (DiscordBot.commandOnlyOneChannel)
-            if (!event.getTextChannel().getId().equalsIgnoreCase(DiscordBot.getLoggerChannel().getId()) && event.getTextChannel() != null)
+            if (!event.getTextChannel().getId().equalsIgnoreCase(DiscordBot.channel) && event.getTextChannel() != null && DiscordBot.channel != null)
                 return;
 
         String[] args = event.getMessage().getContentRaw().split(" ");
@@ -25,7 +25,7 @@ public class RemoteConfigControl extends ListenerAdapter {
             return;
         }
         String command = args[0];
-        if (command.equalsIgnoreCase(DiscordBot.prefix + "bot") && args[1].equalsIgnoreCase("help")) {
+        if (command.equalsIgnoreCase(DiscordBot.prefix + "bot") && args.length == 2 && args[1].equalsIgnoreCase("help")) {
             EmbedBuilder info = new EmbedBuilder();
             info.setTitle("Помощь");
             info.setDescription("Доступные команды:\n" +
@@ -34,7 +34,7 @@ public class RemoteConfigControl extends ListenerAdapter {
                     "~bot disable - *выключение бота.*\n" +
                     "~bot restart - *перезагрузка бота.*\n" +
                     "~bot developers - *информация о разработчиках.*\n" +
-                    "~bot online - *просмотреть кто находится на сервере.\n" +
+                    "~bot online - *просмотреть кто находится на сервере.*\n" +
                     "~verify <nickname> - *привязать Discord к Minecraft аккаунту. Необходимо открыть личные сообщения от участников сервера!*");
             info.addField("Создатели", String.valueOf(DiscordLogger.getInstance().getDescription().getAuthors()), false);
             info.setColor(0x008000);
@@ -44,19 +44,6 @@ public class RemoteConfigControl extends ListenerAdapter {
         }
 
         String who = event.getAuthor().getAsTag();
-        if (command.equalsIgnoreCase(DiscordBot.prefix + "toggle")) {
-            if (DiscordBot.isLocalEnabled()) {
-                DiscordBot.setLocalEnabled(false);
-                DiscordBot.sendImportantMessage("Локальный чат отключен! (" + who + ")");
-                DiscordLogger.getInstance().getConfig().set("local-chat", false);
-            } else {
-                DiscordBot.setLocalEnabled(true);
-                DiscordBot.sendImportantMessage("Локальный чат включен! (" + who + ")");
-                DiscordLogger.getInstance().getConfig().set("local-chat", true);
-            }
-            DiscordLogger.getInstance().getLogger().info("<" + who + "> issued discord command: ~toggle");
-            return;
-        }
 
         if (command.equalsIgnoreCase(DiscordBot.prefix + "verify") && args.length == 2) {
             String nickname = args[1];
@@ -72,6 +59,10 @@ public class RemoteConfigControl extends ListenerAdapter {
         }
 
         if (command.equalsIgnoreCase(DiscordBot.prefix + "bot") && args.length == 2) {
+            if (!DiscordLogger.getInstance().getNetwork().existUser(event.getAuthor())) {
+                DiscordBot.sendVerifyMessage("Вы не прошли верификацию!");
+                return;
+            }
             switch (args[1]) {
                 case "reload":
                     DiscordLogger.getInstance().reloadConfig();
@@ -112,8 +103,20 @@ public class RemoteConfigControl extends ListenerAdapter {
                     event.getChannel().sendTyping().queue();
                     event.getChannel().sendMessage(online.build()).queue();
                     break;
+                case "toggle":
+                    if (DiscordBot.isLocalEnabled()) {
+                        DiscordBot.setLocalEnabled(false);
+                        DiscordBot.sendImportantMessage("Локальный чат отключен! (" + who + ")");
+                        DiscordLogger.getInstance().getConfig().set("local-chat", false);
+                    } else {
+                        DiscordBot.setLocalEnabled(true);
+                        DiscordBot.sendImportantMessage("Локальный чат включен! (" + who + ")");
+                        DiscordLogger.getInstance().getConfig().set("local-chat", true);
+                    }
+                    DiscordLogger.getInstance().getLogger().info("<" + who + "> issued discord command: ~toggle");
+                    break;
                 default:
-                    event.getChannel().sendMessage("Доступные команды: ~bot <disable/restart/developers/online>").queue();
+                    event.getChannel().sendMessage("Доступные команды: ~bot <disable/restart/developers/online/toggle>").queue();
                     break;
             }
         }
