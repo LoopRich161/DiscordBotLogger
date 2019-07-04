@@ -18,7 +18,7 @@ public class DiscordBot {
     private static DiscordBot bot;
     private static boolean localEnabled;
     private static String tokenBot;
-    private static String channel;
+    public static String channel;
     private static TextChannel loggerChannel = null;
     private static JDA jda = null;
     private static boolean enable;
