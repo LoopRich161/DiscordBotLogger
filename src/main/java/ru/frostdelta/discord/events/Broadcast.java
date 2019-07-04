@@ -10,7 +10,7 @@ public class Broadcast implements Listener {
 
     @EventHandler(priority = EventPriority.MONITOR)
     void onBroadcastMessageEvent(BroadcastMessageEvent event) {
-        DiscordBot.sendMessageChannel("[BROADCAST]<" + event.getRecipients().toString() + "> " + event.getMessage());
+        DiscordBot.sendMessageChannel("[BROADCAST] " + event.getMessage());
     }
 
 }
