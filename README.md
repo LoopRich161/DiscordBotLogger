@@ -1,2 +1,2 @@
 # DiscordBotLogger
-We look console in the online mode!
+Manage and view your server console online!
