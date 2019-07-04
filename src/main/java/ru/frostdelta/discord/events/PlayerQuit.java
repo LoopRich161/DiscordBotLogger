@@ -1,6 +1,5 @@
 package ru.frostdelta.discord.events;
 
-import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -11,9 +10,8 @@ public class PlayerQuit implements Listener {
 
     @EventHandler(priority = EventPriority.MONITOR)
     void onPlayerQuitEvent(PlayerQuitEvent event) {
-        Player player = event.getPlayer();
-        DiscordBot.sendMessageChannel(player.getName() + " lost connection: Disconnected\n" +
-                player.getName() + " left the game");
+        DiscordBot.sendMessageChannel(event.getPlayer().getName() + " lost connection: Disconnected");
+        DiscordBot.sendMessageChannel(event.getPlayer().getName() + " left the game");
     }
 
 }

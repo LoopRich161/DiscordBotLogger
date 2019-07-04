@@ -1,6 +1,5 @@
 package ru.frostdelta.discord.events;
 
-import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -12,8 +11,7 @@ public class Achievement implements Listener {
 
     @EventHandler(priority = EventPriority.MONITOR)
     void onPlayerAdvancementDoneEvent(PlayerAdvancementDoneEvent event) {
-        Player player = event.getPlayer();
-        DiscordBot.sendMessageChannel(player.getName() + " has made the new achievement!");
+        DiscordBot.sendMessageChannel(event.getPlayer().getName() + " has made the new achievement!");
     }
 
 }
