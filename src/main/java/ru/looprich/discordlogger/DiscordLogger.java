@@ -51,7 +51,7 @@ public class DiscordLogger extends JavaPlugin {
         if (!discordBot.createBot()) {
             getLogger().severe("PLUGIN DISABLE! YOU HAVE PROBLEMS WITH DISCORD BOT!");
             getPluginLoader().disablePlugin(this);
-        } else getLogger().info("Bot successful loaded!");
+        } else getLogger().info("Bot v" + this.getDescription().getVersion() + " successful loaded!");
     }
 
     private void checkDatabase() {

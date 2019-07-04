@@ -136,7 +136,7 @@ public class DiscordBot {
         localEnabled = DiscordLogger.getInstance().getConfig().getBoolean("bot.local-chat");
         commandOnlyOneChannel = DiscordLogger.getInstance().getConfig().getBoolean("bot.command-only-channel");
         enable = true;
-        sendImportantMessage("Я включился!");
+        sendImportantMessage("Я включился v" + DiscordLogger.getInstance().getDescription().getVersion() + "!");
         return true;
     }
 
