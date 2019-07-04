@@ -19,7 +19,6 @@ public class DiscordLogger extends JavaPlugin {
 
     @Override
     public void onEnable() {
-        this.getLogger().info("Developed by " + getDescription().getAuthors());
         plugin = this;
         this.saveDefaultConfig();
         getServer().getPluginManager().registerEvents(new AsyncPlayerChat(), this);
@@ -28,7 +27,9 @@ public class DiscordLogger extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new PlayerQuit(), this);
         getServer().getPluginManager().registerEvents(new PlayerCommandPreprocess(), this);
         getServer().getPluginManager().registerEvents(new Broadcast(), this);
-        getServer().getPluginManager().registerEvents(new Achievement(), this);
+        getServer().getPluginManager().registerEvents(new ServerCommand(), this);
+        getServer().getPluginManager().registerEvents(new RemoteServerCommand(), this);
+        //getServer().getPluginManager().registerEvents(new Achievement(), this);
 
         boolean isEnabled = getConfig().getBoolean("bot.enabled");
         if (isEnabled) {
