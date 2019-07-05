@@ -1,4 +1,4 @@
-package ru.looprich.discordlogger.snapping;
+package ru.looprich.discordlogger.verification;
 
 import org.bukkit.scheduler.BukkitRunnable;
 import ru.looprich.discordlogger.DiscordLogger;
