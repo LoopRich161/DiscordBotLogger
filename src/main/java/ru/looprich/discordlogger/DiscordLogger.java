@@ -21,6 +21,7 @@ public class DiscordLogger extends JavaPlugin {
     public void onEnable() {
         plugin = this;
         this.saveDefaultConfig();
+        this.reloadConfig();
         getServer().getPluginManager().registerEvents(new AsyncPlayerChat(), this);
         getServer().getPluginManager().registerEvents(new PlayerLogin(), this);
         getServer().getPluginManager().registerEvents(new PlayerJoin(), this);
@@ -84,6 +85,7 @@ public class DiscordLogger extends JavaPlugin {
             DiscordBot.shutdown();
         }
         network.close();
+        this.saveConfig();
         getServer().getConsoleSender().sendMessage(ChatColor.WHITE + "Authors: " + getDescription().getAuthors());
         getServer().getConsoleSender().sendMessage(ChatColor.WHITE + "WebSite: " + getDescription().getWebsite());
     }
