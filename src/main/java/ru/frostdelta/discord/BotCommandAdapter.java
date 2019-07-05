@@ -11,9 +11,8 @@ public class BotCommandAdapter extends ListenerAdapter {
 
     @Override
     public void onMessageReceived(MessageReceivedEvent event) {
-        //проверка на привязку
         if (DiscordBot.commandOnlyOneChannel)
-            if (!event.getTextChannel().getId().equalsIgnoreCase(DiscordBot.getLoggerChannel().getId()) && event.getTextChannel() != null)
+            if (!event.getTextChannel().getId().equalsIgnoreCase(DiscordBot.channel) && event.getTextChannel() != null && DiscordBot.channel != null)
                 return;
 
         String[] args = event.getMessage().getContentRaw().split(" ");
@@ -22,6 +21,10 @@ public class BotCommandAdapter extends ListenerAdapter {
         }
         String command = args[0];
         if(command.equalsIgnoreCase(DiscordBot.prefix + "command")){
+            if (!DiscordLogger.getInstance().getNetwork().existUser(event.getAuthor())) {
+                DiscordBot.sendVerifyMessage("Вы не прошли верификацию!");
+                return;
+            }
             if (DiscordBot.isIsWhitelistEnabled()){
                 List<String> whitelist = DiscordLogger.getInstance().getConfig().getStringList("whitelist");
                 for(String allowedCmd : whitelist){
