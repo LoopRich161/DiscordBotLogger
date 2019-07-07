@@ -6,8 +6,8 @@ import net.dv8tion.jda.core.hooks.ListenerAdapter;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import ru.looprich.discordlogger.DiscordLogger;
+import ru.looprich.discordlogger.authentication.GameAuthentication;
 import ru.looprich.discordlogger.modules.DiscordBot;
-import ru.looprich.discordlogger.snapping.GameAuthentication;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -98,7 +98,7 @@ public class RemoteConfigControl extends ListenerAdapter {
                     for (Player player : Bukkit.getServer().getOnlinePlayers()) onlinePlayers.add(player.getName());
                     online.setTitle("Онлайн сервера");
                     online.setDescription(Bukkit.getServer().getOnlinePlayers().size() + "/" + Bukkit.getServer().getMaxPlayers()
-                            + "\nИгроки: " + onlinePlayers.toString().replace("[", "").replace("]", ""));
+                            + "\nИгроки: " + DiscordBot.cancelFormatMessage(onlinePlayers.toString().replace("[", "").replace("]", "")));
                     online.setColor(0xFFFF00);
                     event.getChannel().sendTyping().queue();
                     event.getChannel().sendMessage(online.build()).queue();

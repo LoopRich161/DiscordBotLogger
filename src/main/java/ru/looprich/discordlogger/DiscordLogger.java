@@ -4,8 +4,8 @@ import org.bukkit.ChatColor;
 import org.bukkit.plugin.java.JavaPlugin;
 import ru.frostdelta.discord.BotCommand;
 import ru.frostdelta.discord.events.*;
+import ru.looprich.discordlogger.authentication.GameAuthentication;
 import ru.looprich.discordlogger.modules.DiscordBot;
-import ru.looprich.discordlogger.verification.GameAuthentication;
 
 import java.util.ArrayList;
 import java.util.List;

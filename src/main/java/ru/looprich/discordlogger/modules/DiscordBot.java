@@ -57,7 +57,7 @@ public class DiscordBot {
         loggerChannel.sendMessage(message.build()).queue();
     }
 
-    private static String cancelFormatMessage(String message) {
+    public static String cancelFormatMessage(String message) {
         String[] array = message.split(" ");
         StringBuilder msg = new StringBuilder();
         int pos1, pos2, difference;

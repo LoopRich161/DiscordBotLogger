@@ -1,4 +1,4 @@
-package ru.looprich.discordlogger.verification;
+package ru.looprich.discordlogger.authentication;
 
 
 import net.dv8tion.jda.core.entities.User;
