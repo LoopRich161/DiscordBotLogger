@@ -50,7 +50,7 @@ public class DiscordBot {
 
     public static void sendServerResponse(String msg){
         EmbedBuilder message = new EmbedBuilder();
-        message.setTitle("Ответ сервера!");
+        message.setTitle("Ответ сервера.");
         message.setDescription(msg);
         message.setColor(0xf45642);
         loggerChannel.sendTyping().queue();
