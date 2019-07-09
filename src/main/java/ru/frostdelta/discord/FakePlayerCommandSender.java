@@ -32,7 +32,7 @@ public class FakePlayerCommandSender implements CommandSender {
     public void sendMessage(String message) {
         if(isOnline){
             player.sendMessage(message);
-        }else DiscordBot.sendServerResponse(message);
+        }else DiscordBot.sendServerResponse(Util.removeCodeColors(message));
     }
 
     @Override
@@ -43,7 +43,7 @@ public class FakePlayerCommandSender implements CommandSender {
             }
         }else {
             for(String message : messages){
-                DiscordBot.sendServerResponse(message);
+                DiscordBot.sendServerResponse(Util.removeCodeColors(message));
             }
         }
     }

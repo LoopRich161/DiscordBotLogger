@@ -88,7 +88,7 @@ public class RemoteConfigControl extends ListenerAdapter {
                     EmbedBuilder developers = new EmbedBuilder();
                     developers.setTitle("Разработчики");
                     developers.setDescription("LoopRich161 - *создатель плагина.*\n" +
-                            "FrostDelta123 - *человек-идея, а так же фиксящий ошибки и исправляющий костыли.*");
+                            "FrostDelta123 - *человек-идея, а так же фиксящий ошибки и исправляющий костыли, maintrainer.*");
                     developers.setColor(0x0000ff);
                     event.getChannel().sendTyping().queue();
                     event.getChannel().sendMessage(developers.build()).queue();
