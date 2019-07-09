@@ -13,7 +13,7 @@ public class BotCommandAdapter extends ListenerAdapter {
 
     @Override
     public void onMessageReceived(MessageReceivedEvent event) {
-        //С НЕБА УРОНИТ, НОЧЬ НА ЛАДОНИ
+        //НЕБО УРОНИТ, НОЧЬ НА ЛАДОНИ
         String[] args = event.getMessage().getContentRaw().split(" ");
         if (args.length == 0) {
             return;
