@@ -135,6 +135,7 @@ public class DiscordBot {
         bot = this;
         localEnabled = DiscordLogger.getInstance().getConfig().getBoolean("bot.local-chat");
         commandOnlyOneChannel = DiscordLogger.getInstance().getConfig().getBoolean("bot.command-only-channel");
+        setIsWhitelistEnabled(DiscordLogger.getInstance().getConfig().getBoolean("enable-whitelist"));
         enable = true;
         sendImportantMessage("Я включился v" + DiscordLogger.getInstance().getDescription().getVersion() + "!");
         return true;
