@@ -116,7 +116,7 @@ public class DiscordBot {
     public boolean createBot() {
         try {
             jda = new JDABuilder(tokenBot).build().awaitReady();
-            jda.getPresence().setStatus(OnlineStatus.IDLE);
+            jda.getPresence().setStatus(OnlineStatus.ONLINE);
             jda.getPresence().setGame(Game.watching("за вашим сервером."));
             jda.addEventListener(new RemoteConfigControl());
             jda.addEventListener(new BotCommandAdapter());

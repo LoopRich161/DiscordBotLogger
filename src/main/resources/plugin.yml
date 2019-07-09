@@ -1,10 +1,11 @@
 name: DiscordBotLogger
 version: ${project.version}
 main: ru.looprich.discordlogger.DiscordLogger
-load: STARTUP
 authors: [LoopRich161, FrostDelta123]
 website: [vk.com/id199167970, vk.com/id159089730]
 description: Manage and view your server console online!
+softdepend:
+  - Vault
 commands:
   bot:
     permission: discordlogger.bot
