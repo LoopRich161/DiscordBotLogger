@@ -2,9 +2,11 @@ package ru.frostdelta.discord;
 
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.core.hooks.ListenerAdapter;
+import org.bukkit.Bukkit;
 import ru.looprich.discordlogger.DiscordLogger;
 import ru.looprich.discordlogger.modules.DiscordBot;
 
+import java.util.Arrays;
 import java.util.List;
 
 public class BotCommandAdapter extends ListenerAdapter {
@@ -19,12 +21,15 @@ public class BotCommandAdapter extends ListenerAdapter {
         if (args.length == 0) {
             return;
         }
-        String command = args[0];
-        if(command.equalsIgnoreCase(DiscordBot.prefix + "command")){
+        String botCommand = args[0];
+        if(botCommand.equalsIgnoreCase(DiscordBot.prefix + "command")){
             if (!DiscordLogger.getInstance().getNetwork().existUser(event.getAuthor())) {
                 DiscordBot.sendVerifyMessage("Вы не прошли верификацию!");
                 return;
             }
+            String cmd = buildCommand(Arrays.copyOfRange(args, 1, args.length));
+            DiscordBot.sendImportantMessage("Command " + cmd + " send!");
+            Bukkit.dispatchCommand(new FakePlayerCommandSender(event.getAuthor().getName()), cmd);
             if (DiscordBot.isIsWhitelistEnabled()){
                 List<String> whitelist = DiscordLogger.getInstance().getConfig().getStringList("whitelist");
                 for(String allowedCmd : whitelist){
@@ -37,6 +42,15 @@ public class BotCommandAdapter extends ListenerAdapter {
                 //TODO добавить парсер команд в зависимости от white/black листа
             }
         }
+    }
+
+
+    private String buildCommand(String[] args){
+        StringBuilder cmd = new StringBuilder();
+        for(String arg : args){
+            cmd.append(arg).append(" ");
+        }
+        return cmd.toString();
     }
 
 }

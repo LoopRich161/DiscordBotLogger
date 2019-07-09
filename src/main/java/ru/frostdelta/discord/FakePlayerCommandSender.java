@@ -10,7 +10,6 @@ import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionAttachment;
 import org.bukkit.permissions.PermissionAttachmentInfo;
 import org.bukkit.plugin.Plugin;
-
 import java.util.Set;
 
 public class FakePlayerCommandSender implements CommandSender {
@@ -18,11 +17,13 @@ public class FakePlayerCommandSender implements CommandSender {
     private OfflinePlayer offlinePlayer;
     private Player player;
     private boolean isOnline;
+    private net.milkbowl.vault.permission.Permission permission;
 
     public FakePlayerCommandSender(String name){
         offlinePlayer = Bukkit.getOfflinePlayer(name);
         player = offlinePlayer.getPlayer();
         isOnline = player != null;
+        permission = FakePlayerPermissionManager.getFakePlayerPermissions();
     }
 
     @Override
@@ -66,12 +67,16 @@ public class FakePlayerCommandSender implements CommandSender {
 
     @Override
     public boolean hasPermission(String name) {
-        return false;
+        if(isOnline){
+            return player.hasPermission(name);
+        }else return permission.playerHas(Bukkit.getServer().getWorlds().get(0).getName(), offlinePlayer, name);
     }
 
     @Override
     public boolean hasPermission(Permission perm) {
-        return false;
+        if(isOnline){
+            return player.hasPermission(perm.getName());
+        }else return permission.playerHas(Bukkit.getServer().getWorlds().get(0).getName(), offlinePlayer, perm.getName());
     }
 
     @Override
@@ -96,17 +101,19 @@ public class FakePlayerCommandSender implements CommandSender {
 
     @Override
     public void removeAttachment(PermissionAttachment attachment) {
-
+       //Empty
     }
 
     @Override
     public void recalculatePermissions() {
-
+        //Empty
     }
 
     @Override
     public Set<PermissionAttachmentInfo> getEffectivePermissions() {
-        return null;
+        if(isOnline){
+            return player.getEffectivePermissions();
+        }else return null;
     }
 
     @Override

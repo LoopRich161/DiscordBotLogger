@@ -64,10 +64,10 @@ public class DiscordLogger extends JavaPlugin {
         String password = getConfig().getString("network.password");
         network = new Network(getLogger(), url, username, password);
         if (network.init()) {
-            getLogger().info("Database find!");
+            getLogger().info("Database found!");
             network.createDB();
         } else {
-            getLogger().severe("Database not find!");
+            getLogger().severe("Database not found!");
             getPluginLoader().disablePlugin(this);
         }
     }
