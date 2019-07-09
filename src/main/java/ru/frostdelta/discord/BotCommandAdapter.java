@@ -25,7 +25,7 @@ public class BotCommandAdapter extends ListenerAdapter {
                 return;
             }
             String cmd = buildCommand(Arrays.copyOfRange(args, 1, args.length));
-            DiscordBot.sendImportantMessage("Command " + cmd + " send!");
+
             Bukkit.dispatchCommand(new FakePlayerCommandSender(event.getAuthor().getName()), cmd);
             if (DiscordBot.isIsWhitelistEnabled()){
                 List<String> whitelist = DiscordLogger.getInstance().getConfig().getStringList("whitelist");
