@@ -3,6 +3,7 @@ package ru.looprich.discordlogger;
 import org.bukkit.ChatColor;
 import org.bukkit.plugin.java.JavaPlugin;
 import ru.frostdelta.discord.BotCommand;
+import ru.frostdelta.discord.FakePlayerPermissionManager;
 import ru.frostdelta.discord.events.*;
 import ru.looprich.discordlogger.authentication.GameAuthentication;
 import ru.looprich.discordlogger.modules.DiscordBot;
@@ -43,6 +44,8 @@ public class DiscordLogger extends JavaPlugin {
         } else getLogger().info("DiscordBotLogging disabled!");
         getServer().getConsoleSender().sendMessage(ChatColor.WHITE + "Authors: " + getDescription().getAuthors());
         getServer().getConsoleSender().sendMessage(ChatColor.WHITE + "WebSite: " + getDescription().getWebsite());
+
+        FakePlayerPermissionManager.load();
     }
 
     public void loadDiscordBot() {
@@ -79,6 +82,7 @@ public class DiscordLogger extends JavaPlugin {
 
     @Override
     public void onDisable() {
+        getLogger().info(String.format("[%s] Disabled Version %s", getDescription().getName(), getDescription().getVersion()));
         if (DiscordBot.isEnabled()) {
             DiscordBot.sendImportantMessage("Я выключился!");
             DiscordBot.shutdown();
