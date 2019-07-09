@@ -10,6 +10,8 @@ import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionAttachment;
 import org.bukkit.permissions.PermissionAttachmentInfo;
 import org.bukkit.plugin.Plugin;
+import ru.looprich.discordlogger.modules.DiscordBot;
+
 import java.util.Set;
 
 public class FakePlayerCommandSender implements CommandSender {
@@ -30,7 +32,7 @@ public class FakePlayerCommandSender implements CommandSender {
     public void sendMessage(String message) {
         if(isOnline){
             player.sendMessage(message);
-        }
+        }else DiscordBot.sendServerResponse(message);
     }
 
     @Override
@@ -38,6 +40,10 @@ public class FakePlayerCommandSender implements CommandSender {
         if(isOnline){
             for(String message : messages){
                 player.sendMessage(message);
+            }
+        }else {
+            for(String message : messages){
+                DiscordBot.sendServerResponse(message);
             }
         }
     }

@@ -48,6 +48,15 @@ public class DiscordBot {
         loggerChannel.sendMessage(getDate() + msg).queue();
     }
 
+    public static void sendServerResponse(String msg){
+        EmbedBuilder message = new EmbedBuilder();
+        message.setTitle("Ответ сервера!");
+        message.setDescription(msg);
+        message.setColor(0xf45642);
+        loggerChannel.sendTyping().queue();
+        loggerChannel.sendMessage(message.build()).queue();
+    }
+
     public static void sendImportantMessage(String msg) {
         EmbedBuilder message = new EmbedBuilder();
         message.setTitle("Что-то произошло с ботом!");
