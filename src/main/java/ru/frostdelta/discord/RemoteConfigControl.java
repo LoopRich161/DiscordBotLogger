@@ -35,6 +35,7 @@ public class RemoteConfigControl extends ListenerAdapter {
                     "~bot restart - *перезагрузка бота.*\n" +
                     "~bot developers - *информация о разработчиках.*\n" +
                     "~bot online - *просмотреть кто находится на сервере.*\n" +
+                    "~bot version - *текущая версия плагина*.\n" +
                     "~verify <nickname> - *привязать Discord к Minecraft аккаунту. Необходимо открыть личные сообщения от участников сервера!*");
             info.addField("Создатели", String.valueOf(DiscordLogger.getInstance().getDescription().getAuthors()), false);
             info.setColor(0x008000);
@@ -114,6 +115,9 @@ public class RemoteConfigControl extends ListenerAdapter {
                         DiscordLogger.getInstance().getConfig().set("local-chat", true);
                     }
                     DiscordLogger.getInstance().getLogger().info("<" + who + "> issued discord command: ~toggle");
+                    break;
+                case "version":
+                    event.getChannel().sendMessage("Версия бота: v" + DiscordLogger.getInstance().getDescription().getVersion()).queue();
                     break;
                 default:
                     event.getChannel().sendMessage("Доступные команды: ~bot <disable/restart/developers/online/toggle>").queue();
