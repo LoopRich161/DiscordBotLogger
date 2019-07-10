@@ -5,6 +5,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
+import ru.frostdelta.discord.Util;
 import ru.looprich.discordlogger.modules.DiscordBot;
 
 public class AsyncPlayerChat implements Listener {
@@ -13,9 +14,9 @@ public class AsyncPlayerChat implements Listener {
     void onAsyncPlayerChatEvent(AsyncPlayerChatEvent event) {
         if (event.isCancelled()) return;
         if (event.getRecipients().size() == Bukkit.getOnlinePlayers().size())
-            DiscordBot.sendMessageChannel("[G]<" + event.getPlayer().getName() + "> " + event.getMessage().replaceFirst("!", ""));
+            DiscordBot.sendMessageChannel("[G]<" + event.getPlayer().getName() + "> " + Util.removeCodeColors(event.getMessage().replaceFirst("!", "")));
         else if (DiscordBot.isLocalEnabled())
-            DiscordBot.sendMessageChannel("[L]<" + event.getPlayer().getName() + "> " + event.getMessage());
+            DiscordBot.sendMessageChannel("[L]<" + event.getPlayer().getName() + "> " + Util.removeCodeColors(event.getMessage()));
     }
 
 }
