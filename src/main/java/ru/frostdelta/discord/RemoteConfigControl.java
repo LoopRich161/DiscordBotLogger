@@ -33,10 +33,11 @@ public class RemoteConfigControl extends ListenerAdapter {
                     "~bot reload - *перезагрузка конфига.*\n" +
                     "~bot disable - *выключение бота.*\n" +
                     "~bot restart - *перезагрузка бота.*\n" +
+                    "~verify <nickname> - *привязать Discord к Minecraft аккаунту. Необходимо открыть личные сообщения от участников сервера!*\n" +
+                    "~command <command> - *выполнить команду на Minecraft сервере*\n" +
                     "~bot developers - *информация о разработчиках.*\n" +
                     "~bot online - *просмотреть кто находится на сервере.*\n" +
-                    "~bot version - *текущая версия плагина*.\n" +
-                    "~verify <nickname> - *привязать Discord к Minecraft аккаунту. Необходимо открыть личные сообщения от участников сервера!*");
+                    "~bot version - *текущая версия плагина*.\n");
             info.addField("Создатели", String.valueOf(DiscordLogger.getInstance().getDescription().getAuthors()), false);
             info.setColor(0x008000);
             event.getChannel().sendTyping().queue();
@@ -99,7 +100,7 @@ public class RemoteConfigControl extends ListenerAdapter {
                     for (Player player : Bukkit.getServer().getOnlinePlayers()) onlinePlayers.add(player.getName());
                     online.setTitle("Онлайн сервера");
                     online.setDescription(Bukkit.getServer().getOnlinePlayers().size() + "/" + Bukkit.getServer().getMaxPlayers()
-                            + "\nИгроки: " + DiscordBot.cancelFormatMessage(onlinePlayers.toString().replace("[", "").replace("]", "")));
+                            + "\nИгроки: " + Util.cancelFormatMessage(onlinePlayers.toString().replace("[", "").replace("]", "")));
                     online.setColor(0xFFFF00);
                     event.getChannel().sendTyping().queue();
                     event.getChannel().sendMessage(online.build()).queue();

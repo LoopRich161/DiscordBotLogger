@@ -8,6 +8,7 @@ import net.dv8tion.jda.core.entities.Game;
 import net.dv8tion.jda.core.entities.TextChannel;
 import ru.frostdelta.discord.BotCommandAdapter;
 import ru.frostdelta.discord.RemoteConfigControl;
+import ru.frostdelta.discord.Util;
 import ru.looprich.discordlogger.DiscordLogger;
 
 import javax.security.auth.login.LoginException;
@@ -45,28 +46,28 @@ public class DiscordBot {
 
     public static void sendMessageChannel(String message) {
         if (!isEnabled()) return;
-        String msg = cancelFormatMessage(message);
+        String msg = Util.cancelFormatMessage(message);
         loggerChannel.sendMessage(getDate() + msg).queue();
     }
 
-    public static void sendServerResponse(List<String> msgs){
+    public static void sendServerResponse(List<String> msgs) {
         EmbedBuilder message = new EmbedBuilder();
         StringBuilder formatted = new StringBuilder();
-        for(String msg : msgs){
+        for (String msg : msgs) {
             formatted.append(msg).append("\n");
         }
         message.setTitle("Ответ сервера.");
         message.setDescription(formatted.toString());
-        message.setColor(0xf45642);
+        message.setColor(0xffa500);
         loggerChannel.sendTyping().queue();
         loggerChannel.sendMessage(message.build()).queue();
     }
 
-    public static void sendServerResponse(String msg){
+    public static void sendServerResponse(String msg) {
         EmbedBuilder message = new EmbedBuilder();
         message.setTitle("Ответ сервера.");
         message.setDescription(msg);
-        message.setColor(0xf45642);
+        message.setColor(0xffa500);
         loggerChannel.sendTyping().queue();
         loggerChannel.sendMessage(message.build()).queue();
     }
@@ -80,32 +81,6 @@ public class DiscordBot {
         loggerChannel.sendMessage(message.build()).queue();
     }
 
-    public static String cancelFormatMessage(String message) {
-        String[] array = message.split(" ");
-        StringBuilder msg = new StringBuilder();
-        int pos1, pos2, difference;
-        for (int i = 0; i <= array.length - 1; i++) {
-            StringBuilder buff = new StringBuilder(" " + array[i]);
-
-            pos1 = buff.toString().indexOf('_');
-            pos2 = buff.toString().lastIndexOf('_');
-            difference = Math.max(pos1, pos2) - Math.min(pos1, pos2);
-            if (pos1 != pos2 && difference != 1) buff.insert(pos1, "\\");
-
-            pos1 = buff.toString().indexOf('*');
-            pos2 = buff.toString().lastIndexOf('*');
-            difference = Math.max(pos1, pos2) - Math.min(pos1, pos2);
-            if (pos1 != pos2 && difference != 1) buff.insert(pos1, "\\");
-
-            pos1 = buff.toString().indexOf('~');
-            pos2 = buff.toString().lastIndexOf('~');
-            difference = Math.max(pos1, pos2) - Math.min(pos1, pos2);
-            if (pos1 != pos2 && difference != 1) buff.insert(pos1, " \\");
-
-            msg.append(buff.toString());
-        }
-        return msg.toString();
-    }
 
     private static String getDate() {
         LocalDateTime time = LocalDateTime.now();
