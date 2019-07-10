@@ -131,4 +131,16 @@ public class FakePlayerCommandSender implements CommandSender {
             player.setOp(value);
         }else offlinePlayer.setOp(value);
     }
+
+    public boolean isOnline() {
+        return isOnline;
+    }
+
+    public OfflinePlayer getOfflinePlayer() {
+        return offlinePlayer;
+    }
+
+    public Player getPlayer() {
+        return player;
+    }
 }

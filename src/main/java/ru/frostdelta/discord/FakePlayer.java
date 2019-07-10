@@ -23,64 +23,95 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.util.Vector;
+import ru.looprich.discordlogger.modules.DiscordBot;
 
 import java.net.InetSocketAddress;
 import java.util.*;
 
 public class FakePlayer extends FakePlayerCommandSender implements Player {
 
+    private OfflinePlayer offlinePlayer;
+    private Player player;
+    private net.milkbowl.vault.permission.Permission permission;
+
     public FakePlayer(String name) {
         super(name);
+        offlinePlayer = super.getOfflinePlayer();
+        player = super.getPlayer();
+        permission = FakePlayerPermissionManager.getFakePlayerPermissions();
+    }
+
+    private String sendError(){
+        DiscordBot.sendImportantMessage("Ошибка, действие недоступно!");
+        return null;
     }
 
     @Override
     public String getDisplayName() {
-        return null;
+        if(isOnline()){
+            return player.getName();
+        }else return offlinePlayer.getName();
     }
 
     @Override
     public void setDisplayName(String name) {
-
+        sendError();
     }
 
     @Override
     public String getPlayerListName() {
-        return null;
+        if(isOnline()){
+            return player.getPlayerListName();
+        }else return sendError();
     }
 
     @Override
     public void setPlayerListName(String name) {
-
+        sendError();
     }
 
     @Override
     public void setCompassTarget(Location loc) {
-
+        sendError();
     }
 
     @Override
     public Location getCompassTarget() {
-        return null;
+        if(isOnline()){
+            return player.getCompassTarget();
+        } else{
+            sendError();
+            return null;
+        }
     }
 
     @Override
     public InetSocketAddress getAddress() {
-        return null;
+        if(isOnline()){
+            return player.getAddress();
+        } else{
+            sendError();
+            return null;
+        }
     }
 
     @Override
     public boolean isConversing() {
-        return false;
+        if(isOnline()){
+            return player.isConversing();
+        }else return false;
     }
 
     @Override
     public void acceptConversationInput(String input) {
-
+        sendError();
     }
 
     @Override
     public boolean beginConversation(Conversation conversation) {
-        return false;
+        if(isOnline()){
+            return player.beginConversation(conversation);
+        }else return false;
     }
 
     @Override
@@ -95,17 +126,23 @@ public class FakePlayer extends FakePlayerCommandSender implements Player {
 
     @Override
     public void sendRawMessage(String message) {
-
+        if(player.isOnline()){
+            player.sendRawMessage(message);
+        }
     }
 
     @Override
     public void kickPlayer(String message) {
-
+        if(isOnline()){
+            player.kickPlayer(message);
+        }else sendError();
     }
 
     @Override
     public void chat(String msg) {
-
+        if(isOnline()){
+            player.chat(msg);
+        }
     }
 
     @Override
@@ -120,7 +157,7 @@ public class FakePlayer extends FakePlayerCommandSender implements Player {
 
     @Override
     public void setSneaking(boolean sneak) {
-
+        sendError();
     }
 
     @Override
@@ -460,7 +497,7 @@ public class FakePlayer extends FakePlayerCommandSender implements Player {
 
     @Override
     public boolean isOnline() {
-        return false;
+        return super.isOnline();
     }
 
     @Override
@@ -470,107 +507,131 @@ public class FakePlayer extends FakePlayerCommandSender implements Player {
 
     @Override
     public boolean isWhitelisted() {
-        return false;
+        return offlinePlayer.isWhitelisted();
     }
 
     @Override
     public void setWhitelisted(boolean value) {
-
+        offlinePlayer.setWhitelisted(value);
     }
 
     @Override
     public Player getPlayer() {
-        return null;
+        return player;
     }
 
     @Override
     public long getFirstPlayed() {
-        return 0;
+        return offlinePlayer.getFirstPlayed();
     }
 
     @Override
     public long getLastPlayed() {
-        return 0;
+        return offlinePlayer.getLastPlayed();
     }
 
     @Override
     public boolean hasPlayedBefore() {
-        return false;
+        return offlinePlayer.hasPlayedBefore();
     }
 
     @Override
     public Location getBedSpawnLocation() {
-        return null;
+        return offlinePlayer.getBedSpawnLocation();
     }
 
     @Override
     public void setBedSpawnLocation(Location location) {
-
+        sendError();
     }
 
     @Override
     public void setBedSpawnLocation(Location location, boolean force) {
-
+        sendError();
     }
 
     @Override
     public boolean getAllowFlight() {
-        return false;
+        if(isOnline()){
+            return player.getAllowFlight();
+        }return false;
     }
 
     @Override
     public void setAllowFlight(boolean flight) {
-
+        if(isOnline()){
+            player.setAllowFlight(flight);
+        }
     }
 
     @Override
     public void hidePlayer(Player player) {
-
+        if(isOnline()){
+            player.hidePlayer(player);
+        }sendError();
     }
 
     @Override
     public void hidePlayer(Plugin plugin, Player player) {
-
+        if(isOnline()){
+            player.hidePlayer(plugin, player);
+        }sendError();
     }
 
     @Override
     public void showPlayer(Player player) {
-
+        if(isOnline()){
+            player.hidePlayer(player);
+        }sendError();
     }
 
     @Override
     public void showPlayer(Plugin plugin, Player player) {
-
+        if(isOnline()){
+            player.hidePlayer(plugin, player);
+        }sendError();
     }
 
     @Override
     public boolean canSee(Player player) {
-        return false;
+        if(isOnline()){
+            return this.player.canSee(player);
+        }return false;
     }
 
     @Override
     public boolean isFlying() {
-        return false;
+        if(isOnline()){
+            return player.isFlying();
+        }else return false;
     }
 
     @Override
     public void setFlying(boolean value) {
-
+        if(isOnline()){
+            player.setFlying(value);
+        }sendError();
     }
 
     @Override
     public void setFlySpeed(float value) throws IllegalArgumentException {
-
+        if(isOnline()){
+            player.setFlySpeed(value);
+        }sendError();
     }
 
     @Override
     public void setWalkSpeed(float value) throws IllegalArgumentException {
-
+        if(isOnline()){
+            player.setWalkSpeed(value);
+        }sendError();
     }
 
     @Override
     public float getFlySpeed() {
-        return 0;
+        if(isOnline()) {
+            player.getFlySpeed();
+        }return 0;
     }
 
     @Override
@@ -1215,17 +1276,23 @@ public class FakePlayer extends FakePlayerCommandSender implements Player {
 
     @Override
     public void sendMessage(String message) {
-
+        if(isOnline()){
+            player.sendMessage(message);
+        }else DiscordBot.sendServerResponse(Util.removeCodeColors(message));
     }
 
     @Override
     public void sendMessage(String[] messages) {
-
+        if(isOnline()){
+            for(String message : messages){
+                player.sendMessage(message);
+            }
+        }else DiscordBot.sendServerResponse(Util.removeCodeColors(messages));
     }
 
     @Override
     public Server getServer() {
-        return null;
+        return Bukkit.getServer();
     }
 
     @Override
@@ -1405,12 +1472,16 @@ public class FakePlayer extends FakePlayerCommandSender implements Player {
 
     @Override
     public String getCustomName() {
-        return null;
+        if(isOnline()){
+            return player.getName();
+        }return offlinePlayer.getName();
     }
 
     @Override
     public void setCustomName(String name) {
-
+        if(isOnline()){
+            player.setCustomName(name);
+        }sendError();
     }
 
     @Override
@@ -1445,12 +1516,16 @@ public class FakePlayer extends FakePlayerCommandSender implements Player {
 
     @Override
     public boolean hasPermission(String name) {
-        return false;
+        if(isOnline()){
+            return player.hasPermission(name);
+        }else return permission.playerHas(Bukkit.getServer().getWorlds().get(0).getName(), offlinePlayer, name);
     }
 
     @Override
     public boolean hasPermission(Permission perm) {
-        return false;
+        if(isOnline()){
+            return player.hasPermission(perm.getName());
+        }else return permission.playerHas(Bukkit.getServer().getWorlds().get(0).getName(), offlinePlayer, perm.getName());
     }
 
     @Override
@@ -1475,7 +1550,7 @@ public class FakePlayer extends FakePlayerCommandSender implements Player {
 
     @Override
     public void removeAttachment(PermissionAttachment attachment) {
-
+        //Empty
     }
 
     @Override
@@ -1485,27 +1560,37 @@ public class FakePlayer extends FakePlayerCommandSender implements Player {
 
     @Override
     public Set<PermissionAttachmentInfo> getEffectivePermissions() {
-        return null;
+        if(isOnline()){
+            return player.getEffectivePermissions();
+        }else return null;
     }
 
     @Override
     public boolean isOp() {
-        return false;
+        if(isOnline()){
+           return player.isOp();
+        }return offlinePlayer.isOp();
     }
 
     @Override
     public void setOp(boolean value) {
-
+        if(isOnline()){
+            player.setOp(value);
+        }offlinePlayer.setOp(value);
     }
 
     @Override
     public void sendPluginMessage(Plugin source, String channel, byte[] message) {
-
+        if(isOnline()){
+            player.sendPluginMessage(source, channel, message);
+        }else sendError();
     }
 
     @Override
     public Set<String> getListeningPluginChannels() {
-        return null;
+        if(isOnline()){
+            return player.getListeningPluginChannels();
+        }return null;
     }
 
     @Override
