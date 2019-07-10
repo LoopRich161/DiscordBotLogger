@@ -41,11 +41,7 @@ public class FakePlayerCommandSender implements CommandSender {
             for(String message : messages){
                 player.sendMessage(message);
             }
-        }else {
-            for(String message : messages){
-                DiscordBot.sendServerResponse(Util.removeCodeColors(message));
-            }
-        }
+        }else DiscordBot.sendServerResponse(Util.removeCodeColors(messages));
     }
 
     @Override

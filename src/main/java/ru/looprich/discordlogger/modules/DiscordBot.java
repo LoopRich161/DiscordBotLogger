@@ -12,6 +12,7 @@ import ru.looprich.discordlogger.DiscordLogger;
 
 import javax.security.auth.login.LoginException;
 import java.time.LocalDateTime;
+import java.util.List;
 
 public class DiscordBot {
 
@@ -46,6 +47,19 @@ public class DiscordBot {
         if (!isEnabled()) return;
         String msg = cancelFormatMessage(message);
         loggerChannel.sendMessage(getDate() + msg).queue();
+    }
+
+    public static void sendServerResponse(List<String> msgs){
+        EmbedBuilder message = new EmbedBuilder();
+        StringBuilder formatted = new StringBuilder();
+        for(String msg : msgs){
+            formatted.append(msg).append("\n");
+        }
+        message.setTitle("Ответ сервера.");
+        message.setDescription(formatted.toString());
+        message.setColor(0xf45642);
+        loggerChannel.sendTyping().queue();
+        loggerChannel.sendMessage(message.build()).queue();
     }
 
     public static void sendServerResponse(String msg){
