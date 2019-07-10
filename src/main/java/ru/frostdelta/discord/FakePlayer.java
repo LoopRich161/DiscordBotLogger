@@ -27,8 +27,11 @@ import org.bukkit.util.Vector;
 import java.net.InetSocketAddress;
 import java.util.*;
 
-public class FakePlayer implements Player {
+public class FakePlayer extends FakePlayerCommandSender implements Player {
 
+    public FakePlayer(String name) {
+        super(name);
+    }
 
     @Override
     public String getDisplayName() {
