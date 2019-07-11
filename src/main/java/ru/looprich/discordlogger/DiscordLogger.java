@@ -10,6 +10,8 @@ import ru.looprich.discordlogger.modules.DiscordBot;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+import java.util.logging.Level;
 
 public class DiscordLogger extends JavaPlugin {
 
@@ -23,6 +25,11 @@ public class DiscordLogger extends JavaPlugin {
         plugin = this;
         this.saveDefaultConfig();
         this.reloadConfig();
+        if(getServer().getPluginManager().getPlugin("Citizens") == null || !Objects.requireNonNull(getServer().getPluginManager().getPlugin("Citizens")).isEnabled()) {
+            getLogger().log(Level.SEVERE, "Citizens 2.0 not found or not enabled");
+            getServer().getPluginManager().disablePlugin(this);
+            return;
+        }
         getServer().getPluginManager().registerEvents(new AsyncPlayerChat(), this);
         getServer().getPluginManager().registerEvents(new PlayerLogin(), this);
         getServer().getPluginManager().registerEvents(new PlayerJoin(), this);

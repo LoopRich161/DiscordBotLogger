@@ -4,6 +4,7 @@ main: ru.looprich.discordlogger.DiscordLogger
 authors: [LoopRich161, FrostDelta123]
 website: [vk.com/id199167970, vk.com/id159089730]
 description: Manage and view your server console online!
+depend: [Citizens]
 softdepend:
   - Vault
 commands:
