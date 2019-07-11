@@ -1,11 +1,26 @@
 package ru.frostdelta.discord;
 
+import net.citizensnpcs.api.CitizensAPI;
+import net.citizensnpcs.api.npc.NPC;
+import net.citizensnpcs.api.npc.NPCRegistry;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.entity.EntityType;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class Util {
+
+    public static NPC getFakePlayerNPC(String name){
+        NPCRegistry registry = CitizensAPI.getNPCRegistry();
+        NPC npc = registry.createNPC(EntityType.SPIDER, name);
+        npc.setProtected(true);
+        npc.setName(name);
+        npc.spawn(Bukkit.getServer().getWorlds().get(0).getSpawnLocation());
+        npc.setBukkitEntityType(EntityType.SPIDER);
+        return npc;
+    }
 
     public static String removeCodeColors(String message) {
         return ChatColor.stripColor(message);
