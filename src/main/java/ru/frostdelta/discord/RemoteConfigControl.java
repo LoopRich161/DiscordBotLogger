@@ -33,7 +33,7 @@ public class RemoteConfigControl extends ListenerAdapter {
                     "~bot reload - *перезагрузка конфига.*\n" +
                     "~bot disable - *выключение бота.*\n" +
                     "~bot restart - *перезагрузка бота.*\n" +
-                    "~verify <nickname> - *привязать Discord к Minecraft аккаунту. Необходимо открыть личные сообщения от участников сервера!*\n" +
+                    "~authentication <nickname> - *привязать Discord к Minecraft аккаунту. Необходимо открыть личные сообщения от участников сервера!*\n" +
                     "~command <command> - *выполнить команду на Minecraft сервере*\n" +
                     "~bot developers - *информация о разработчиках.*\n" +
                     "~bot online - *просмотреть кто находится на сервере.*\n" +
@@ -47,17 +47,35 @@ public class RemoteConfigControl extends ListenerAdapter {
 
         String who = event.getAuthor().getAsTag();
 
-        if (command.equalsIgnoreCase(DiscordBot.prefix + "verify") && args.length == 2) {
+        if (command.equalsIgnoreCase(DiscordBot.prefix + "authentication") && args.length == 2) {
             String nickname = args[1];
-            for (GameAuthentication gameSnapping : DiscordLogger.getInstance().verifyUsers)
-                if (gameSnapping.getPlayerName().equalsIgnoreCase(nickname)) {
+            for (GameAuthentication gameAuthentication : DiscordLogger.getInstance().gameAuthenticationUsers)
+                if (gameAuthentication.getPlayerName().equalsIgnoreCase(nickname)) {
                     DiscordBot.sendVerifyMessage("Данному участнику уже выслан код! Ожидайте пока закончится время для подтверждения кода.");
                     return;
                 }
-            GameAuthentication snapping = new GameAuthentication(event.getAuthor(), nickname);
-            snapping.regPlayer();
-            DiscordLogger.getInstance().getLogger().info("<" + who + "> issued discord command: ~verify " + nickname);
+            GameAuthentication gameAuthentication = new GameAuthentication(event.getAuthor(), nickname);
+            gameAuthentication.authentication();
+            DiscordLogger.getInstance().getLogger().info("<" + who + "> issued discord command: ~authentication " + nickname);
             return;
+        }
+
+        if (command.equalsIgnoreCase(DiscordBot.prefix + "authentication") && args.length == 3) {
+            String code = args[2];
+            if ("code".equalsIgnoreCase(args[1])) {
+                for (GameAuthentication gameAuthentication : DiscordLogger.getInstance().gameAuthenticationUsers) {
+                    if (gameAuthentication.getUser().getAsTag().equalsIgnoreCase(event.getAuthor().getAsTag())) {
+                        if (gameAuthentication.getCode().equalsIgnoreCase(code)) {
+                            gameAuthentication.accept();
+                            return;
+                        }
+                        event.getChannel().sendMessage("Код подтверждения неверный!").queue();
+                        gameAuthentication.reject();
+                        return;
+                    }
+                }
+            } else event.getChannel().sendMessage("Использование команды: /authentication code <code>").queue();
+
         }
 
         if (command.equalsIgnoreCase(DiscordBot.prefix + "bot") && args.length == 2) {

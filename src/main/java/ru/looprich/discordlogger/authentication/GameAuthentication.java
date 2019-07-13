@@ -40,7 +40,7 @@ public class GameAuthentication {
         confirm = false;
     }
 
-    public void regPlayer() {
+    public void authentication() {
         for (Player var1 : Bukkit.getOnlinePlayers()) {
             if (playerName.equalsIgnoreCase(var1.getName())) {
                 player = var1;
@@ -62,9 +62,8 @@ public class GameAuthentication {
         sendCode();
         AuthenticationTimer timer = new AuthenticationTimer(this);
         player.sendMessage(ChatColor.GOLD + "Вы или кто-то за Вас, пытаетесь привязать свой Discord(" + user.getAsTag() + ") к Minecraft аккаунту.");
-        player.sendMessage(ChatColor.AQUA + "/verify accept <code>" + ChatColor.GREEN + "- принять предложение");
-        player.sendMessage(ChatColor.AQUA + "/verify reject " + ChatColor.GREEN + "- отклонить предложение");
-        DiscordLogger.getInstance().verifyUsers.add(this);
+        player.sendMessage(ChatColor.AQUA + "/authentication code <code>" + ChatColor.GREEN + "- принять предложение");
+        DiscordLogger.getInstance().gameAuthenticationUsers.add(this);
         timer.runTaskTimer(DiscordLogger.getInstance(), 0L, 20L);
     }
 
@@ -73,21 +72,21 @@ public class GameAuthentication {
         confirm = true;
         DiscordBot.sendVerifyMessage("Игрок " + player.getName() + " отказался привязать свой Minecraft к Discord аккаунту!");
         player.sendMessage(ChatColor.RED + "Вы отказались привязать свой Minecraft к Discord аккаунту!");
-        DiscordLogger.getInstance().verifyUsers.remove(this);
+        DiscordLogger.getInstance().gameAuthenticationUsers.remove(this);
     }
 
     public void accept() {
         confirm = true;
         DiscordBot.sendVerifyMessage("Игрок " + player.getName() + " согласился привязать свой Minecraft к Discord аккаунту!");
         player.sendMessage(ChatColor.GREEN + "Вы согласились привязать свой Minecraft к Discord аккаунту!");
-        DiscordLogger.getInstance().getNetwork().verifyPlayer(player, user, code);
-        DiscordLogger.getInstance().verifyUsers.remove(this);
+        DiscordLogger.getInstance().getNetwork().authentication(player, user, code);
+        DiscordLogger.getInstance().gameAuthenticationUsers.remove(this);
     }
 
     void fail() {
         DiscordBot.sendVerifyMessage("Игрок " + player.getName() + " не успел подтвердить код в игре!");
         player.sendMessage(ChatColor.RED + "Вы не успели подтвердить код!");
-        DiscordLogger.getInstance().verifyUsers.remove(this);
+        DiscordLogger.getInstance().gameAuthenticationUsers.remove(this);
     }
 
     boolean isConfirm() {
@@ -100,6 +99,14 @@ public class GameAuthentication {
 
     public String getCode() {
         return code;
+    }
+
+    public Player getPlayer() {
+        return player;
+    }
+
+    public User getUser() {
+        return user;
     }
 
 }

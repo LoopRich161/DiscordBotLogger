@@ -4,18 +4,18 @@ import org.bukkit.scheduler.BukkitRunnable;
 import ru.looprich.discordlogger.DiscordLogger;
 
 public class AuthenticationTimer extends BukkitRunnable {
-    private int verifyTime = DiscordLogger.getInstance().getConfig().getInt("bot.verify-time");
+    private int verifyTime = DiscordLogger.getInstance().getConfig().getInt("bot.authentication-time");
     private int time = 0;
-    private GameAuthentication snapping;
+    private GameAuthentication gameAuthentication;
 
-    AuthenticationTimer(GameAuthentication snapping) {
-        this.snapping = snapping;
+    AuthenticationTimer(GameAuthentication gameAuthentication) {
+        this.gameAuthentication = gameAuthentication;
     }
 
     @Override
     public void run() {
         if (time == verifyTime) {
-            if (!snapping.isConfirm()) snapping.fail();
+            if (!gameAuthentication.isConfirm()) gameAuthentication.fail();
             cancel();
         }
         time++;

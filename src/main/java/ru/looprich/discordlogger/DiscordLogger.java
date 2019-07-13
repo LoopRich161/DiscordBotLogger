@@ -6,6 +6,7 @@ import ru.frostdelta.discord.BotCommand;
 import ru.frostdelta.discord.FakePlayerPermissionManager;
 import ru.frostdelta.discord.events.*;
 import ru.looprich.discordlogger.authentication.GameAuthentication;
+import ru.looprich.discordlogger.deauthentication.GameDeauthentication;
 import ru.looprich.discordlogger.modules.DiscordBot;
 
 import java.util.ArrayList;
@@ -18,14 +19,15 @@ public class DiscordLogger extends JavaPlugin {
     private static DiscordLogger plugin;
     public DiscordBot discordBot;
     private Network network;
-    public List<GameAuthentication> verifyUsers;
+    public List<GameAuthentication> gameAuthenticationUsers;
+    public List<GameDeauthentication> gameDeauthenticationPlayers;
 
     @Override
     public void onEnable() {
         plugin = this;
         this.saveDefaultConfig();
         this.reloadConfig();
-        if(getServer().getPluginManager().getPlugin("Citizens") == null || !Objects.requireNonNull(getServer().getPluginManager().getPlugin("Citizens")).isEnabled()) {
+        if (getServer().getPluginManager().getPlugin("Citizens") == null || !Objects.requireNonNull(getServer().getPluginManager().getPlugin("Citizens")).isEnabled()) {
             getLogger().log(Level.SEVERE, "Citizens 2.0 not found or not enabled");
             getServer().getPluginManager().disablePlugin(this);
             return;
@@ -47,7 +49,8 @@ public class DiscordLogger extends JavaPlugin {
             getLogger().info("Loading...");
             loadDiscordBot();
             BotCommand.reg();
-            verifyUsers = new ArrayList<>();
+            gameAuthenticationUsers = new ArrayList<>();
+            gameDeauthenticationPlayers = new ArrayList<>();
         } else getLogger().info("DiscordBotLogging disabled!");
         getServer().getConsoleSender().sendMessage(ChatColor.WHITE + "Authors: " + getDescription().getAuthors());
         getServer().getConsoleSender().sendMessage(ChatColor.WHITE + "WebSite: " + getDescription().getWebsite());

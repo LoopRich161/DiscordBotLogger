@@ -10,7 +10,7 @@ public class Network {
 
     private static final long autoReconnect = 28700L;
 
-    private final String INSERT_QUERY, SELECT_QUERY_PLAYER, SELECT_QUERY_USER, CREATE_DB;
+    private final String INSERT_QUERY, SELECT_QUERY_PLAYER, SELECT_QUERY_USER, CREATE_DB, DELETE_QUERY;
     private final String url, user, password;
     private Connection connection;
     private long lastExecute = 0L;
@@ -22,10 +22,11 @@ public class Network {
         this.user = user;
         this.password = password;
 
-        this.CREATE_DB = "CREATE TABLE IF NOT EXISTS `DiscordLogger` (player varchar(200),playerUUID varchar(200),  discord varchar(200), code varchar(200)) CHARACTER SET utf8 COLLATE utf8_general_ci;";
+        this.CREATE_DB = "CREATE TABLE IF NOT EXISTS `DiscordLogger` (player varchar(200), playerUUID varchar(200),  discord varchar(200), code varchar(200)) CHARACTER SET utf8 COLLATE utf8_general_ci;";
         this.INSERT_QUERY = "INSERT INTO `DiscordLogger` (player, playerUUID, discord, code) VALUES (?, ?, ?, ?);";
         this.SELECT_QUERY_PLAYER = "SELECT * FROM `DiscordLogger` WHERE `player` = ? ;";
         this.SELECT_QUERY_USER = "SELECT * FROM `DiscordLogger` WHERE `discord` = ? ;";
+        this.DELETE_QUERY = "DELETE FROM `DiscordLogger` WHERE `player` = ? ;";
     }
 
 
@@ -42,7 +43,7 @@ public class Network {
 
     }
 
-    public void verifyPlayer(Player player, User user, String code) {
+    public void authentication(Player player, User user, String code) {
         this.connection = getConnection();
         if (this.connection != null) {
             try (PreparedStatement preparedStatement = this.connection.prepareStatement(INSERT_QUERY)) {
@@ -59,6 +60,40 @@ public class Network {
         }
     }
 
+    public void deauthentication(Player player) {
+        this.connection = getConnection();
+        if (this.connection != null) {
+            try (PreparedStatement preparedStatement = this.connection.prepareStatement(DELETE_QUERY)) {
+                preparedStatement.setString(1, player.getName());
+                preparedStatement.executeUpdate();
+                flushLastExecute();
+            } catch (SQLException e) {
+                logger.severe("Error deauthentication.");
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public boolean existPlayer(Player player, User user) {
+        this.connection = getConnection();
+        if (this.connection != null) {
+            try (PreparedStatement preparedStatement = this.connection.prepareStatement(SELECT_QUERY_PLAYER)) {
+                preparedStatement.setString(1, player.getName());
+                try (ResultSet rs = preparedStatement.executeQuery()) {
+                    while (rs.next()) {
+                        String userName = rs.getString("discord");
+                        if (userName.equalsIgnoreCase(user.getAsTag())) return true;
+                    }
+                }
+            } catch (SQLException ex) {
+                logger.severe("Error existPlayer.");
+                ex.printStackTrace();
+            }
+        }
+        flushLastExecute();
+        return false;
+    }
+
     public boolean existPlayer(Player player) {
         this.connection = getConnection();
         if (this.connection != null) {
@@ -66,12 +101,32 @@ public class Network {
                 preparedStatement.setString(1, player.getName());
                 try (ResultSet rs = preparedStatement.executeQuery()) {
                     while (rs.next()) {
-                        String code = rs.getString("code");
-                        if (code != null) return true;
+                        String userName = rs.getString("discord");
+                        if (userName != null) return true;
                     }
                 }
             } catch (SQLException ex) {
                 logger.severe("Error existPlayer.");
+                ex.printStackTrace();
+            }
+        }
+        flushLastExecute();
+        return false;
+    }
+
+    public boolean existUser(User user, Player player) {
+        this.connection = getConnection();
+        if (this.connection != null) {
+            try (PreparedStatement preparedStatement = this.connection.prepareStatement(SELECT_QUERY_USER)) {
+                preparedStatement.setString(1, user.getAsTag());
+                try (ResultSet rs = preparedStatement.executeQuery()) {
+                    while (rs.next()) {
+                        String playerName = rs.getString("player");
+                        if (playerName.equalsIgnoreCase(player.getName())) return true;
+                    }
+                }
+            } catch (SQLException ex) {
+                logger.severe("Error existUser.");
                 ex.printStackTrace();
             }
         }
@@ -86,8 +141,8 @@ public class Network {
                 preparedStatement.setString(1, user.getAsTag());
                 try (ResultSet rs = preparedStatement.executeQuery()) {
                     while (rs.next()) {
-                        String code = rs.getString("code");
-                        if (code != null) return true;
+                        String playerName = rs.getString("player");
+                        if (playerName != null) return true;
                     }
                 }
             } catch (SQLException ex) {

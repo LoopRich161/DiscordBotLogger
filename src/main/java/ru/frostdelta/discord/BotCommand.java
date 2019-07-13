@@ -6,38 +6,52 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import ru.looprich.discordlogger.DiscordLogger;
-import ru.looprich.discordlogger.authentication.GameAuthentication;
+import ru.looprich.discordlogger.deauthentication.GameDeauthentication;
 import ru.looprich.discordlogger.modules.DiscordBot;
 
 public class BotCommand implements CommandExecutor {
 
     public static void reg() {
         DiscordLogger.getInstance().getCommand("bot").setExecutor(new BotCommand());
-        DiscordLogger.getInstance().getCommand("verify").setExecutor(new BotCommand());
+        DiscordLogger.getInstance().getCommand("deauthentication").setExecutor(new BotCommand());
     }
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         String who = sender.getName();
-        if (command.getName().equalsIgnoreCase("verify") && args.length >= 1) {
+        if (command.getName().equalsIgnoreCase("deauthentication") && args.length == 1) {
             if (sender instanceof Player) {
-                for (GameAuthentication snapping : DiscordLogger.getInstance().verifyUsers) {
-                    if (snapping.getPlayerName().equalsIgnoreCase(sender.getName())) {
-                        switch (args[0]) {
-                            case "accept":
-                                if (args[1].equalsIgnoreCase(snapping.getCode())) snapping.accept();
-                                else sender.sendMessage(ChatColor.RED + "Вы ввели неверный код!");
-                                break;
-                            case "reject":
-                                snapping.reject();
-                                break;
-                            default:
-                                sender.sendMessage(ChatColor.RED + "Доступные ответы: " + ChatColor.GOLD + "/verify <accept <code>/reject>");
-                                break;
-                        }
+                String userAsTag = args[0];
+                for (GameDeauthentication deauthentication : DiscordLogger.getInstance().gameDeauthenticationPlayers) {
+                    if (deauthentication.getPlayerName().equalsIgnoreCase(sender.getName())) {
+                        sender.sendMessage("Данному участнику уже выслан код! Ожидайте пока закончится время для подтверждения кода.");
                         return true;
                     }
                 }
+                GameDeauthentication gameDeauthentication = new GameDeauthentication((Player) sender, userAsTag);
+                gameDeauthentication.deauthentication();
+
+            } else sender.sendMessage("Только для игроков!");
+            return true;
+        }
+
+        if (command.getName().equalsIgnoreCase("deauthentication") && args.length == 2) {
+            if (sender instanceof Player) {
+                if ("code".equalsIgnoreCase(args[0])) {
+                    String code = args[1];
+                    for (GameDeauthentication deauthentication : DiscordLogger.getInstance().gameDeauthenticationPlayers) {
+                        if (deauthentication.getPlayerName().equalsIgnoreCase(sender.getName())) {
+                            if (code.equalsIgnoreCase(deauthentication.getCode())) {
+                                deauthentication.accept();
+                                return true;
+                            }
+                            sender.sendMessage("Код подтверждения неверный!");
+                            deauthentication.reject();
+                            return true;
+                        }
+                    }
+                } else sender.sendMessage("Использование команды: /deauthentication code <code>");
+
             } else sender.sendMessage("Только для игроков!");
             return true;
         }
