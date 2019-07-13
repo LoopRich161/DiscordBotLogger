@@ -9,19 +9,21 @@ whitelist:
 
 network:
   url: 'jdbc:mysql://localhost:3306/test'
-  username: ''
-  password: ''
+  username: 'root'
+  password: 'admin'
 
 bot:
   #Статус бота: true - включен, false - выключен
   enabled: true
   #Токен бота
   token: ''
-  #ID канала для логгирования сообщений
+  #ID канала для сообщений
   channel-id: ''
   #Использование команд только в указаном канале
   command-only-channel: true
-  #Логгировать локал-чат
+  #Локал-чат
   local-chat: true
   #Время для подтверждения связки аккаунтов (в секундах)
-  verify-time: 60
+  authentication-time: 60
+  #Время для подтверждения отвязки аккаунтов (в секундах)
+  deauthentication-time: 60
