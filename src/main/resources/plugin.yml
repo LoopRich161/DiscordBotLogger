@@ -12,4 +12,8 @@ commands:
     permission: discordlogger.bot
     permission-message: U dont have permissions!
   authentication:
+    permission: discordlogger.authentication
+    permission-message: U dont have permissions!
   deauthentication:
+    permission: discordlogger.deauthentication
+    permission-message: U dont have permissions!
