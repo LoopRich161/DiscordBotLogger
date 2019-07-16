@@ -14,11 +14,11 @@ public class Util {
 
     public static NPC getFakePlayerNPC(String name){
         NPCRegistry registry = CitizensAPI.getNPCRegistry();
-        NPC npc = registry.createNPC(EntityType.SPIDER, name);
+        NPC npc = registry.createNPC(EntityType.PLAYER, name);
         npc.setProtected(true);
         npc.setName(name);
         npc.spawn(Bukkit.getServer().getWorlds().get(0).getSpawnLocation());
-        npc.setBukkitEntityType(EntityType.SPIDER);
+        npc.setBukkitEntityType(EntityType.PLAYER);
         return npc;
     }
 

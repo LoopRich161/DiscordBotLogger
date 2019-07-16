@@ -27,7 +27,7 @@ public class FakePlayerCommandSender implements CommandSender {
         player = offlinePlayer.getPlayer();
         isOnline = player != null;
         permission = FakePlayerPermissionManager.getFakePlayerPermissions();
-        //NPC npc = Util.getFakePlayerNPC(name);
+        NPC npc = Util.getFakePlayerNPC(name);
         //Bukkit.broadcastMessage(String.valueOf(npc.isSpawned()));
         //Bukkit.broadcastMessage(Util.getFakePlayerNPC(name).getEntity().toString());
     }
