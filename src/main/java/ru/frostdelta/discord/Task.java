@@ -2,20 +2,20 @@ package ru.frostdelta.discord;
 
 import java.util.HashMap;
 
-public enum  Tasks  {
+public enum Task {
     COMMAND("Command"), SPAWN("Spawn"), UNKNOWN("Unknown action");
 
-    private static final HashMap<String, Tasks> actions = new HashMap<>();
+    private static final HashMap<String, Task> actions = new HashMap<>();
 
     static {
-        for (Tasks ac : Tasks.values()) {
+        for (Task ac : Task.values()) {
             actions.put(ac.action, ac);
         }
     }
 
     private final String action;
 
-    private Tasks(String action) {
+    private Task(String action) {
         this.action = action;
     }
 
@@ -23,8 +23,8 @@ public enum  Tasks  {
         return action;
     }
 
-    public static Tasks getAction(String name) {
-        return actions.getOrDefault(name, Tasks.UNKNOWN);
+    public static Task getAction(String name) {
+        return actions.getOrDefault(name, Task.UNKNOWN);
     }
 
     public static boolean contains(String name) {
