@@ -5,6 +5,7 @@ import net.citizensnpcs.api.npc.NPC;
 import net.citizensnpcs.api.npc.NPCRegistry;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Location;
 import org.bukkit.entity.EntityType;
 
 import java.util.ArrayList;
@@ -15,10 +16,10 @@ public class Util {
     public static NPC getFakePlayerNPC(String name){
         NPCRegistry registry = CitizensAPI.getNPCRegistry();
         NPC npc = registry.createNPC(EntityType.PLAYER, name);
-        npc.setProtected(true);
-        npc.setName(name);
-        npc.spawn(Bukkit.getServer().getWorlds().get(0).getSpawnLocation());
-        npc.setBukkitEntityType(EntityType.PLAYER);
+        //npc.setProtected(true);
+        //npc.setName(name);
+        npc.spawn(new Location(Bukkit.getWorld("world"), 0,0,0));
+        //npc.setBukkitEntityType(EntityType.PLAYER);
         return npc;
     }
 

@@ -6,7 +6,9 @@ import org.bukkit.advancement.AdvancementProgress;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeInstance;
 import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
 import org.bukkit.block.PistonMoveReaction;
+import org.bukkit.block.data.BlockData;
 import org.bukkit.conversations.Conversation;
 import org.bukkit.conversations.ConversationAbandonedEvent;
 import org.bukkit.entity.*;
@@ -22,7 +24,11 @@ import org.bukkit.plugin.Plugin;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scoreboard.Scoreboard;
+import org.bukkit.util.BoundingBox;
+import org.bukkit.util.RayTraceResult;
 import org.bukkit.util.Vector;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import ru.looprich.discordlogger.modules.DiscordBot;
 
 import java.net.InetSocketAddress;
@@ -68,6 +74,58 @@ public class FakePlayer extends FakePlayerCommandSender implements Player {
     @Override
     public void setPlayerListName(String name) {
         sendError();
+    }
+
+    /**
+     * Gets the currently displayed player list header for this player.
+     *
+     * @return player list header or null
+     */
+    @Override
+    public @Nullable String getPlayerListHeader() {
+        return null;
+    }
+
+    /**
+     * Gets the currently displayed player list footer for this player.
+     *
+     * @return player list header or null
+     */
+    @Override
+    public @Nullable String getPlayerListFooter() {
+        return null;
+    }
+
+    /**
+     * Sets the currently displayed player list header for this player.
+     *
+     * @param header player list header, null for empty
+     */
+    @Override
+    public void setPlayerListHeader(@Nullable String header) {
+
+    }
+
+    /**
+     * Sets the currently displayed player list footer for this player.
+     *
+     * @param footer player list footer, null for empty
+     */
+    @Override
+    public void setPlayerListFooter(@Nullable String footer) {
+
+    }
+
+    /**
+     * Sets the currently displayed player list header and footer for this
+     * player.
+     *
+     * @param header player list header, null for empty
+     * @param footer player list footer, null for empty
+     */
+    @Override
+    public void setPlayerListHeaderFooter(@Nullable String header, @Nullable String footer) {
+
     }
 
     @Override
@@ -255,14 +313,21 @@ public class FakePlayer extends FakePlayerCommandSender implements Player {
 
     }
 
+    /**
+     * Send a block change. This fakes a block change packet for a user at a
+     * certain location. This will not actually change the world in any way.
+     *
+     * @param loc   The location of the changed block
+     * @param block The new block
+     */
     @Override
-    public boolean sendChunkChange(Location loc, int sx, int sy, int sz, byte[] data) {
-        return false;
+    public void sendBlockChange(@NotNull Location loc, @NotNull BlockData block) {
+
     }
 
     @Override
-    public void sendBlockChange(Location loc, int material, byte data) {
-
+    public boolean sendChunkChange(Location loc, int sx, int sy, int sz, byte[] data) {
+        return false;
     }
 
     @Override
@@ -356,7 +421,7 @@ public class FakePlayer extends FakePlayerCommandSender implements Player {
     }
 
     @Override
-    public void incrementStatistic(Statistic statistic, EntityType entityType) throws IllegalArgumentException {
+    public void incrementStatistic(@NotNull Statistic statistic, EntityType entityType) throws IllegalArgumentException {
 
     }
 
@@ -548,6 +613,46 @@ public class FakePlayer extends FakePlayerCommandSender implements Player {
     @Override
     public void setBedSpawnLocation(Location location, boolean force) {
         sendError();
+    }
+
+    /**
+     * Attempts to make the entity sleep at the given location.
+     * <br>
+     * The location must be in the current world and have a bed placed at the
+     * location. The game may also enforce other requirements such as proximity
+     * to bed, monsters, and dimension type if force is not set.
+     *
+     * @param location the location of the bed
+     * @param force    whether to try and sleep at the location even if not
+     *                 normally possible
+     * @return whether the sleep was successful
+     */
+    @Override
+    public boolean sleep(@NotNull Location location, boolean force) {
+        return false;
+    }
+
+    /**
+     * Causes the player to wakeup if they are currently sleeping.
+     *
+     * @param setSpawnLocation whether to set their spawn location to the bed
+     *                         they are currently sleeping in
+     * @throws IllegalStateException if not sleeping
+     */
+    @Override
+    public void wakeup(boolean setSpawnLocation) {
+
+    }
+
+    /**
+     * Gets the location of the bed the player is currently sleeping in
+     *
+     * @return location
+     * @throws IllegalStateException if not sleeping
+     */
+    @Override
+    public @NotNull Location getBedLocation() {
+        return null;
     }
 
     @Override
@@ -774,9 +879,33 @@ public class FakePlayer extends FakePlayerCommandSender implements Player {
         return null;
     }
 
+    /**
+     * Get the player's current client side view distance.
+     * <br>
+     * Will default to the server view distance if the client has not yet
+     * communicated this information,
+     *
+     * @return client view distance as above
+     */
+    @Override
+    public int getClientViewDistance() {
+        return 0;
+    }
+
     @Override
     public String getLocale() {
         return null;
+    }
+
+    /**
+     * Update the list of commands sent to the client.
+     * <br>
+     * Generally useful to ensure the client has a complete list of commands
+     * after permission changes are done.
+     */
+    @Override
+    public void updateCommands() {
+
     }
 
     @Override
@@ -919,6 +1048,65 @@ public class FakePlayer extends FakePlayerCommandSender implements Player {
         return 0;
     }
 
+    /**
+     * Discover a recipe for this player such that it has not already been
+     * discovered. This method will add the key's associated recipe to the
+     * player's recipe book.
+     *
+     * @param recipe the key of the recipe to discover
+     * @return whether or not the recipe was newly discovered
+     */
+    @Override
+    public boolean discoverRecipe(@NotNull NamespacedKey recipe) {
+        return false;
+    }
+
+    /**
+     * Discover a collection of recipes for this player such that they have not
+     * already been discovered. This method will add the keys' associated
+     * recipes to the player's recipe book. If a recipe in the provided
+     * collection has already been discovered, it will be silently ignored.
+     *
+     * @param recipes the keys of the recipes to discover
+     * @return the amount of newly discovered recipes where 0 indicates that
+     * none were newly discovered and a number equal to {@code recipes.size()}
+     * indicates that all were new
+     */
+    @Override
+    public int discoverRecipes(@NotNull Collection<NamespacedKey> recipes) {
+        return 0;
+    }
+
+    /**
+     * Undiscover a recipe for this player such that it has already been
+     * discovered. This method will remove the key's associated recipe from the
+     * player's recipe book.
+     *
+     * @param recipe the key of the recipe to undiscover
+     * @return whether or not the recipe was successfully undiscovered (i.e. it
+     * was previously discovered)
+     */
+    @Override
+    public boolean undiscoverRecipe(@NotNull NamespacedKey recipe) {
+        return false;
+    }
+
+    /**
+     * Undiscover a collection of recipes for this player such that they have
+     * already been discovered. This method will remove the keys' associated
+     * recipes from the player's recipe book. If a recipe in the provided
+     * collection has not yet been discovered, it will be silently ignored.
+     *
+     * @param recipes the keys of the recipes to undiscover
+     * @return the amount of undiscovered recipes where 0 indicates that none
+     * were undiscovered and a number equal to {@code recipes.size()} indicates
+     * that all were undiscovered
+     */
+    @Override
+    public int undiscoverRecipes(@NotNull Collection<NamespacedKey> recipes) {
+        return 0;
+    }
+
     @Override
     public Entity getShoulderEntityLeft() {
         return null;
@@ -966,6 +1154,80 @@ public class FakePlayer extends FakePlayerCommandSender implements Player {
 
     @Override
     public List<Block> getLastTwoTargetBlocks(Set<Material> transparent, int maxDistance) {
+        return null;
+    }
+
+    /**
+     * Gets the block that the living entity has targeted.
+     * <p>
+     * This takes the blocks' precise collision shapes into account. Fluids are
+     * ignored.
+     * <p>
+     * This may cause loading of chunks! Some implementations may impose
+     * artificial restrictions on the maximum distance.
+     *
+     * @param maxDistance the maximum distance to scan
+     * @return block that the living entity has targeted
+     * @see #getTargetBlockExact(int, FluidCollisionMode)
+     */
+    @Override
+    public @Nullable Block getTargetBlockExact(int maxDistance) {
+        return null;
+    }
+
+    /**
+     * Gets the block that the living entity has targeted.
+     * <p>
+     * This takes the blocks' precise collision shapes into account.
+     * <p>
+     * This may cause loading of chunks! Some implementations may impose
+     * artificial restrictions on the maximum distance.
+     *
+     * @param maxDistance        the maximum distance to scan
+     * @param fluidCollisionMode the fluid collision mode
+     * @return block that the living entity has targeted
+     * @see #rayTraceBlocks(double, FluidCollisionMode)
+     */
+    @Override
+    public @Nullable Block getTargetBlockExact(int maxDistance, @NotNull FluidCollisionMode fluidCollisionMode) {
+        return null;
+    }
+
+    /**
+     * Performs a ray trace that provides information on the targeted block.
+     * <p>
+     * This takes the blocks' precise collision shapes into account. Fluids are
+     * ignored.
+     * <p>
+     * This may cause loading of chunks! Some implementations may impose
+     * artificial restrictions on the maximum distance.
+     *
+     * @param maxDistance the maximum distance to scan
+     * @return information on the targeted block, or <code>null</code> if there
+     * is no targeted block in range
+     * @see #rayTraceBlocks(double, FluidCollisionMode)
+     */
+    @Override
+    public @Nullable RayTraceResult rayTraceBlocks(double maxDistance) {
+        return null;
+    }
+
+    /**
+     * Performs a ray trace that provides information on the targeted block.
+     * <p>
+     * This takes the blocks' precise collision shapes into account.
+     * <p>
+     * This may cause loading of chunks! Some implementations may impose
+     * artificial restrictions on the maximum distance.
+     *
+     * @param maxDistance        the maximum distance to scan
+     * @param fluidCollisionMode the fluid collision mode
+     * @return information on the targeted block, or <code>null</code> if there
+     * is no targeted block in range
+     * @see World#rayTraceBlocks(Location, Vector, double, FluidCollisionMode)
+     */
+    @Override
+    public @Nullable RayTraceResult rayTraceBlocks(double maxDistance, @NotNull FluidCollisionMode fluidCollisionMode) {
         return null;
     }
 
@@ -1114,6 +1376,38 @@ public class FakePlayer extends FakePlayerCommandSender implements Player {
 
     }
 
+    /**
+     * Checks to see if an entity is swimming.
+     *
+     * @return True if this entity is swimming.
+     */
+    @Override
+    public boolean isSwimming() {
+        return false;
+    }
+
+    /**
+     * Makes entity start or stop swimming.
+     * <p>
+     * This may have unexpected results if the entity is not in water.
+     *
+     * @param swimming True if the entity is swimming.
+     */
+    @Override
+    public void setSwimming(boolean swimming) {
+
+    }
+
+    /**
+     * Checks to see if an entity is currently using the Riptide enchantment.
+     *
+     * @return True if this entity is currently riptiding.
+     */
+    @Override
+    public boolean isRiptiding() {
+        return false;
+    }
+
     @Override
     public void setAI(boolean ai) {
 
@@ -1204,6 +1498,19 @@ public class FakePlayer extends FakePlayerCommandSender implements Player {
         return 0;
     }
 
+    /**
+     * Gets the entity's current bounding box.
+     * <p>
+     * The returned bounding box reflects the entity's current location and
+     * size.
+     *
+     * @return the entity's current bounding box
+     */
+    @Override
+    public @NotNull BoundingBox getBoundingBox() {
+        return null;
+    }
+
     @Override
     public boolean isOnGround() {
         return false;
@@ -1212,6 +1519,21 @@ public class FakePlayer extends FakePlayerCommandSender implements Player {
     @Override
     public World getWorld() {
         return null;
+    }
+
+    /**
+     * Sets the entity's rotation.
+     * <p>
+     * Note that if the entity is affected by AI, it may override this rotation.
+     *
+     * @param yaw   the yaw
+     * @param pitch the pitch
+     * @throws UnsupportedOperationException if used for players
+     * @deprecated draft API
+     */
+    @Override
+    public void setRotation(float yaw, float pitch) {
+
     }
 
     @Override
@@ -1293,6 +1615,41 @@ public class FakePlayer extends FakePlayerCommandSender implements Player {
     @Override
     public Server getServer() {
         return Bukkit.getServer();
+    }
+
+    /**
+     * Returns true if the entity gets persisted.
+     * <p>
+     * By default all entities are persistent. An entity will also not get
+     * persisted, if it is riding an entity that is not persistent.
+     * <p>
+     * The persistent flag on players controls whether or not to save their
+     * playerdata file when they quit. If a player is directly or indirectly
+     * riding a non-persistent entity, the vehicle at the root and all its
+     * passengers won't get persisted.
+     * <p>
+     * <b>This should not be confused with
+     * {@link LivingEntity#setRemoveWhenFarAway(boolean)} which controls
+     * despawning of living entities. </b>
+     *
+     * @return true if this entity is persistent
+     * @deprecated draft API
+     */
+    @Override
+    public boolean isPersistent() {
+        return false;
+    }
+
+    /**
+     * Sets whether or not the entity gets persisted.
+     *
+     * @param persistent the persistence status
+     * @see #isPersistent()
+     * @deprecated draft API
+     */
+    @Override
+    public void setPersistent(boolean persistent) {
+
     }
 
     @Override
@@ -1467,6 +1824,24 @@ public class FakePlayer extends FakePlayerCommandSender implements Player {
 
     @Override
     public PistonMoveReaction getPistonMoveReaction() {
+        return null;
+    }
+
+    /**
+     * Get the closest cardinal {@link BlockFace} direction an entity is
+     * currently facing.
+     * <br>
+     * This will not return any non-cardinal directions such as
+     * {@link BlockFace#UP} or {@link BlockFace#DOWN}.
+     * <br>
+     * {@link Hanging} entities will override this call and thus their behavior
+     * may be different.
+     *
+     * @return the entity's current cardinal facing.
+     * @see Hanging
+     */
+    @Override
+    public @NotNull BlockFace getFacing() {
         return null;
     }
 
