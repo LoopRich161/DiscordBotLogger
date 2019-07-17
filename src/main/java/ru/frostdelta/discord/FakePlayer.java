@@ -1713,7 +1713,9 @@ public class FakePlayer extends FakePlayerCommandSender implements Player {
 
     @Override
     public UUID getUniqueId() {
-        return null;
+        if(isOnline()){
+            return player.getUniqueId();
+        }else return offlinePlayer.getUniqueId();
     }
 
     @Override
