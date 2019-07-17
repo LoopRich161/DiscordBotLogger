@@ -39,12 +39,14 @@ public class FakePlayer extends FakePlayerCommandSender implements Player {
     private OfflinePlayer offlinePlayer;
     private Player player;
     private net.milkbowl.vault.permission.Permission permission;
+    private String offlineName;
 
     public FakePlayer(String name) {
         super(name);
         offlinePlayer = super.getOfflinePlayer();
         player = super.getPlayer();
         permission = FakePlayerPermissionManager.getFakePlayerPermissions();
+        offlineName = name;
     }
 
     private String sendError(){
@@ -56,7 +58,7 @@ public class FakePlayer extends FakePlayerCommandSender implements Player {
     public String getDisplayName() {
         if(isOnline()){
             return player.getName();
-        }else return offlinePlayer.getName();
+        }else return offlineName;
     }
 
     @Override
@@ -917,7 +919,7 @@ public class FakePlayer extends FakePlayerCommandSender implements Player {
     public String getName() {
         if(isOnline()){
             return player.getName();
-        }else return offlinePlayer.getName();
+        }else return offlineName;
     }
 
     @Override
@@ -1858,7 +1860,7 @@ public class FakePlayer extends FakePlayerCommandSender implements Player {
     public String getCustomName() {
         if(isOnline()){
             return player.getName();
-        }return offlinePlayer.getName();
+        }return offlineName;
     }
 
     @Override
