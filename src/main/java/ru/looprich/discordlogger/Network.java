@@ -43,6 +43,26 @@ public class Network {
 
     }
 
+
+    public String getAccountMinecraftName(User user) {
+        this.connection = getConnection();
+        if (this.connection != null) {
+            try (PreparedStatement preparedStatement = this.connection.prepareStatement(SELECT_QUERY_PLAYER)) {
+                preparedStatement.setString(1, user.getAsTag());
+                try (ResultSet rs = preparedStatement.executeQuery()) {
+                    if (rs.next()) {
+                        return rs.getString("player");
+                    }
+                }
+            } catch (SQLException ex) {
+                logger.severe("Error existPlayer.");
+                ex.printStackTrace();
+            }
+        }
+        flushLastExecute();
+        return null;
+    }
+
     public void authentication(Player player, User user, String code) {
         this.connection = getConnection();
         if (this.connection != null) {
