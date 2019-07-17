@@ -917,7 +917,9 @@ public class FakePlayer extends FakePlayerCommandSender implements Player {
 
     @Override
     public String getName() {
-        return null;
+        if(isOnline()){
+            return player.getName();
+        }else return offlinePlayer.getName();
     }
 
     @Override

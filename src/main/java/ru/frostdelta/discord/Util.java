@@ -16,8 +16,8 @@ public class Util {
 
         NPCRegistry registry = CitizensAPI.getNPCRegistry();
         NPC npc = registry.createNPC(EntityType.PLAYER, name);
-        //npc.setProtected(true);
-        //npc.setName(name);
+        npc.setProtected(true);
+        npc.setName(name);
         new SyncTasks(npc, Task.SPAWN).runTask(DiscordLogger.getInstance());
         //npc.setBukkitEntityType(EntityType.PLAYER);
         return npc;
