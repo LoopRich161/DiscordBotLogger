@@ -59,6 +59,8 @@ public class RemoteConfigControl extends ListenerAdapter {
             return;
         }
 
+
+        //Ты вообще ебанулся? привет дырка. Теперь кто угодно может привязать себе твой акк, когда ты просто онлайн
         if (command.equalsIgnoreCase(DiscordBot.prefix + "authentication") && args.length == 3) {
             String code = args[2];
             if ("code".equalsIgnoreCase(args[1])) {

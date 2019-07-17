@@ -37,7 +37,7 @@ public class BotCommand implements CommandExecutor {
 
         if (command.getName().equalsIgnoreCase("deauthentication") && args.length == 2) {
             if (sender instanceof Player) {
-                if ("code".equalsIgnoreCase(args[0])) {
+                if (args[0].equalsIgnoreCase("code")) {
                     String code = args[1];
                     for (GameDeauthentication deauthentication : DiscordLogger.getInstance().gameDeauthenticationPlayers) {
                         if (deauthentication.getPlayerName().equalsIgnoreCase(sender.getName())) {
