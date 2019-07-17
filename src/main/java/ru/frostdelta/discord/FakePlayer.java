@@ -199,7 +199,7 @@ public class FakePlayer extends FakePlayerCommandSender implements Player {
     }
 
     @Override
-    public void chat(String msg) {
+    public void chat(@NotNull String msg) {
         if(isOnline()){
             player.chat(msg);
         }else fakePlayer.chat(msg);

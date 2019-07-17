@@ -47,7 +47,7 @@ public class Network {
     public String getAccountMinecraftName(User user) {
         this.connection = getConnection();
         if (this.connection != null) {
-            try (PreparedStatement preparedStatement = this.connection.prepareStatement(SELECT_QUERY_PLAYER)) {
+            try (PreparedStatement preparedStatement = this.connection.prepareStatement(SELECT_QUERY_USER)) {
                 preparedStatement.setString(1, user.getAsTag());
                 try (ResultSet rs = preparedStatement.executeQuery()) {
                     if (rs.next()) {

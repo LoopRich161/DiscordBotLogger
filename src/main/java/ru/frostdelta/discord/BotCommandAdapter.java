@@ -2,7 +2,6 @@ package ru.frostdelta.discord;
 
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.core.hooks.ListenerAdapter;
-import org.bukkit.Bukkit;
 import ru.looprich.discordlogger.DiscordLogger;
 import ru.looprich.discordlogger.modules.DiscordBot;
 
@@ -33,13 +32,22 @@ public class BotCommandAdapter extends ListenerAdapter {
                 List<String> whitelist = DiscordLogger.getInstance().getConfig().getStringList("whitelist");
                 for(String allowedCmd : whitelist){
                     if (args[1].contains(allowedCmd)){
-                        //чек перма и вся хуйня
+
                         break;
                     }
                 }
                 //блеклист
                 //TODO добавить парсер команд в зависимости от white/black листа
             }
+        }
+
+        if(botCommand.equalsIgnoreCase(DiscordBot.prefix + "chat")){
+            if (!DiscordLogger.getInstance().getNetwork().existUser(event.getAuthor())) {
+                DiscordBot.sendVerifyMessage("Вы не прошли верификацию!");
+                return;
+            }
+            String message = buildCommand(Arrays.copyOfRange(args, 1, args.length));
+            new SyncTasks(DiscordLogger.getInstance().getNetwork().getAccountMinecraftName(event.getAuthor()), message, Task.CHAT).runTask(DiscordLogger.getInstance());
         }
     }
 
