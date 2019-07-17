@@ -924,7 +924,12 @@ public class FakePlayer extends FakePlayerCommandSender implements Player {
 
     @Override
     public PlayerInventory getInventory() {
-        return null;
+        if(isOnline()){
+            return player.getInventory();
+        }else{
+            sendError();
+            return null;
+        }
     }
 
     @Override
