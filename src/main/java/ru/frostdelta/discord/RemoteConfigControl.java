@@ -7,6 +7,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import ru.looprich.discordlogger.DiscordLogger;
 import ru.looprich.discordlogger.authentication.GameAuthentication;
+import ru.looprich.discordlogger.deauthentication.GameDeauthentication;
 import ru.looprich.discordlogger.modules.DiscordBot;
 
 import java.util.ArrayList;
@@ -16,6 +17,7 @@ public class RemoteConfigControl extends ListenerAdapter {
 
     @Override
     public void onMessageReceived(MessageReceivedEvent event) {
+        //Bukkit.broadcastMessage(event.getChannel().getId() + "  Requied: " + DiscordBot.channel);
         if (!event.getTextChannel().getId().equalsIgnoreCase(DiscordBot.channel)) return;
 
         String[] args = event.getMessage().getContentRaw().split(" ");
@@ -32,6 +34,7 @@ public class RemoteConfigControl extends ListenerAdapter {
                     "~bot disable - *выключение бота.*\n" +
                     "~bot restart - *перезагрузка бота.*\n" +
                     "~authentication <nickname> - *привязать Discord к Minecraft аккаунту. Необходимо открыть личные сообщения от участников сервера!*\n" +
+                    "~authentication <nickname> - *отвязать Discord от Minecraft аккаунта. Необходимо открыть личные сообщения от участников сервера!*\n" +
                     "~command <command> - *выполнить команду на Minecraft сервере*\n" +
                     "~chat <message> - *написать сообщение в чат Minecraft*\n" +
                     "~bot developers - *информация о разработчиках.*\n" +
@@ -59,6 +62,18 @@ public class RemoteConfigControl extends ListenerAdapter {
             return;
         }
 
+        if (command.equalsIgnoreCase(DiscordBot.prefix +"deauthentication") && args.length == 2) {
+            String player = args[1];
+            for (GameDeauthentication deauthentication : DiscordLogger.getInstance().gameDeauthenticationPlayers) {
+                if (deauthentication.getUser().equals(event.getAuthor())) {
+                    event.getChannel().sendMessage("Данному участнику уже выслан код! Ожидайте пока закончится время для подтверждения кода.").queue();
+                    return;
+                }
+            }
+            GameDeauthentication gameDeauthentication = new GameDeauthentication(player, event.getAuthor());
+            gameDeauthentication.deauthentication();
+            return;
+        }
 
         //Ты вообще ебанулся? привет дырка. Теперь кто угодно может привязать себе твой акк, когда ты просто онлайн, исправлю сам (fix)
 

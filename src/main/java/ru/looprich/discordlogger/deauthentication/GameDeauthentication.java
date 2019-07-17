@@ -1,6 +1,7 @@
 package ru.looprich.discordlogger.deauthentication;
 
 import net.dv8tion.jda.core.entities.User;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import ru.looprich.discordlogger.DiscordLogger;
@@ -12,15 +13,15 @@ public class GameDeauthentication {
     private final String[] allLetter = {"Q", "W", "E", "R", "T", "Y", "U", "I", "O", "P", "A", "S", "D", "F", "G", "H", "J",
             "K", "L", "Z", "X", "C", "V", "B", "N", "M", "1", "2", "3", "4", "5", "6", "7", "8", "9", "0"};
     private final Random random = new Random();
-    private Player player;
-    private String userName;
-    private User user = null;
+    private String playerName;
+    private Player player = null;
+    private User user;
     private String code;
     private boolean confirm;
 
-    public GameDeauthentication(Player player, String userName) {
-        this.player = player;
-        this.userName = userName;
+    public GameDeauthentication(String player, User user) {
+        this.playerName = player;
+        this.user = user;
     }
 
     private void sendCode() {
@@ -36,11 +37,14 @@ public class GameDeauthentication {
     }
 
     public void deauthentication() {
-        for (User var1 : DiscordBot.getJDA().getUsers())
-            if (userName.equalsIgnoreCase(var1.getAsTag())) this.user = var1;
-
-        if (user == null) {
-            player.sendMessage(ChatColor.RED + "Такого юзера нет. Пожалуйста, попробуйте ещё раз в формате: LoopRich161#7665");
+        for (Player var1 : Bukkit.getOnlinePlayers()) {
+            if (var1.getName().equalsIgnoreCase(playerName)) {
+                player = var1;
+                break;
+            }
+        }
+        if (player == null) {
+            DiscordBot.sendVerifyMessage("Игрок оффлайн!");
             return;
         }
         if (!DiscordLogger.getInstance().getNetwork().existPlayer(player, user)) {
@@ -56,6 +60,8 @@ public class GameDeauthentication {
         user.openPrivateChannel().queue((channel) ->
                 channel.sendMessage("Вы или кто-то за Вас, пытаетесь отвязать свой Minecraft аккаунт от Discord." +
                         "\nЕсли это не Вы обратитесь к администрации сервера!").queue());
+        player.sendMessage("Вы или кто-то за Вас, пытаетесь отвязать свой Minecraft аккаунт от Discord." +
+                "\nЕсли это не Вы обратитесь к администрации сервера!");
         DiscordLogger.getInstance().gameDeauthenticationPlayers.add(this);
         timer.runTaskTimer(DiscordLogger.getInstance(), 0L, 20L);
     }
@@ -65,7 +71,6 @@ public class GameDeauthentication {
         confirm = true;
         user.openPrivateChannel().queue((channel) ->
                 channel.sendMessage("Вы отказались отвязать аккаунты Minecraft и Discord или ввели неверный код подтверждения.").queue());
-        player.sendMessage("Вы отказались отвязать аккаунты Minecraft  или ввели неверный код подтверждения!");
         DiscordBot.sendVerifyMessage("Игрок " + player.getName() + " отказался отвязать свои Minecraft и Discord аккаунты или ввел неверный код подтверждения!");
         DiscordLogger.getInstance().gameDeauthenticationPlayers.remove(this);
     }
@@ -73,7 +78,7 @@ public class GameDeauthentication {
     public void accept() {
         confirm = true;
         DiscordBot.sendVerifyMessage("Игрок " + player.getName() + " согласился отвязать свой Minecraft аккаунт и Discord!");
-        player.sendMessage(ChatColor.GREEN + "Вы согласились отвязать свой Minecraft аккаунт и Discord!");
+        player.sendMessage(ChatColor.GREEN + "Вы согласились отвязать свой Minecraft от Discord аккаунта!");
         DiscordLogger.getInstance().getNetwork().deauthentication(player);
         DiscordLogger.getInstance().gameDeauthenticationPlayers.remove(this);
     }

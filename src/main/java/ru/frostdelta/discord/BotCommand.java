@@ -24,7 +24,7 @@ public class BotCommand implements CommandExecutor {
 
         //Какие-то костыли честно говоря, я думаю с мапами в разы проще сделать можно
         if (command.getName().equalsIgnoreCase("authentication") && args.length == 2) {
-            String code = args[2];
+            String code = args[1];
             if (args[0].equalsIgnoreCase("code")) {
                 for (GameAuthentication gameAuthentication : DiscordLogger.getInstance().gameAuthenticationUsers) {
                     if (gameAuthentication.getPlayer().getName().equalsIgnoreCase(who)) {
@@ -40,7 +40,7 @@ public class BotCommand implements CommandExecutor {
             } else sender.sendMessage("Использование команды: /authentication code <code>");
         }
 
-        if (command.getName().equalsIgnoreCase("deauthentication") && args.length == 1) {
+        /*if (command.getName().equalsIgnoreCase("deauthentication") && args.length == 1) {
             if (sender instanceof Player) {
                 String userAsTag = args[0];
                 for (GameDeauthentication deauthentication : DiscordLogger.getInstance().gameDeauthenticationPlayers) {
@@ -54,7 +54,7 @@ public class BotCommand implements CommandExecutor {
 
             } else sender.sendMessage("Только для игроков!");
             return true;
-        }
+        }*/
 
         if (command.getName().equalsIgnoreCase("deauthentication") && args.length == 2) {
             if (sender instanceof Player) {
