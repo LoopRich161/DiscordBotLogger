@@ -16,9 +16,7 @@ public class RemoteConfigControl extends ListenerAdapter {
 
     @Override
     public void onMessageReceived(MessageReceivedEvent event) {
-        if (DiscordBot.commandOnlyOneChannel)
-            if (!event.getTextChannel().getId().equalsIgnoreCase(DiscordBot.channel) && event.getTextChannel() != null && DiscordBot.channel != null)
-                return;
+        if (!event.getTextChannel().getId().equalsIgnoreCase(DiscordBot.channel)) return;
 
         String[] args = event.getMessage().getContentRaw().split(" ");
         if (args.length == 0) {

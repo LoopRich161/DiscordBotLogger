@@ -13,6 +13,8 @@ public class BotCommandAdapter extends ListenerAdapter {
     @Override
     public void onMessageReceived(MessageReceivedEvent event) {
         //НЕБО УРОНИТ, НОЧЬ НА ЛАДОНИ
+        if (!event.getTextChannel().getId().equalsIgnoreCase(DiscordBot.channel)) return;
+
         String[] args = event.getMessage().getContentRaw().split(" ");
         if (args.length == 0) {
             return;
@@ -24,10 +26,8 @@ public class BotCommandAdapter extends ListenerAdapter {
                 return;
             }
             String cmd = buildCommand(Arrays.copyOfRange(args, 1, args.length));
-
             //OLD FakePlayerCommandSender
             new SyncTasks(new FakePlayer(DiscordLogger.getInstance().getNetwork().getAccountMinecraftName(event.getAuthor())), cmd, Task.COMMAND).runTask(DiscordLogger.getInstance());
-
             if (DiscordBot.isIsWhitelistEnabled()){
                 List<String> whitelist = DiscordLogger.getInstance().getConfig().getStringList("whitelist");
                 for(String allowedCmd : whitelist){
