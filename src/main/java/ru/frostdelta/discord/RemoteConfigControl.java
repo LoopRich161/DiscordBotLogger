@@ -60,24 +60,7 @@ public class RemoteConfigControl extends ListenerAdapter {
         }
 
 
-        //Ты вообще ебанулся? привет дырка. Теперь кто угодно может привязать себе твой акк, когда ты просто онлайн, исправлю сам
-        if (command.equalsIgnoreCase(DiscordBot.prefix + "authentication") && args.length == 3) {
-            String code = args[2];
-            if ("code".equalsIgnoreCase(args[1])) {
-                for (GameAuthentication gameAuthentication : DiscordLogger.getInstance().gameAuthenticationUsers) {
-                    if (gameAuthentication.getUser().getAsTag().equalsIgnoreCase(event.getAuthor().getAsTag())) {
-                        if (gameAuthentication.getCode().equalsIgnoreCase(code)) {
-                            gameAuthentication.accept();
-                            return;
-                        }
-                        event.getChannel().sendMessage("Код подтверждения неверный!").queue();
-                        gameAuthentication.reject();
-                        return;
-                    }
-                }
-            } else event.getChannel().sendMessage("Использование команды: /authentication code <code>").queue();
-
-        }
+        //Ты вообще ебанулся? привет дырка. Теперь кто угодно может привязать себе твой акк, когда ты просто онлайн, исправлю сам (fix)
 
         if (command.equalsIgnoreCase(DiscordBot.prefix + "bot") && args.length == 2) {
             if (!DiscordLogger.getInstance().getNetwork().existUser(event.getAuthor())) {

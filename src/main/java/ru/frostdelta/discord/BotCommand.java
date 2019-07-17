@@ -6,6 +6,7 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import ru.looprich.discordlogger.DiscordLogger;
+import ru.looprich.discordlogger.authentication.GameAuthentication;
 import ru.looprich.discordlogger.deauthentication.GameDeauthentication;
 import ru.looprich.discordlogger.modules.DiscordBot;
 
@@ -14,11 +15,31 @@ public class BotCommand implements CommandExecutor {
     public static void reg() {
         DiscordLogger.getInstance().getCommand("bot").setExecutor(new BotCommand());
         DiscordLogger.getInstance().getCommand("deauthentication").setExecutor(new BotCommand());
+        DiscordLogger.getInstance().getCommand("authentication").setExecutor(new BotCommand());
     }
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         String who = sender.getName();
+
+        //Какие-то костыли честно говоря, я думаю с мапами в разы проще сделать можно
+        if (command.getName().equalsIgnoreCase("authentication") && args.length == 2) {
+            String code = args[2];
+            if (args[0].equalsIgnoreCase("code")) {
+                for (GameAuthentication gameAuthentication : DiscordLogger.getInstance().gameAuthenticationUsers) {
+                    if (gameAuthentication.getPlayer().getName().equalsIgnoreCase(who)) {
+                        if (gameAuthentication.getCode().equalsIgnoreCase(code)) {
+                            gameAuthentication.accept();
+                            return true;
+                        }
+                        sender.sendMessage("Код подтверждения неверный!");
+                        gameAuthentication.reject();
+                        return true;
+                    }
+                }
+            } else sender.sendMessage("Использование команды: /authentication code <code>");
+        }
+
         if (command.getName().equalsIgnoreCase("deauthentication") && args.length == 1) {
             if (sender instanceof Player) {
                 String userAsTag = args[0];
