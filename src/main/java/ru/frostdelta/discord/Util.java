@@ -18,7 +18,7 @@ public class Util {
         NPC npc = registry.createNPC(EntityType.PLAYER, name);
         //npc.setProtected(true);
         //npc.setName(name);
-        new SyncTasks(npc).runTask(DiscordLogger.getInstance());
+        new SyncTasks(npc, Task.SPAWN).runTask(DiscordLogger.getInstance());
         //npc.setBukkitEntityType(EntityType.PLAYER);
         return npc;
     }
