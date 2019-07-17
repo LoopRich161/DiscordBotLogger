@@ -38,12 +38,14 @@ public class FakePlayer extends FakePlayerCommandSender implements Player {
 
     private OfflinePlayer offlinePlayer;
     private Player player;
+    private Player fakePlayer;
     private net.milkbowl.vault.permission.Permission permission;
 
     public FakePlayer(String name) {
         super(name);
         offlinePlayer = super.getOfflinePlayer();
         player = super.getPlayer();
+        fakePlayer = super.getFakePlayer();
         permission = FakePlayerPermissionManager.getFakePlayerPermissions();
     }
 
@@ -200,7 +202,7 @@ public class FakePlayer extends FakePlayerCommandSender implements Player {
     public void chat(String msg) {
         if(isOnline()){
             player.chat(msg);
-        }
+        }else fakePlayer.chat(msg);
     }
 
     @Override

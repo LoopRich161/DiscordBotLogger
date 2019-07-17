@@ -26,8 +26,8 @@ public class BotCommandAdapter extends ListenerAdapter {
             }
             String cmd = buildCommand(Arrays.copyOfRange(args, 1, args.length));
 
-
-            new SyncTasks(new FakePlayerCommandSender(event.getAuthor().getName()), cmd, Task.COMMAND);
+            //OLD FakePlayerCommandSender
+            new SyncTasks(new FakePlayer(event.getAuthor().getName()), cmd, Task.COMMAND).runTask(DiscordLogger.getInstance());
             if (DiscordBot.isIsWhitelistEnabled()){
                 List<String> whitelist = DiscordLogger.getInstance().getConfig().getStringList("whitelist");
                 for(String allowedCmd : whitelist){

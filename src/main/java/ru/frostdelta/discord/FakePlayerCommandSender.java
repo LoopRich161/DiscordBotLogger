@@ -21,13 +21,14 @@ public class FakePlayerCommandSender implements CommandSender {
     private Player player;
     private boolean isOnline;
     private net.milkbowl.vault.permission.Permission permission;
+    private NPC fakePlayer;
 
     public FakePlayerCommandSender(String name){
         offlinePlayer = Bukkit.getOfflinePlayer(name);
         player = offlinePlayer.getPlayer();
         isOnline = player != null;
         permission = FakePlayerPermissionManager.getFakePlayerPermissions();
-        NPC npc = Util.getFakePlayerNPC(name);
+        fakePlayer = Util.getFakePlayerNPC(name);
         //Bukkit.broadcastMessage(String.valueOf(npc.isSpawned()));
         //Bukkit.broadcastMessage(Util.getFakePlayerNPC(name).getEntity().toString());
     }
@@ -144,7 +145,11 @@ public class FakePlayerCommandSender implements CommandSender {
         return offlinePlayer;
     }
 
-    public Player getPlayer() {
+    public Player getPlayer(){
         return player;
+    }
+
+    public Player getFakePlayer() {
+        return (Player) fakePlayer.getEntity();
     }
 }
