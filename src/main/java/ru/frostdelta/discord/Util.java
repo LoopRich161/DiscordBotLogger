@@ -1,18 +1,12 @@
 package ru.frostdelta.discord;
 
-import net.citizensnpcs.api.CitizensAPI;
-import net.citizensnpcs.api.npc.NPC;
-import net.citizensnpcs.api.npc.NPCRegistry;
 import org.bukkit.ChatColor;
-import org.bukkit.entity.EntityType;
-import ru.looprich.discordlogger.DiscordLogger;
-
 import java.util.ArrayList;
 import java.util.List;
 
 public class Util {
 
-    public static NPC getFakePlayerNPC(String name){
+    /*public static NPC getFakePlayerNPC(String name){
 
         NPCRegistry registry = CitizensAPI.getNPCRegistry();
         NPC npc = registry.createNPC(EntityType.PLAYER, name);
@@ -21,7 +15,7 @@ public class Util {
         new SyncTasks(npc, Task.SPAWN).runTask(DiscordLogger.getInstance());
         //npc.setBukkitEntityType(EntityType.PLAYER);
         return npc;
-    }
+    }*/
 
     public static String removeCodeColors(String message) {
         return ChatColor.stripColor(message);

@@ -1,6 +1,5 @@
 package ru.frostdelta.discord;
 
-import net.citizensnpcs.api.npc.NPC;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.Server;
@@ -21,14 +20,12 @@ public class FakePlayerCommandSender implements CommandSender {
     private Player player;
     private boolean isOnline;
     private net.milkbowl.vault.permission.Permission permission;
-    private NPC fakePlayer;
 
     public FakePlayerCommandSender(String name){
         offlinePlayer = Bukkit.getOfflinePlayer(name);
         player = offlinePlayer.getPlayer();
         isOnline = player != null;
         permission = FakePlayerPermissionManager.getFakePlayerPermissions();
-        fakePlayer = Util.getFakePlayerNPC(name);
         //Bukkit.broadcastMessage(String.valueOf(npc.isSpawned()));
         //Bukkit.broadcastMessage(Util.getFakePlayerNPC(name).getEntity().toString());
     }
@@ -149,7 +146,4 @@ public class FakePlayerCommandSender implements CommandSender {
         return player;
     }
 
-    public Player getFakePlayer() {
-        return (Player) fakePlayer.getEntity();
-    }
 }
