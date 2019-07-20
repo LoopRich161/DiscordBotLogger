@@ -34,7 +34,7 @@ public class RemoteConfigControl extends ListenerAdapter {
                     "~bot disable - *выключение бота.*\n" +
                     "~bot restart - *перезагрузка бота.*\n" +
                     "~authentication <nickname> - *привязать Discord к Minecraft аккаунту. Необходимо открыть личные сообщения от участников сервера!*\n" +
-                    "~authentication <nickname> - *отвязать Discord от Minecraft аккаунта. Необходимо открыть личные сообщения от участников сервера!*\n" +
+                    "~deauthentication <nickname> - *отвязать Discord от Minecraft аккаунта. Необходимо открыть личные сообщения от участников сервера!*\n" +
                     "~command <command> - *выполнить команду на Minecraft сервере*\n" +
                     "~chat <message> - *написать сообщение в чат Minecraft*\n" +
                     "~bot developers - *информация о разработчиках.*\n" +
