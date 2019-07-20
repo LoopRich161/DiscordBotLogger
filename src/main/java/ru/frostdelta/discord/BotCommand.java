@@ -40,22 +40,6 @@ public class BotCommand implements CommandExecutor {
             } else sender.sendMessage("Использование команды: /authentication code <code>");
         }
 
-        /*if (command.getName().equalsIgnoreCase("deauthentication") && args.length == 1) {
-            if (sender instanceof Player) {
-                String userAsTag = args[0];
-                for (GameDeauthentication deauthentication : DiscordLogger.getInstance().gameDeauthenticationPlayers) {
-                    if (deauthentication.getPlayerName().equalsIgnoreCase(sender.getName())) {
-                        sender.sendMessage("Данному участнику уже выслан код! Ожидайте пока закончится время для подтверждения кода.");
-                        return true;
-                    }
-                }
-                GameDeauthentication gameDeauthentication = new GameDeauthentication((Player) sender, userAsTag);
-                gameDeauthentication.deauthentication();
-
-            } else sender.sendMessage("Только для игроков!");
-            return true;
-        }*/
-
         if (command.getName().equalsIgnoreCase("deauthentication") && args.length == 2) {
             if (sender instanceof Player) {
                 if (args[0].equalsIgnoreCase("code")) {
