@@ -1,12 +1,18 @@
 package ru.looprich.discordlogger;
 
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.event.EventPriority;
+import org.bukkit.event.player.*;
+import org.bukkit.event.server.BroadcastMessageEvent;
+import org.bukkit.event.server.RemoteServerCommandEvent;
+import org.bukkit.event.server.ServerCommandEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 import ru.frostdelta.discord.BotCommand;
 import ru.frostdelta.discord.FakePlayerPermissionManager;
-import ru.frostdelta.discord.events.*;
 import ru.looprich.discordlogger.authentication.GameAuthentication;
 import ru.looprich.discordlogger.deauthentication.GameDeauthentication;
+import ru.looprich.discordlogger.events.EventHandlers;
 import ru.looprich.discordlogger.modules.DiscordBot;
 
 import java.util.ArrayList;
@@ -19,27 +25,20 @@ public class DiscordLogger extends JavaPlugin {
     private Network network;
     public List<GameAuthentication> gameAuthenticationUsers;
     public List<GameDeauthentication> gameDeauthenticationPlayers;
+    private EventHandlers eventHandler;
 
     @Override
     public void onEnable() {
         plugin = this;
         this.saveDefaultConfig();
         this.reloadConfig();
-        getServer().getPluginManager().registerEvents(new AsyncPlayerChat(), this);
-        getServer().getPluginManager().registerEvents(new PlayerLogin(), this);
-        getServer().getPluginManager().registerEvents(new PlayerJoin(), this);
-        getServer().getPluginManager().registerEvents(new PlayerQuit(), this);
-        getServer().getPluginManager().registerEvents(new PlayerCommandPreprocess(), this);
-        getServer().getPluginManager().registerEvents(new Broadcast(), this);
-        getServer().getPluginManager().registerEvents(new ServerCommand(), this);
-        getServer().getPluginManager().registerEvents(new RemoteServerCommand(), this);
-        //getServer().getPluginManager().registerEvents(new Achievement(), this);
 
         boolean isEnabled = getConfig().getBoolean("bot.enabled");
         if (isEnabled) {
             checkDatabase();
             getLogger().info("DiscordBotLogging enabled!");
             getLogger().info("Loading...");
+            regEvents();
             loadDiscordBot();
             BotCommand.reg();
             gameAuthenticationUsers = new ArrayList<>();
@@ -72,6 +71,55 @@ public class DiscordLogger extends JavaPlugin {
         } else {
             getLogger().severe("Database not found!");
             getPluginLoader().disablePlugin(this);
+        }
+    }
+
+    private void regEvents() {
+        eventHandler = new EventHandlers();
+        if (getConfig().getBoolean("tracing.player-quit")) {
+            Bukkit.getPluginManager().registerEvent(PlayerQuitEvent.class, eventHandler, EventPriority.MONITOR,
+                    (listener, event) -> eventHandler.onPlayerQuitEvent((PlayerQuitEvent) event), this);
+            getLogger().info("Tracing on player quit enabled.");
+        }
+        if (getConfig().getBoolean("tracing.player-login")) {
+            Bukkit.getPluginManager().registerEvent(PlayerLoginEvent.class, eventHandler, EventPriority.MONITOR,
+                    (listener, event) -> eventHandler.onPlayerLoginEvent((PlayerLoginEvent) event), this);
+            getLogger().info("Tracing on player login enabled.");
+        }
+        if (getConfig().getBoolean("tracing.player-join")) {
+            Bukkit.getPluginManager().registerEvent(PlayerJoinEvent.class, eventHandler, EventPriority.MONITOR,
+                    (listener, event) -> eventHandler.onPlayerJoinEvent((PlayerJoinEvent) event), this);
+            getLogger().info("Tracing on player join enabled.");
+        }
+        if (getConfig().getBoolean("tracing.player-command")) {
+            Bukkit.getPluginManager().registerEvent(PlayerCommandPreprocessEvent.class, eventHandler, EventPriority.MONITOR,
+                    (listener, event) -> eventHandler.onPlayerCommandPreprocessEvent((PlayerCommandPreprocessEvent) event), this);
+            getLogger().info("Tracing on player command enabled.");
+        }
+        if (getConfig().getBoolean("tracing.player-chat")) {
+            Bukkit.getPluginManager().registerEvent(AsyncPlayerChatEvent.class, eventHandler, EventPriority.MONITOR,
+                    (listener, event) -> eventHandler.onAsyncPlayerChatEvent((AsyncPlayerChatEvent) event), this);
+            getLogger().info("Tracing on player chat enabled.");
+        }
+        if (getConfig().getBoolean("tracing.player-achievement")) {
+            Bukkit.getPluginManager().registerEvent(PlayerAchievementAwardedEvent.class, eventHandler, EventPriority.MONITOR,
+                    (listener, event) -> eventHandler.onPlayerAchievementAwardedEvent((PlayerAchievementAwardedEvent) event), this);
+            getLogger().info("Tracing on player achievement enabled.");
+        }
+        if (getConfig().getBoolean("tracing.server-broadcast")) {
+            Bukkit.getPluginManager().registerEvent(BroadcastMessageEvent.class, eventHandler, EventPriority.MONITOR,
+                    (listener, event) -> eventHandler.onBroadcastMessageEvent((BroadcastMessageEvent) event), this);
+            getLogger().info("Tracing on server broadcast enabled.");
+        }
+        if (getConfig().getBoolean("tracing.server-command")) {
+            Bukkit.getPluginManager().registerEvent(ServerCommandEvent.class, eventHandler, EventPriority.MONITOR,
+                    (listener, event) -> eventHandler.onServerCommandEvent((ServerCommandEvent) event), this);
+            getLogger().info("Tracing on server command enabled.");
+        }
+        if (getConfig().getBoolean("tracing.server-remote-command")) {
+            Bukkit.getPluginManager().registerEvent(RemoteServerCommandEvent.class, eventHandler, EventPriority.MONITOR,
+                    (listener, event) -> eventHandler.onRemoteServerCommandEvent((RemoteServerCommandEvent) event), this);
+            getLogger().info("Tracing on server remote command enabled.");
         }
     }
 
