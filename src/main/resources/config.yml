@@ -12,9 +12,24 @@ network:
   username: 'root'
   password: 'admin'
 
+tracing:
+  player-quit: true
+  player-login: true
+  player-join: true
+  player-command: true
+  player-chat: true
+  player-achievement: true
+  server-command: true
+  server-remote-command: true
+  server-broadcast: true
+
+
+
 bot:
   #Статус бота: true - включен, false - выключен
   enabled: true
+  #Префикс бота в Discord
+  prefix: '~'
   #Токен бота
   token: ''
   #ID канала для сообщений
