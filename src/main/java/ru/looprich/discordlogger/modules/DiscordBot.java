@@ -24,7 +24,7 @@ public class DiscordBot {
     private static TextChannel loggerChannel = null;
     private static JDA jda = null;
     private static boolean enable;
-    public static final String prefix = "~";
+    public static String prefix;
     public static boolean commandOnlyOneChannel;
     private static boolean isWhitelistEnabled;
 
@@ -116,6 +116,7 @@ public class DiscordBot {
             jda = new JDABuilder(tokenBot).build().awaitReady();
             jda.getPresence().setStatus(OnlineStatus.ONLINE);
             jda.getPresence().setGame(Game.watching("за вашим сервером."));
+            prefix = DiscordLogger.getInstance().getConfig().getString("bot.prefix");
             jda.addEventListener(new RemoteConfigControl());
             jda.addEventListener(new BotCommandAdapter());
         } catch (LoginException e) {
