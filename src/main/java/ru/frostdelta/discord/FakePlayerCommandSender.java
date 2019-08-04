@@ -4,17 +4,16 @@ import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.Server;
 import org.bukkit.command.CommandSender;
-
 import org.bukkit.entity.Player;
 import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionAttachment;
 import org.bukkit.permissions.PermissionAttachmentInfo;
 import org.bukkit.plugin.Plugin;
-import ru.looprich.discordlogger.modules.DiscordBot;
+import ru.looprich.discordlogger.module.DiscordBot;
 
 import java.util.Set;
 
-public class FakePlayerCommandSender implements CommandSender {
+public abstract class FakePlayerCommandSender implements CommandSender {
 
     private OfflinePlayer offlinePlayer;
     private Player player;
@@ -29,6 +28,8 @@ public class FakePlayerCommandSender implements CommandSender {
         //Bukkit.broadcastMessage(String.valueOf(npc.isSpawned()));
         //Bukkit.broadcastMessage(Util.getFakePlayerNPC(name).getEntity().toString());
     }
+
+    public abstract void setRotation(float yaw, float pitch);
 
     @Override
     public void sendMessage(String message) {
