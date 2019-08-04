@@ -78,10 +78,6 @@
 
     <repositories>
         <repository>
-            <id>everything</id>
-            <url>http://repo.citizensnpcs.co</url>
-        </repository>
-        <repository>
             <id>jitpack.io</id>
             <url>https://jitpack.io</url>
         </repository>
@@ -106,7 +102,7 @@
         <dependency>
             <groupId>net.dv8tion</groupId>
             <artifactId>JDA</artifactId>
-            <version>3.8.3_463</version>
+            <version>4.BETA.0_1</version>
         </dependency>
         <dependency>
             <groupId>org.bukkit</groupId>

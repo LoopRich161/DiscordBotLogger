@@ -1,8 +1,8 @@
 package ru.frostdelta.discord;
 
-import net.dv8tion.jda.core.EmbedBuilder;
-import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
-import net.dv8tion.jda.core.hooks.ListenerAdapter;
+import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
+import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import ru.looprich.discordlogger.DiscordLogger;
@@ -62,7 +62,7 @@ public class RemoteConfigControl extends ListenerAdapter {
             return;
         }
 
-        if (command.equalsIgnoreCase(DiscordBot.prefix +"deauthentication") && args.length == 2) {
+        if (command.equalsIgnoreCase(DiscordBot.prefix + "deauthentication") && args.length == 2) {
             String player = args[1];
             for (GameDeauthentication deauthentication : DiscordLogger.getInstance().gameDeauthenticationPlayers) {
                 if (deauthentication.getUser().equals(event.getAuthor())) {
