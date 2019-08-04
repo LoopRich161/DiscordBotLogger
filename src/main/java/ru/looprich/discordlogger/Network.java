@@ -37,6 +37,7 @@ public class Network {
                 preparedStatement.executeUpdate();
                 flushLastExecute();
             } catch (SQLException e) {
+                logger.severe("Error createBD");
                 e.printStackTrace();
             }
         }
@@ -55,7 +56,7 @@ public class Network {
                     }
                 }
             } catch (SQLException ex) {
-                logger.severe("Error existPlayer.");
+                logger.severe("Error getAccountMinecraftName");
                 ex.printStackTrace();
             }
         }
@@ -74,7 +75,7 @@ public class Network {
                 preparedStatement.executeUpdate();
                 flushLastExecute();
             } catch (SQLException e) {
-                logger.severe("Error verifyPlayer.");
+                logger.severe("Error authentication");
                 e.printStackTrace();
             }
         }
@@ -88,7 +89,7 @@ public class Network {
                 preparedStatement.executeUpdate();
                 flushLastExecute();
             } catch (SQLException e) {
-                logger.severe("Error deauthentication.");
+                logger.severe("Error deauthentication");
                 e.printStackTrace();
             }
         }
@@ -106,7 +107,7 @@ public class Network {
                     }
                 }
             } catch (SQLException ex) {
-                logger.severe("Error existPlayer.");
+                logger.severe("Error existPlayer");
                 ex.printStackTrace();
             }
         }
@@ -126,7 +127,7 @@ public class Network {
                     }
                 }
             } catch (SQLException ex) {
-                logger.severe("Error existPlayer.");
+                logger.severe("Error existPlayer");
                 ex.printStackTrace();
             }
         }
@@ -146,7 +147,7 @@ public class Network {
                     }
                 }
             } catch (SQLException ex) {
-                logger.severe("Error existUser.");
+                logger.severe("Error existUser");
                 ex.printStackTrace();
             }
         }
@@ -166,7 +167,7 @@ public class Network {
                     }
                 }
             } catch (SQLException ex) {
-                logger.severe("Error existUser.");
+                logger.severe("Error existUser");
                 ex.printStackTrace();
             }
         }
