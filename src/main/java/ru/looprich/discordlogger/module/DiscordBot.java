@@ -1,4 +1,4 @@
-package ru.looprich.discordlogger.modules;
+package ru.looprich.discordlogger.module;
 
 import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.JDA;
@@ -31,6 +31,35 @@ public class DiscordBot {
     public DiscordBot(String tokenBot, String channel) {
         DiscordBot.tokenBot = tokenBot;
         DiscordBot.channel = channel;
+    }
+
+    public boolean createBot() {
+        try {
+            jda = new JDABuilder(tokenBot).build().awaitReady();
+            jda.getPresence().setStatus(OnlineStatus.ONLINE);
+            jda.getPresence().setGame(Game.watching("за вашим сервером."));
+            prefix = DiscordLogger.getInstance().getConfig().getString("bot.prefix");
+            jda.addEventListener(new RemoteConfigControl());
+            jda.addEventListener(new BotCommandAdapter());
+        } catch (LoginException e) {
+            DiscordLogger.getInstance().getLogger().severe("Invalid token!");
+            e.printStackTrace();
+            return false;
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        loggerChannel = jda.getTextChannelById(channel);
+        if (loggerChannel == null) {
+            DiscordLogger.getInstance().getLogger().severe("Invalid channel!");
+            return false;
+        }
+        bot = this;
+        localEnabled = DiscordLogger.getInstance().getConfig().getBoolean("bot.local-chat");
+        commandOnlyOneChannel = DiscordLogger.getInstance().getConfig().getBoolean("bot.command-only-channel");
+        setIsWhitelistEnabled(DiscordLogger.getInstance().getConfig().getBoolean("enable-whitelist"));
+        enable = true;
+        sendImportantMessage("Я включился v" + DiscordLogger.getInstance().getDescription().getVersion() + "!");
+        return true;
     }
 
     public static void shutdown() {
@@ -81,7 +110,6 @@ public class DiscordBot {
         loggerChannel.sendMessage(message.build()).queue();
     }
 
-
     private static String getDate() {
         LocalDateTime time = LocalDateTime.now();
         String hours, minutes, seconds;
@@ -111,35 +139,6 @@ public class DiscordBot {
         return jda;
     }
 
-    public boolean createBot() {
-        try {
-            jda = new JDABuilder(tokenBot).build().awaitReady();
-            jda.getPresence().setStatus(OnlineStatus.ONLINE);
-            jda.getPresence().setGame(Game.watching("за вашим сервером."));
-            prefix = DiscordLogger.getInstance().getConfig().getString("bot.prefix");
-            jda.addEventListener(new RemoteConfigControl());
-            jda.addEventListener(new BotCommandAdapter());
-        } catch (LoginException e) {
-            DiscordLogger.getInstance().getLogger().severe("Invalid token!");
-            e.printStackTrace();
-            return false;
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        loggerChannel = jda.getTextChannelById(channel);
-        if (loggerChannel == null) {
-            DiscordLogger.getInstance().getLogger().severe("Invalid channel!");
-            return false;
-        }
-        bot = this;
-        localEnabled = DiscordLogger.getInstance().getConfig().getBoolean("bot.local-chat");
-        commandOnlyOneChannel = DiscordLogger.getInstance().getConfig().getBoolean("bot.command-only-channel");
-        setIsWhitelistEnabled(DiscordLogger.getInstance().getConfig().getBoolean("enable-whitelist"));
-        enable = true;
-        sendImportantMessage("Я включился v" + DiscordLogger.getInstance().getDescription().getVersion() + "!");
-        return true;
-    }
-
     public static boolean isIsWhitelistEnabled() {
         return isWhitelistEnabled;
     }
@@ -159,6 +158,5 @@ public class DiscordBot {
     public static void setLocalEnabled(boolean localEnabled) {
         DiscordBot.localEnabled = localEnabled;
     }
-
 
 }

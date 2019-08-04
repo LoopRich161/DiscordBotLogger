@@ -12,8 +12,8 @@ import ru.frostdelta.discord.BotCommand;
 import ru.frostdelta.discord.FakePlayerPermissionManager;
 import ru.looprich.discordlogger.authentication.GameAuthentication;
 import ru.looprich.discordlogger.deauthentication.GameDeauthentication;
-import ru.looprich.discordlogger.events.EventHandlers;
-import ru.looprich.discordlogger.modules.DiscordBot;
+import ru.looprich.discordlogger.event.EventListener;
+import ru.looprich.discordlogger.module.DiscordBot;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,9 +23,9 @@ public class DiscordLogger extends JavaPlugin {
     private static DiscordLogger plugin;
     public DiscordBot discordBot;
     private Network network;
-    public List<GameAuthentication> gameAuthenticationUsers;
-    public List<GameDeauthentication> gameDeauthenticationPlayers;
-    private EventHandlers eventHandler;
+    public List<GameAuthentication> gameAuthenticationUsers = null;
+    public List<GameDeauthentication> gameDeauthenticationPlayers = null;
+    private EventListener eventHandler;
 
     @Override
     public void onEnable() {
@@ -75,7 +75,7 @@ public class DiscordLogger extends JavaPlugin {
     }
 
     private void regEvents() {
-        eventHandler = new EventHandlers();
+        eventHandler = new EventListener();
         if (getConfig().getBoolean("tracing.player-quit")) {
             Bukkit.getPluginManager().registerEvent(PlayerQuitEvent.class, eventHandler, EventPriority.MONITOR,
                     (listener, event) -> eventHandler.onPlayerQuitEvent((PlayerQuitEvent) event), this);

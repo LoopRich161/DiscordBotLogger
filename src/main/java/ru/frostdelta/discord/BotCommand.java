@@ -8,7 +8,7 @@ import org.bukkit.entity.Player;
 import ru.looprich.discordlogger.DiscordLogger;
 import ru.looprich.discordlogger.authentication.GameAuthentication;
 import ru.looprich.discordlogger.deauthentication.GameDeauthentication;
-import ru.looprich.discordlogger.modules.DiscordBot;
+import ru.looprich.discordlogger.module.DiscordBot;
 
 public class BotCommand implements CommandExecutor {
 

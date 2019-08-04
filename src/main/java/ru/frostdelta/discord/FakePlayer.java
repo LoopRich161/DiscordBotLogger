@@ -29,7 +29,7 @@ import org.bukkit.util.RayTraceResult;
 import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import ru.looprich.discordlogger.modules.DiscordBot;
+import ru.looprich.discordlogger.module.DiscordBot;
 
 import java.net.InetSocketAddress;
 import java.util.*;

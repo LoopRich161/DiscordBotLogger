@@ -5,7 +5,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import ru.looprich.discordlogger.DiscordLogger;
-import ru.looprich.discordlogger.modules.DiscordBot;
+import ru.looprich.discordlogger.module.DiscordBot;
 
 import java.util.Random;
 
