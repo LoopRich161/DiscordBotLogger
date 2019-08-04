@@ -1,4 +1,4 @@
-package ru.looprich.discordlogger.events;
+package ru.looprich.discordlogger.event;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -8,9 +8,9 @@ import org.bukkit.event.server.BroadcastMessageEvent;
 import org.bukkit.event.server.RemoteServerCommandEvent;
 import org.bukkit.event.server.ServerCommandEvent;
 import ru.frostdelta.discord.Util;
-import ru.looprich.discordlogger.modules.DiscordBot;
+import ru.looprich.discordlogger.module.DiscordBot;
 
-public class EventHandlers implements Listener {
+public class EventListener implements Listener {
 
     public void onPlayerQuitEvent(PlayerQuitEvent event) {
         DiscordBot.sendMessageChannel(event.getPlayer().getName() + " lost connection: Disconnected");
