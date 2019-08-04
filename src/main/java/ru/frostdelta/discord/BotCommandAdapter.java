@@ -3,7 +3,7 @@ package ru.frostdelta.discord;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.core.hooks.ListenerAdapter;
 import ru.looprich.discordlogger.DiscordLogger;
-import ru.looprich.discordlogger.modules.DiscordBot;
+import ru.looprich.discordlogger.module.DiscordBot;
 
 import java.util.Arrays;
 import java.util.List;
@@ -20,28 +20,34 @@ public class BotCommandAdapter extends ListenerAdapter {
             return;
         }
         String botCommand = args[0];
-        if(botCommand.equalsIgnoreCase(DiscordBot.prefix + "command")){
+        if (botCommand.equalsIgnoreCase(DiscordBot.prefix + "command")) {
             if (!DiscordLogger.getInstance().getNetwork().existUser(event.getAuthor())) {
                 DiscordBot.sendVerifyMessage("Вы не прошли верификацию!");
                 return;
             }
             String cmd = buildCommand(Arrays.copyOfRange(args, 1, args.length));
-            //OLD FakePlayerCommandSender
-            new SyncTasks(new FakePlayer(DiscordLogger.getInstance().getNetwork().getAccountMinecraftName(event.getAuthor())), cmd, Task.COMMAND).runTask(DiscordLogger.getInstance());
-            if (DiscordBot.isIsWhitelistEnabled()){
-                List<String> whitelist = DiscordLogger.getInstance().getConfig().getStringList("whitelist");
-                for(String allowedCmd : whitelist){
-                    if (args[1].contains(allowedCmd)){
 
+            List<String> blacklist = DiscordLogger.getInstance().getConfig().getStringList("blacklist");
+            for (String disallowedCmd : blacklist) {
+                if (args[1].contains(disallowedCmd)) {
+                    DiscordBot.sendServerResponse("Данная комманда запрещена!");
+                    return;
+                }
+            }
+
+            if (DiscordBot.isIsWhitelistEnabled()) {
+                List<String> whitelist = DiscordLogger.getInstance().getConfig().getStringList("whitelist");
+                for (String allowedCmd : whitelist) {
+                    if (args[1].contains(allowedCmd)) {
+                        new SyncTasks(new FakePlayer(DiscordLogger.getInstance().getNetwork().getAccountMinecraftName(event.getAuthor())), cmd, Task.COMMAND).runTask(DiscordLogger.getInstance());
                         break;
                     }
                 }
-                //блеклист
-                //TODO добавить парсер команд в зависимости от white/black листа
-            }
+            } else
+                new SyncTasks(new FakePlayer(DiscordLogger.getInstance().getNetwork().getAccountMinecraftName(event.getAuthor())), cmd, Task.COMMAND).runTask(DiscordLogger.getInstance());
         }
 
-        if(botCommand.equalsIgnoreCase(DiscordBot.prefix + "chat")){
+        if (botCommand.equalsIgnoreCase(DiscordBot.prefix + "chat")) {
             if (!DiscordLogger.getInstance().getNetwork().existUser(event.getAuthor())) {
                 DiscordBot.sendVerifyMessage("Вы не прошли верификацию!");
                 return;
@@ -52,9 +58,9 @@ public class BotCommandAdapter extends ListenerAdapter {
     }
 
 
-    private String buildCommand(String[] args){
+    private String buildCommand(String[] args) {
         StringBuilder cmd = new StringBuilder();
-        for(String arg : args){
+        for (String arg : args) {
             cmd.append(arg).append(" ");
         }
         return cmd.toString();
