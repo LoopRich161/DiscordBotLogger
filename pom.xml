@@ -6,7 +6,7 @@
 
     <groupId>ru.looprich.discordlogger</groupId>
     <artifactId>DiscordBotLogger</artifactId>
-    <version>3.3</version>
+    <version>3.3.1</version>
 
 
     <scm>
