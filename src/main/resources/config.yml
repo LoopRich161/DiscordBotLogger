@@ -40,5 +40,3 @@ bot:
   local-chat: true
   #Время для подтверждения связки аккаунтов (в секундах)
   authentication-time: 60
-  #Время для подтверждения отвязки аккаунтов (в секундах)
-  deauthentication-time: 60
