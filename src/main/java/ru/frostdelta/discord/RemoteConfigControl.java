@@ -5,9 +5,8 @@ import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+import ru.looprich.discordlogger.Authentication;
 import ru.looprich.discordlogger.DiscordLogger;
-import ru.looprich.discordlogger.authentication.GameAuthentication;
-import ru.looprich.discordlogger.deauthentication.GameDeauthentication;
 import ru.looprich.discordlogger.module.DiscordBot;
 
 import java.util.ArrayList;
@@ -27,19 +26,19 @@ public class RemoteConfigControl extends ListenerAdapter {
         String command = args[0];
         if (command.equalsIgnoreCase(DiscordBot.prefix + "bot") && args.length == 2 && args[1].equalsIgnoreCase("help")) {
             EmbedBuilder info = new EmbedBuilder();
+            String prefix = DiscordBot.getPrefix();
             info.setTitle("Помощь");
             info.setDescription("Доступные команды:\n" +
-                    "~bot toggle - *переключение локального чата.*\n" +
-                    "~bot reload - *перезагрузка конфига.*\n" +
-                    "~bot disable - *выключение бота.*\n" +
-                    "~bot restart - *перезагрузка бота.*\n" +
-                    "~authentication <nickname> - *привязать Discord к Minecraft аккаунту. Необходимо открыть личные сообщения от участников сервера!*\n" +
-                    "~deauthentication <nickname> - *отвязать Discord от Minecraft аккаунта. Необходимо открыть личные сообщения от участников сервера!*\n" +
-                    "~command <command> - *выполнить команду на Minecraft сервере*\n" +
-                    "~chat <message> - *написать сообщение в чат Minecraft*\n" +
-                    "~bot developers - *информация о разработчиках.*\n" +
-                    "~bot online - *просмотреть кто находится на сервере.*\n" +
-                    "~bot version - *текущая версия плагина*.\n");
+                    prefix + "bot toggle - *переключение локального чата.*\n" +
+                    prefix + "bot reload - *перезагрузка конфига.*\n" +
+                    prefix + "bot disable - *выключение бота.*\n" +
+                    prefix + "bot restart - *перезагрузка бота.*\n" +
+                    prefix + "authentication <nickname> - *привязать Discord к Minecraft аккаунту. Необходимо открыть личные сообщения от участников сервера!*\n" +
+                    prefix + "command <command> - *выполнить команду на Minecraft сервере*\n" +
+                    prefix + "chat <message> - *написать сообщение в чат Minecraft*\n" +
+                    prefix + "bot developers - *информация о разработчиках.*\n" +
+                    prefix + "bot online - *просмотреть кто находится на сервере.*\n" +
+                    prefix + "bot version - *текущая версия плагина*.\n");
             info.addField("Создатели", String.valueOf(DiscordLogger.getInstance().getDescription().getAuthors()), false);
             info.setColor(0x008000);
             event.getChannel().sendTyping().queue();
@@ -50,36 +49,20 @@ public class RemoteConfigControl extends ListenerAdapter {
         String who = event.getAuthor().getAsTag();
 
         if (command.equalsIgnoreCase(DiscordBot.prefix + "authentication") && args.length == 2) {
-            String nickname = args[1];
-            for (GameAuthentication gameAuthentication : DiscordLogger.getInstance().gameAuthenticationUsers)
-                if (gameAuthentication.getPlayerName().equalsIgnoreCase(nickname)) {
-                    DiscordBot.sendVerifyMessage("Данному участнику уже выслан код! Ожидайте пока закончится время для подтверждения кода.");
-                    return;
-                }
-            GameAuthentication gameAuthentication = new GameAuthentication(event.getAuthor(), nickname);
-            gameAuthentication.authentication();
-            DiscordLogger.getInstance().getLogger().info("<" + who + "> issued discord command: ~authentication " + nickname);
-            return;
-        }
-
-        if (command.equalsIgnoreCase(DiscordBot.prefix + "deauthentication") && args.length == 2) {
-            String player = args[1];
-            for (GameDeauthentication deauthentication : DiscordLogger.getInstance().gameDeauthenticationPlayers) {
-                if (deauthentication.getUser().equals(event.getAuthor())) {
-                    event.getChannel().sendMessage("Данному участнику уже выслан код! Ожидайте пока закончится время для подтверждения кода.").queue();
-                    return;
-                }
+            String playerName = args[1];
+            if (DiscordLogger.getInstance().authentication.containsKey(playerName)) {
+                DiscordBot.sendVerifyMessage("Участник " + playerName + " в данный момент уже проходит аутентификацию!");
+                return;
             }
-            GameDeauthentication gameDeauthentication = new GameDeauthentication(player, event.getAuthor());
-            gameDeauthentication.deauthentication();
+            Authentication authentication = new Authentication(event.getAuthor(), playerName);
+            authentication.auth();
+            DiscordLogger.getInstance().getLogger().info("<" + who + "> issued discord command: ~authentication " + playerName);
             return;
         }
-
-        //Ты вообще ебанулся? привет дырка. Теперь кто угодно может привязать себе твой акк, когда ты просто онлайн, исправлю сам (fix)
 
         if (command.equalsIgnoreCase(DiscordBot.prefix + "bot") && args.length == 2) {
-            if (!DiscordLogger.getInstance().getNetwork().existUser(event.getAuthor())) {
-                DiscordBot.sendVerifyMessage("Вы не прошли верификацию!");
+            if (!DiscordLogger.getInstance().getNetwork().verifyUser(event.getAuthor())) {
+                DiscordBot.sendVerifyMessage("Вы не прошли аутентификацию!");
                 return;
             }
             switch (args[1]) {
@@ -138,7 +121,7 @@ public class RemoteConfigControl extends ListenerAdapter {
                     event.getChannel().sendMessage("Версия бота: v" + DiscordLogger.getInstance().getDescription().getVersion()).queue();
                     break;
                 default:
-                    event.getChannel().sendMessage("Доступные команды: ~bot <disable/restart/developers/online/toggle>").queue();
+                    event.getChannel().sendMessage("Доступные команды: " + DiscordBot.getPrefix() + "bot <disable/restart/developers/online/toggle>").queue();
                     break;
             }
         }

@@ -10,21 +10,18 @@ import org.bukkit.event.server.ServerCommandEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 import ru.frostdelta.discord.BotCommand;
 import ru.frostdelta.discord.FakePlayerPermissionManager;
-import ru.looprich.discordlogger.authentication.GameAuthentication;
-import ru.looprich.discordlogger.deauthentication.GameDeauthentication;
 import ru.looprich.discordlogger.event.EventListener;
 import ru.looprich.discordlogger.module.DiscordBot;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 public class DiscordLogger extends JavaPlugin {
 
     private static DiscordLogger plugin;
     public DiscordBot discordBot;
     private Network network;
-    public List<GameAuthentication> gameAuthenticationUsers = null;
-    public List<GameDeauthentication> gameDeauthenticationPlayers = null;
+    public Map<String, Authentication> authentication = new HashMap<>();
     private EventListener eventHandler;
 
     @Override
@@ -41,13 +38,10 @@ public class DiscordLogger extends JavaPlugin {
             regEvents();
             loadDiscordBot();
             BotCommand.reg();
-            gameAuthenticationUsers = new ArrayList<>();
-            gameDeauthenticationPlayers = new ArrayList<>();
+            FakePlayerPermissionManager.load();
         } else getLogger().info("DiscordBotLogging disabled!");
         getServer().getConsoleSender().sendMessage(ChatColor.WHITE + "Authors: " + getDescription().getAuthors());
         getServer().getConsoleSender().sendMessage(ChatColor.WHITE + "WebSite: " + getDescription().getWebsite());
-
-        FakePlayerPermissionManager.load();
     }
 
     public void loadDiscordBot() {

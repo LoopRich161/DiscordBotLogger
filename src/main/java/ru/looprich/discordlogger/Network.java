@@ -4,13 +4,14 @@ import net.dv8tion.jda.api.entities.User;
 import org.bukkit.entity.Player;
 
 import java.sql.*;
+import java.util.concurrent.TimeUnit;
 import java.util.logging.Logger;
 
 public class Network {
 
     private static final long autoReconnect = 28700L;
 
-    private final String INSERT_QUERY, SELECT_QUERY_PLAYER, SELECT_QUERY_USER, CREATE_DB, DELETE_QUERY;
+    private final String INSERT_QUERY, SELECT_QUERY_PLAYER, SELECT_QUERY_USER, CREATE_DB, DELETE_QUERY, TIME_QUERY, AUTH_QUERY;
     private final String url, user, password;
     private Connection connection;
     private long lastExecute = 0L;
@@ -22,11 +23,13 @@ public class Network {
         this.user = user;
         this.password = password;
 
-        this.CREATE_DB = "CREATE TABLE IF NOT EXISTS `DiscordLogger` (player varchar(200), playerUUID varchar(200),  discord varchar(200), code varchar(200)) CHARACTER SET utf8 COLLATE utf8_general_ci;";
-        this.INSERT_QUERY = "INSERT INTO `DiscordLogger` (player, playerUUID, discord, code) VALUES (?, ?, ?, ?);";
+        this.CREATE_DB = "CREATE TABLE IF NOT EXISTS `DiscordLogger` (player varchar(200), playerUUID varchar(200),  discord varchar(200), code varchar(200), time varchar(200), confirm varchar(200)) CHARACTER SET utf8 COLLATE utf8_general_ci ;";
+        this.INSERT_QUERY = "INSERT INTO `DiscordLogger` (player, playerUUID, discord, code, time, confirm) VALUES (?, ?, ?, ?, ?, ?) ;";
         this.SELECT_QUERY_PLAYER = "SELECT * FROM `DiscordLogger` WHERE `player` = ? ;";
         this.SELECT_QUERY_USER = "SELECT * FROM `DiscordLogger` WHERE `discord` = ? ;";
         this.DELETE_QUERY = "DELETE FROM `DiscordLogger` WHERE `player` = ? ;";
+        this.TIME_QUERY = "SELECT * FROM `DiscordLogger` WHERE `player` = ? ;";
+        this.AUTH_QUERY = "UPDATE `DiscordLogger` SET `confirm` = ? WHERE `player` = ? ;";
     }
 
 
@@ -43,7 +46,6 @@ public class Network {
         }
 
     }
-
 
     public String getAccountMinecraftName(User user) {
         this.connection = getConnection();
@@ -64,7 +66,8 @@ public class Network {
         return null;
     }
 
-    public void authentication(Player player, User user, String code) {
+    public void needAuthentication(Player player, User user, String code) {
+        long time = DiscordLogger.getInstance().getConfig().getInt("bot.authentication-time") + TimeUnit.SECONDS.convert(System.currentTimeMillis(), TimeUnit.MILLISECONDS);
         this.connection = getConnection();
         if (this.connection != null) {
             try (PreparedStatement preparedStatement = this.connection.prepareStatement(INSERT_QUERY)) {
@@ -72,6 +75,8 @@ public class Network {
                 preparedStatement.setString(2, player.getUniqueId().toString());
                 preparedStatement.setString(3, user.getAsTag());
                 preparedStatement.setString(4, code);
+                preparedStatement.setLong(5, time);
+                preparedStatement.setBoolean(6, false);
                 preparedStatement.executeUpdate();
                 flushLastExecute();
             } catch (SQLException e) {
@@ -79,6 +84,40 @@ public class Network {
                 e.printStackTrace();
             }
         }
+    }
+
+    public void authentication(Player player) {
+        this.connection = getConnection();
+        if (this.connection != null) {
+            try (PreparedStatement preparedStatement = this.connection.prepareStatement(AUTH_QUERY)) {
+                preparedStatement.setBoolean(1, true);
+                preparedStatement.setString(2, player.getName());
+                preparedStatement.executeUpdate();
+                flushLastExecute();
+            } catch (SQLException e) {
+                logger.severe("Error authentication");
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public long getTimeAuthentication(Player player) {
+        this.connection = getConnection();
+        if (this.connection != null) {
+            try (PreparedStatement preparedStatement = this.connection.prepareStatement(TIME_QUERY)) {
+                preparedStatement.setString(1, player.getName());
+                try (ResultSet rs = preparedStatement.executeQuery()) {
+                    while (rs.next()) {
+                        flushLastExecute();
+                        return rs.getLong("time");
+                    }
+                }
+            } catch (SQLException ex) {
+                logger.severe("Error getTimeAuthentication");
+                ex.printStackTrace();
+            }
+        }
+        return 0;
     }
 
     public void deauthentication(Player player) {
@@ -172,6 +211,24 @@ public class Network {
             }
         }
         flushLastExecute();
+        return false;
+    }
+
+    public boolean verifyUser(User user) {
+        this.connection = getConnection();
+        if (this.connection != null) {
+            try (PreparedStatement preparedStatement = this.connection.prepareStatement(SELECT_QUERY_USER)) {
+                preparedStatement.setString(1, user.getAsTag());
+                try (ResultSet rs = preparedStatement.executeQuery()) {
+                    while (rs.next()) {
+                        return rs.getBoolean("confirm");
+                    }
+                }
+            } catch (SQLException e) {
+                logger.severe("Error verifyUser");
+                e.printStackTrace();
+            }
+        }
         return false;
     }
 

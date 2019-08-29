@@ -5,9 +5,9 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import ru.looprich.discordlogger.Authentication;
+import ru.looprich.discordlogger.Deauthentication;
 import ru.looprich.discordlogger.DiscordLogger;
-import ru.looprich.discordlogger.authentication.GameAuthentication;
-import ru.looprich.discordlogger.deauthentication.GameDeauthentication;
 import ru.looprich.discordlogger.module.DiscordBot;
 
 public class BotCommand implements CommandExecutor {
@@ -21,55 +21,48 @@ public class BotCommand implements CommandExecutor {
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         String who = sender.getName();
-
-        //Какие-то костыли честно говоря, я думаю с мапами в разы проще сделать можно
-        if (command.getName().equalsIgnoreCase("authentication") && args.length == 2) {
-            String code = args[1];
-            if (args[0].equalsIgnoreCase("code")) {
-                for (GameAuthentication gameAuthentication : DiscordLogger.getInstance().gameAuthenticationUsers) {
-                    if (gameAuthentication.getPlayer().getName().equalsIgnoreCase(who)) {
-                        if (gameAuthentication.getCode().equalsIgnoreCase(code)) {
-                            gameAuthentication.accept();
-                            return true;
-                        }
-                        sender.sendMessage("Код подтверждения неверный!");
-                        gameAuthentication.reject();
+        if (command.getName().equalsIgnoreCase("authentication") && args.length != 0) {
+            if (args[0].equalsIgnoreCase("accept")) {
+                if (args.length == 1) {
+                    sender.sendMessage(ChatColor.RED + "Вы не ввели код подверждения!");
+                    return true;
+                }
+                String code = args[1];
+                if (DiscordLogger.getInstance().authentication.containsKey(sender.getName())) {
+                    Authentication authentication = DiscordLogger.getInstance().authentication.get(sender.getName());
+                    if (authentication.getCode().equalsIgnoreCase(code)) {
+                        authentication.accept();
+                    } else sender.sendMessage(ChatColor.RED + "Код подверждения неверный!");
+                    return true;
+                }
+            } else if (args[0].equalsIgnoreCase("reject")) {
+                for (Authentication var1 : DiscordLogger.getInstance().authentication.values()) {
+                    if (var1.getPlayerName().equalsIgnoreCase(who)) {
+                        var1.reject();
                         return true;
                     }
                 }
-            } else sender.sendMessage("Использование команды: /authentication code <code>");
-        }
-
-        if (command.getName().equalsIgnoreCase("deauthentication") && args.length == 2) {
-            if (sender instanceof Player) {
-                if (args[0].equalsIgnoreCase("code")) {
-                    String code = args[1];
-                    for (GameDeauthentication deauthentication : DiscordLogger.getInstance().gameDeauthenticationPlayers) {
-                        if (deauthentication.getPlayerName().equalsIgnoreCase(sender.getName())) {
-                            if (code.equalsIgnoreCase(deauthentication.getCode())) {
-                                deauthentication.accept();
-                                return true;
-                            }
-                            sender.sendMessage("Код подтверждения неверный!");
-                            deauthentication.reject();
-                            return true;
-                        }
-                    }
-                } else sender.sendMessage("Использование команды: /deauthentication code <code>");
-
-            } else sender.sendMessage("Только для игроков!");
+            } else {
+                sender.sendMessage("Доступные команды:  /authentication accept <code> - для завершения аутентификации.\n" +
+                        "/authentication reject - для отказа в завершении аутентификации");
+            }
             return true;
         }
-
+        if (command.getName().equalsIgnoreCase("deauthentication")) {
+            Deauthentication deauthentication = new Deauthentication((Player) sender);
+            deauthentication.deauth();
+            return true;
+        }
         if (command.getName().equalsIgnoreCase("bot") && args.length == 1) {
             switch (args[0]) {
                 case "help":
                     sender.sendMessage("Доступные команды:\n" +
-                            "~toggle - *переключение локального чата.*\n" +
-                            "~bot reload - *перезагрузка конфига.*\n" +
-                            "~bot disable - *выключение бота.*\n" +
-                            "~bot restart - *перезагрузка бота.*\n" +
-                            "~bot developers - *информация о разработчиках.*");
+                            "/toggle - переключение локального чата.\n" +
+                            "/bot reload - перезагрузка конфига.\n" +
+                            "/bot disable - выключение бота.\n" +
+                            "/bot restart - перезагрузка бота.\n" +
+                            "/bot developers - информация о разработчиках.\n" +
+                            "/bot deauthentication - отвязать свой аккаунт от Discord.");
                     break;
                 case "toggle":
                     if (DiscordBot.isLocalEnabled()) {
@@ -118,6 +111,7 @@ public class BotCommand implements CommandExecutor {
                 case "developers":
                     sender.sendMessage("LoopRich161 - создатель плагина.\n" +
                             "                 FrostDelta123 - человек-идея, а так же фиксящий ошибки и исправляющий костыли.");
+                    break;
                 default:
                     sender.sendMessage(ChatColor.RED + "Доступные команды: " + ChatColor.GOLD + "/bot <help/enable/disable/restart>");
                     break;
