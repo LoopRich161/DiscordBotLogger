@@ -13,13 +13,13 @@ public class SyncTasks extends BukkitRunnable {
     private String fakePlayerName;
 
 
-    public SyncTasks(FakePlayerCommandSender sender, String command, Task task){
+    SyncTasks(FakePlayerCommandSender sender, String command, Task task) {
         this.commandSender = sender;
         this.command = command;
         this.task = task;
     }
 
-    public SyncTasks(String fakePlayerName, String message, Task task){
+    SyncTasks(String fakePlayerName, String message, Task task) {
         this.fakePlayerName = fakePlayerName;
         this.task = task;
         this.message = message;
@@ -32,7 +32,7 @@ public class SyncTasks extends BukkitRunnable {
 
     @Override
     public void run() {
-        switch (task){
+        switch (task) {
             case SPAWN:
                 //npc.spawn(new Location(Bukkit.getWorld("world"), 0,0,0));
                 break;

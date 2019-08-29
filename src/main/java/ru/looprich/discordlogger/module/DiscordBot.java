@@ -146,7 +146,7 @@ public class DiscordBot {
 
     public static void sendVerifyMessage(String msg) {
         EmbedBuilder message = new EmbedBuilder();
-        message.setTitle("Верификация аккаунтов.");
+        message.setTitle("Аутентификация");
         message.setDescription(msg);
         message.setColor(0x800080);
         loggerChannel.sendTyping().queue();
@@ -181,4 +181,7 @@ public class DiscordBot {
         DiscordBot.localEnabled = localEnabled;
     }
 
+    public static String getPrefix() {
+        return prefix;
+    }
 }

@@ -13,14 +13,14 @@ import ru.looprich.discordlogger.module.DiscordBot;
 
 import java.util.Set;
 
-public abstract class FakePlayerCommandSender implements CommandSender {
+public class FakePlayerCommandSender implements CommandSender {
 
     private OfflinePlayer offlinePlayer;
     private Player player;
     private boolean isOnline;
     private net.milkbowl.vault.permission.Permission permission;
 
-    public FakePlayerCommandSender(String name){
+    FakePlayerCommandSender(String name) {
         offlinePlayer = Bukkit.getOfflinePlayer(name);
         player = offlinePlayer.getPlayer();
         isOnline = player != null;
@@ -29,22 +29,24 @@ public abstract class FakePlayerCommandSender implements CommandSender {
         //Bukkit.broadcastMessage(Util.getFakePlayerNPC(name).getEntity().toString());
     }
 
-    public abstract void setRotation(float yaw, float pitch);
+    public void setRotation(float yaw, float pitch) {
+
+    }
 
     @Override
     public void sendMessage(String message) {
-        if(isOnline){
+        if (isOnline) {
             player.sendMessage(message);
-        }else DiscordBot.sendServerResponse(Util.removeCodeColors(message));
+        } else DiscordBot.sendServerResponse(Util.removeCodeColors(message));
     }
 
     @Override
     public void sendMessage(String[] messages) {
-        if(isOnline){
-            for(String message : messages){
+        if (isOnline) {
+            for (String message : messages) {
                 player.sendMessage(message);
             }
-        }else DiscordBot.sendServerResponse(Util.removeCodeColors(messages));
+        } else DiscordBot.sendServerResponse(Util.removeCodeColors(messages));
     }
 
     @Override
@@ -54,7 +56,7 @@ public abstract class FakePlayerCommandSender implements CommandSender {
 
     @Override
     public String getName() {
-        if(isOnline){
+        if (isOnline) {
             return player.getName();
         }
         return offlinePlayer.getName();
@@ -72,16 +74,17 @@ public abstract class FakePlayerCommandSender implements CommandSender {
 
     @Override
     public boolean hasPermission(String name) {
-        if(isOnline){
+        if (isOnline) {
             return player.hasPermission(name);
-        }else return permission.playerHas(Bukkit.getServer().getWorlds().get(0).getName(), offlinePlayer, name);
+        } else return permission.playerHas(Bukkit.getServer().getWorlds().get(0).getName(), offlinePlayer, name);
     }
 
     @Override
     public boolean hasPermission(Permission perm) {
-        if(isOnline){
+        if (isOnline) {
             return player.hasPermission(perm.getName());
-        }else return permission.playerHas(Bukkit.getServer().getWorlds().get(0).getName(), offlinePlayer, perm.getName());
+        } else
+            return permission.playerHas(Bukkit.getServer().getWorlds().get(0).getName(), offlinePlayer, perm.getName());
     }
 
     @Override
@@ -106,7 +109,7 @@ public abstract class FakePlayerCommandSender implements CommandSender {
 
     @Override
     public void removeAttachment(PermissionAttachment attachment) {
-       //Empty
+        //Empty
     }
 
     @Override
@@ -116,23 +119,23 @@ public abstract class FakePlayerCommandSender implements CommandSender {
 
     @Override
     public Set<PermissionAttachmentInfo> getEffectivePermissions() {
-        if(isOnline){
+        if (isOnline) {
             return player.getEffectivePermissions();
-        }else return null;
+        } else return null;
     }
 
     @Override
     public boolean isOp() {
-        if(isOnline){
+        if (isOnline) {
             return player.isOp();
-        }else return offlinePlayer.isOp();
+        } else return offlinePlayer.isOp();
     }
 
     @Override
     public void setOp(boolean value) {
-        if(isOnline){
+        if (isOnline) {
             player.setOp(value);
-        }else offlinePlayer.setOp(value);
+        } else offlinePlayer.setOp(value);
     }
 
     public boolean isOnline() {
@@ -143,7 +146,7 @@ public abstract class FakePlayerCommandSender implements CommandSender {
         return offlinePlayer;
     }
 
-    public Player getPlayer(){
+    public Player getPlayer() {
         return player;
     }
 

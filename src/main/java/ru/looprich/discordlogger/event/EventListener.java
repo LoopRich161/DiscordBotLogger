@@ -22,9 +22,7 @@ public class EventListener implements Listener {
     }
 
     public void onPlayerCommandPreprocessEvent(PlayerCommandPreprocessEvent event) {
-        if(event.getMessage().contains("we")){
-            return;
-        }
+        if (event.getMessage().contains("we")) return;
         DiscordBot.sendMessageChannel(event.getPlayer().getName() + " issued server command: " + Util.removeCodeColors(event.getMessage()));
     }
 

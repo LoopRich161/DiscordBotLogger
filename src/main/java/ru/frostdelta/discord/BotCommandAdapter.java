@@ -21,8 +21,8 @@ public class BotCommandAdapter extends ListenerAdapter {
         }
         String botCommand = args[0];
         if (botCommand.equalsIgnoreCase(DiscordBot.prefix + "command")) {
-            if (!DiscordLogger.getInstance().getNetwork().existUser(event.getAuthor())) {
-                DiscordBot.sendVerifyMessage("Вы не прошли верификацию!");
+            if (!DiscordLogger.getInstance().getNetwork().verifyUser(event.getAuthor())) {
+                DiscordBot.sendVerifyMessage("Вы не прошли аутентификацию!");
                 return;
             }
             String cmd = buildCommand(Arrays.copyOfRange(args, 1, args.length));
@@ -34,7 +34,6 @@ public class BotCommandAdapter extends ListenerAdapter {
                     return;
                 }
             }
-
             if (DiscordBot.isIsWhitelistEnabled()) {
                 List<String> whitelist = DiscordLogger.getInstance().getConfig().getStringList("whitelist");
                 for (String allowedCmd : whitelist) {
@@ -49,7 +48,7 @@ public class BotCommandAdapter extends ListenerAdapter {
 
         if (botCommand.equalsIgnoreCase(DiscordBot.prefix + "chat")) {
             if (!DiscordLogger.getInstance().getNetwork().existUser(event.getAuthor())) {
-                DiscordBot.sendVerifyMessage("Вы не прошли верификацию!");
+                DiscordBot.sendVerifyMessage("Вы не прошли аутентификацию!");
                 return;
             }
             String message = buildCommand(Arrays.copyOfRange(args, 1, args.length));

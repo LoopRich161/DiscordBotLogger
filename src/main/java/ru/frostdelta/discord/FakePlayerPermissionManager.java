@@ -11,7 +11,7 @@ public class FakePlayerPermissionManager {
     private static Permission perms = null;
     private static Chat chat = null;
 
-    public static boolean load(){
+    public static boolean load() {
         RegisteredServiceProvider<Chat> rsp = getServer().getServicesManager().getRegistration(Chat.class);
         chat = rsp.getProvider();
         RegisteredServiceProvider<Permission> rspp = getServer().getServicesManager().getRegistration(Permission.class);
