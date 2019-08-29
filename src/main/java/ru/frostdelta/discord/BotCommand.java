@@ -43,7 +43,7 @@ public class BotCommand implements CommandExecutor {
                     }
                 }
             } else {
-                sender.sendMessage("Доступные команды:  /authentication accept <code> - для завершения аутентификации.\n" +
+                sender.sendMessage(ChatColor.GOLD + "Доступные команды:  /authentication accept <code> - для завершения аутентификации.\n" +
                         "/authentication reject - для отказа в завершении аутентификации");
             }
             return true;
@@ -56,37 +56,37 @@ public class BotCommand implements CommandExecutor {
         if (command.getName().equalsIgnoreCase("bot") && args.length == 1) {
             switch (args[0]) {
                 case "help":
-                    sender.sendMessage("Доступные команды:\n" +
-                            "/toggle - переключение локального чата.\n" +
-                            "/bot reload - перезагрузка конфига.\n" +
-                            "/bot disable - выключение бота.\n" +
-                            "/bot restart - перезагрузка бота.\n" +
-                            "/bot developers - информация о разработчиках.\n" +
-                            "/bot deauthentication - отвязать свой аккаунт от Discord.");
+                    sender.sendMessage(ChatColor.GOLD + "Доступные команды:\n" +
+                            ChatColor.DARK_PURPLE + "/toggle - переключение локального чата.\n" +
+                            ChatColor.DARK_PURPLE + "/bot reload - перезагрузка конфига.\n" +
+                            ChatColor.DARK_PURPLE + "/bot disable - выключение бота.\n" +
+                            ChatColor.DARK_PURPLE + "/bot restart - перезагрузка бота.\n" +
+                            ChatColor.DARK_PURPLE + "/bot developers - информация о разработчиках.\n" +
+                            ChatColor.DARK_PURPLE + "/bot deauthentication - отвязать свой аккаунт от Discord.");
                     break;
                 case "toggle":
                     if (DiscordBot.isLocalEnabled()) {
                         DiscordBot.setLocalEnabled(false);
                         DiscordBot.sendImportantMessage("Локальный чат отключен! (" + who + ")");
-                        sender.sendMessage("Локальный чат отключен!");
+                        sender.sendMessage(ChatColor.GREEN + "Локальный чат отключен!");
                         DiscordLogger.getInstance().getConfig().set("local-chat", false);
                     } else {
                         DiscordBot.setLocalEnabled(true);
                         DiscordBot.sendImportantMessage("Локальный чат включен! (" + who + ")");
-                        sender.sendMessage("Локальный чат включен!");
+                        sender.sendMessage(ChatColor.GREEN + "Локальный чат включен!");
                         DiscordLogger.getInstance().getConfig().set("local-chat", true);
                     }
                     break;
                 case "reload":
                     DiscordLogger.getInstance().reloadConfig();
-                    sender.sendMessage("Бот перезагрузил конфиг!");
+                    sender.sendMessage(ChatColor.GREEN + "Бот перезагрузил конфиг!");
                     break;
                 case "enable":
                     if (!DiscordBot.isEnabled()) {
                         DiscordLogger.getInstance().loadDiscordBot();
                         DiscordBot.sendImportantMessage("Я включился! (" + who + ")");
-                        sender.sendMessage("Бот успешно включен");
-                    } else sender.sendMessage("Бот уже включен!");
+                        sender.sendMessage(ChatColor.GREEN + "Бот успешно включен");
+                    } else sender.sendMessage(ChatColor.RED + "Бот уже включен!");
                     break;
                 case "disable":
                     if (!DiscordBot.isEnabled()) {
@@ -95,21 +95,17 @@ public class BotCommand implements CommandExecutor {
                     }
                     DiscordBot.sendImportantMessage("Я выключился! (" + who + ")");
                     DiscordBot.shutdown();
-                    sender.sendMessage("Бот успешно выключен!");
+                    sender.sendMessage(ChatColor.GREEN + "Бот успешно выключен!");
                     break;
                 case "restart":
-                    if (DiscordBot.isEnabled()) {
+                    if (DiscordBot.isEnabled())
                         DiscordBot.getJDA().shutdownNow();
-                        DiscordLogger.getInstance().loadDiscordBot();
-                        sender.sendMessage("Бот успешно перезагружен!");
-                    } else {
-                        DiscordLogger.getInstance().loadDiscordBot();
-                        sender.sendMessage("Бот успешно перезагружен!");
-                    }
+                    DiscordLogger.getInstance().loadDiscordBot();
+                    sender.sendMessage(ChatColor.GREEN+"Бот успешно перезагружен!");
                     DiscordBot.sendImportantMessage("Я перезагрузился! (" + who + ")");
                     break;
                 case "developers":
-                    sender.sendMessage("LoopRich161 - создатель плагина.\n" +
+                    sender.sendMessage(ChatColor.GOLD+"LoopRich161 - создатель плагина.\n" +
                             "                 FrostDelta123 - человек-идея, а так же фиксящий ошибки и исправляющий костыли.");
                     break;
                 default:
