@@ -10,6 +10,9 @@ import org.bukkit.event.server.ServerCommandEvent;
 import ru.frostdelta.discord.Util;
 import ru.looprich.discordlogger.module.DiscordBot;
 
+import java.util.Arrays;
+import java.util.stream.Collectors;
+
 public class EventListener implements Listener {
 
     public void onPlayerQuitEvent(PlayerQuitEvent event) {
@@ -56,8 +59,26 @@ public class EventListener implements Listener {
             DiscordBot.sendMessageChannel("[L]<" + event.getPlayer().getName() + "> " + Util.removeCodeColors(event.getMessage()));
     }
 
-    public void onPlayerAchievementAwardedEvent(PlayerAchievementAwardedEvent event) {
-        DiscordBot.sendMessageChannel(event.getPlayer().getName() + " has made the new achievement!");
+    public void onPlayerAdvancementDoneEvent (PlayerAdvancementDoneEvent  event) {
+        try {
+            Object craftAdvancement = ((Object) event.getAdvancement()).getClass().getMethod("getHandle").invoke(event.getAdvancement());
+            Object advancementDisplay = craftAdvancement.getClass().getMethod("c").invoke(craftAdvancement);
+            boolean display = (boolean) advancementDisplay.getClass().getMethod("i").invoke(advancementDisplay);
+            if (!display) return;
+        } catch (NullPointerException e) {
+            return;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return;
+        }
+
+        // turn "story/advancement_name" into "Advancement Name"
+        String rawAdvancementName = event.getAdvancement().getKey().getKey();
+        String advancementName = Arrays.stream(rawAdvancementName.substring(rawAdvancementName.lastIndexOf("/") + 1).toLowerCase().split("_"))
+                .map(s -> s.substring(0, 1).toUpperCase() + s.substring(1))
+                .collect(Collectors.joining(" "));
+
+        DiscordBot.sendMessageChannel(event.getPlayer().getName() + " has made the new achievement ["+advancementName+"] !");
     }
 
 }

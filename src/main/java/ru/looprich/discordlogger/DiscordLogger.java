@@ -96,8 +96,8 @@ public class DiscordLogger extends JavaPlugin {
             getLogger().info("Tracing on player chat enabled.");
         }
         if (getConfig().getBoolean("tracing.player-achievement")) {
-            Bukkit.getPluginManager().registerEvent(PlayerAchievementAwardedEvent.class, eventHandler, EventPriority.MONITOR,
-                    (listener, event) -> eventHandler.onPlayerAchievementAwardedEvent((PlayerAchievementAwardedEvent) event), this);
+            Bukkit.getPluginManager().registerEvent(PlayerAdvancementDoneEvent.class, eventHandler, EventPriority.MONITOR,
+                    (listener, event) -> eventHandler.onPlayerAdvancementDoneEvent((PlayerAdvancementDoneEvent) event), this);
             getLogger().info("Tracing on player achievement enabled.");
         }
         if (getConfig().getBoolean("tracing.server-broadcast")) {
