@@ -72,13 +72,12 @@ public class EventListener implements Listener {
             return;
         }
 
-        // turn "story/advancement_name" into "Advancement Name"
         String rawAdvancementName = event.getAdvancement().getKey().getKey();
         String advancementName = Arrays.stream(rawAdvancementName.substring(rawAdvancementName.lastIndexOf("/") + 1).toLowerCase().split("_"))
                 .map(s -> s.substring(0, 1).toUpperCase() + s.substring(1))
                 .collect(Collectors.joining(" "));
 
-        DiscordBot.sendMessageChannel(event.getPlayer().getName() + " has made the new achievement ["+advancementName+"] !");
+        DiscordBot.sendMessageChannel(event.getPlayer().getName() + " has made the new achievement ["+advancementName+"]");
     }
 
 }
