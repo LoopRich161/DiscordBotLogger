@@ -3,7 +3,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>ru.looprich.discordlogger</groupId>
   <artifactId>DiscordBotLogger</artifactId>
-  <version>3.3.1</version>
+  <version>3.4</version>
   <scm>
     <connection>scm:git:https://github.com/LoopRich161/DiscordBotLogger.git</connection>
   </scm>
@@ -19,9 +19,6 @@
       <plugin>
         <artifactId>maven-jar-plugin</artifactId>
         <version>2.3.2</version>
-        <configuration>
-          <finalName>${project.artifactId}-${project.version}b${buildNumber}</finalName>
-        </configuration>
       </plugin>
       <plugin>
         <artifactId>maven-shade-plugin</artifactId>
@@ -38,27 +35,6 @@
           </execution>
         </executions>
       </plugin>
-      <plugin>
-        <groupId>org.codehaus.mojo</groupId>
-        <artifactId>buildnumber-maven-plugin</artifactId>
-        <version>1.4</version>
-        <executions>
-          <execution>
-            <phase>validate</phase>
-            <goals>
-              <goal>create</goal>
-            </goals>
-          </execution>
-        </executions>
-        <configuration>
-          <format>{0,number}</format>
-          <items>
-            <item>buildNumber0</item>
-          </items>
-          <doCheck>false</doCheck>
-          <doUpdate>true</doUpdate>
-        </configuration>
-      </plugin>
     </plugins>
   </build>
   <repositories>
@@ -72,8 +48,8 @@
       <url>http://jcenter.bintray.com</url>
     </repository>
     <repository>
-      <id>bukkit-repo</id>
-      <url>http://repo.bukkit.org/content/groups/public/</url>
+      <id>spigot-repo</id>
+      <url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
     </repository>
   </repositories>
   <dependencies>
@@ -86,16 +62,12 @@
     <dependency>
       <groupId>org.bukkit</groupId>
       <artifactId>bukkit</artifactId>
-      <version>1.13.2-R0.1-SNAPSHOT</version>
+      <version>1.14.2-R0.1-SNAPSHOT</version>
       <scope>provided</scope>
       <exclusions>
         <exclusion>
           <artifactId>commons-lang</artifactId>
           <groupId>commons-lang</groupId>
-        </exclusion>
-        <exclusion>
-          <artifactId>json-simple</artifactId>
-          <groupId>com.googlecode.json-simple</groupId>
         </exclusion>
         <exclusion>
           <artifactId>guava</artifactId>
