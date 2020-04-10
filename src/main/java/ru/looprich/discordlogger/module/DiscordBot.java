@@ -28,32 +28,13 @@ public class DiscordBot {
     public static String prefix;
     public static boolean commandOnlyOneChannel;
     private static boolean isWhitelistEnabled;
+    private static String serverName;
 
     public DiscordBot(String tokenBot, String channel) {
         DiscordBot.tokenBot = tokenBot;
         DiscordBot.channel = channel;
     }
 
-    private static String getServerName() {
-        File file = new File("server.properties");
-        BufferedReader read = null;
-        try {
-            read = new BufferedReader(new FileReader(file));
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-        String line;
-        try {
-            while ((line = read.readLine()) != null) {
-                if (line.contains("motd=")) {
-                    return line.substring(5);
-                }
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return "вашим сервером.";
-    }
 
     public static void shutdown() {
         bot = null;
@@ -62,6 +43,7 @@ public class DiscordBot {
         channel = null;
         loggerChannel = null;
         enable = false;
+        serverName=null;
         DiscordLogger.getInstance().discordBot = null;
         jda.shutdown();
     }
@@ -117,10 +99,11 @@ public class DiscordBot {
 
     public boolean createBot() {
         try {
-            jda = new JDABuilder(tokenBot).build().awaitReady();
-            jda.getPresence().setStatus(OnlineStatus.ONLINE);
-            jda.getPresence().setActivity(Activity.watching("за " + getServerName()));
+            jda = JDABuilder.createDefault(tokenBot).build().awaitReady();
             prefix = DiscordLogger.getInstance().getConfig().getString("bot.prefix");
+            serverName = DiscordLogger.getInstance().getConfig().getString("bot.server-name");
+            jda.getPresence().setStatus(OnlineStatus.ONLINE);
+            jda.getPresence().setActivity(Activity.watching("за " + serverName));
             jda.addEventListener(new RemoteConfigControl());
             jda.addEventListener(new BotCommandAdapter());
         } catch (LoginException e) {
