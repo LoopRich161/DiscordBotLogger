@@ -33,7 +33,8 @@ public class RemoteConfigControl extends ListenerAdapter {
                     prefix + "bot disable - *выключение бота.*\n" +
                     prefix + "bot restart - *перезагрузка бота.*\n" +
                     prefix + "auth <nickname> - *привязать Discord к Minecraft аккаунту. Необходимо открыть личные сообщения от участников сервера!*\n" +
-                    prefix + "command <command> - *выполнить команду на Minecraft сервере*\n" +
+                    prefix + "command <command> - *выполнить команду на Minecraft сервере от своего имени*\n" +
+                    prefix + "dispatch <command> - *выполнить команду на Minecraft сервере от имени консоли*\n"+
                     prefix + "chat <message> - *написать сообщение в чат Minecraft*\n" +
                     prefix + "bot developers - *информация о разработчиках.*\n" +
                     prefix + "bot online - *просмотреть кто находится на сервере.*\n" +
@@ -78,8 +79,8 @@ public class RemoteConfigControl extends ListenerAdapter {
                     if (DiscordBot.isEnabled()) {
                         DiscordBot.sendImportantMessage("Я выключился!");
                         DiscordBot.getJDA().shutdownNow();
-                        DiscordLogger.getInstance().loadDiscordBot();
-                    } else DiscordLogger.getInstance().loadDiscordBot();
+                    }
+                    DiscordLogger.getInstance().loadDiscordBot();
 
                     DiscordLogger.getInstance().getLogger().info("<" + who + "> issued discord command: ~bot restart");
                     DiscordBot.sendImportantMessage("Я перезагрузился! (" + who + ")");

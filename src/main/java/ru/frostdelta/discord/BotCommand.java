@@ -24,7 +24,7 @@ public class BotCommand implements CommandExecutor {
         if (command.getName().equalsIgnoreCase("auth") && args.length != 0) {
             if (args[0].equalsIgnoreCase("accept")) {
                 if (args.length == 1) {
-                    sender.sendMessage(ChatColor.RED + "Вы не ввели код подверждения!");
+                    sender.sendMessage(ChatColor.RED + "Вы не ввели код подтверждения!");
                     return true;
                 }
                 String code = args[1];
@@ -32,7 +32,7 @@ public class BotCommand implements CommandExecutor {
                     Authentication authentication = DiscordLogger.getInstance().authentication.get(sender.getName());
                     if (authentication.getCode().equalsIgnoreCase(code)) {
                         authentication.accept();
-                    } else sender.sendMessage(ChatColor.RED + "Код подверждения неверный!");
+                    } else sender.sendMessage(ChatColor.RED + "Код подтверждения неверный!");
                     return true;
                 }
             } else if (args[0].equalsIgnoreCase("reject")) {
