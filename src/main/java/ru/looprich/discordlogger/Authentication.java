@@ -13,6 +13,7 @@ public class Authentication {
     private User user;
     private Player player;
     private String playerName;
+    private boolean canSendPrivateMsg;
     private StringBuilder code = new StringBuilder();
     private final String[] allLetter = {"Q", "W", "E", "R", "T", "Y", "U", "I", "O", "P", "A", "S", "D", "F", "G", "H", "J",
             "K", "L", "Z", "X", "C", "V", "B", "N", "M", "1", "2", "3", "4", "5", "6", "7", "8", "9", "0"};
@@ -25,6 +26,10 @@ public class Authentication {
 
     public void auth() {
         if (!searchPlayer() || !searchUser()) return;
+        if (canSendPrivateMsg) {
+            DiscordBot.sendVerifyMessage(user.getAsTag() + " откройте личные сообщения!");
+            return;
+        }
         sendingCode();
         DiscordLogger.getInstance().getNetwork().needAuthentication(player, user, code.toString());
         DiscordLogger.getInstance().authentication.put(playerName, this);
@@ -75,8 +80,11 @@ public class Authentication {
     }
 
     private void sendMessageToUser(String message) {
-        user.openPrivateChannel().queue((channel) ->
-                channel.sendMessage(message).queue());
+        user.openPrivateChannel().queue((channel) -> {
+            channel.sendMessage(message).queue();
+            canSendPrivateMsg = true;
+            return;
+        });
     }
 
     private void sendingCode() {
@@ -84,8 +92,8 @@ public class Authentication {
             code.append(allLetter[random.nextInt(allLetter.length)]);
         DiscordBot.sendVerifyMessage(user.getAsTag() + " проверьте личные сообщения. Вам выслан код подтверждения!");
         sendMessageToUser("Код подтверждения: " + code.toString() + "\n" +
-                "Введите на сервере: /authentication accept <code> - для завершения аутентификации.\n" +
-                "Введите на сервере: /authentication reject - для отказа в завершении аутентификации");
+                "Введите на сервере: /auth accept <code> - для завершения аутентификации.\n" +
+                "Введите на сервере: /auth reject - для отказа в завершении аутентификации");
     }
 
     private boolean hasTime() {
