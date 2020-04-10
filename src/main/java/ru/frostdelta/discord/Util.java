@@ -8,6 +8,15 @@ import java.util.List;
 
 public class Util {
 
+    public static String buildCommand(String[] args) {
+        StringBuilder cmd = new StringBuilder();
+        for (String arg : args) {
+            cmd.append(arg).append(" ");
+        }
+        return cmd.toString();
+    }
+
+
     public static String getPermission(){
         return DiscordLogger.getInstance().getConfig().getString("admin-permission");
     }

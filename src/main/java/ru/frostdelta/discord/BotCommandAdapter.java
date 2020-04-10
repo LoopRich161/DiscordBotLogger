@@ -27,7 +27,7 @@ public class BotCommandAdapter extends ListenerAdapter {
                 DiscordBot.sendVerifyMessage("Вы не прошли аутентификацию!");
                 return;
             }
-            String cmd = buildCommand(Arrays.copyOfRange(args, 1, args.length));
+            String cmd = Util.buildCommand(Arrays.copyOfRange(args, 1, args.length));
 
             List<String> blacklist = DiscordLogger.getInstance().getConfig().getStringList("blacklist");
             for (String disallowedCmd : blacklist) {
@@ -56,7 +56,7 @@ public class BotCommandAdapter extends ListenerAdapter {
                 if(args.length <= 1){
                     DiscordBot.sendImportantMessage("Использование комманды - ~dispatch <command>");
                 }
-                String cmd = buildCommand(Arrays.copyOfRange(args, 1, args.length));
+                String cmd = Util.buildCommand(Arrays.copyOfRange(args, 1, args.length));
                 new SyncTasks(playerName, cmd, Task.DISPATCH).runTask(DiscordLogger.getInstance());
             }
         }
@@ -66,18 +66,9 @@ public class BotCommandAdapter extends ListenerAdapter {
                 DiscordBot.sendVerifyMessage("Вы не прошли аутентификацию!");
                 return;
             }
-            String message = buildCommand(Arrays.copyOfRange(args, 1, args.length));
+            String message = Util.buildCommand(Arrays.copyOfRange(args, 1, args.length));
             new SyncTasks(DiscordLogger.getInstance().getNetwork().getAccountMinecraftName(event.getAuthor()), message, Task.CHAT).runTask(DiscordLogger.getInstance());
         }
-    }
-
-
-    private String buildCommand(String[] args) {
-        StringBuilder cmd = new StringBuilder();
-        for (String arg : args) {
-            cmd.append(arg).append(" ");
-        }
-        return cmd.toString();
     }
 
 }
