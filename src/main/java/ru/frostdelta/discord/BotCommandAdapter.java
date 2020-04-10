@@ -62,7 +62,7 @@ public class BotCommandAdapter extends ListenerAdapter {
                     DiscordBot.sendImportantMessage("Использование комманды - ~dispatch <command>");
                 }
                 String cmd = Util.buildCommand(Arrays.copyOfRange(args, 1, args.length));
-                new SyncTasks(playerName, cmd, Task.DISPATCH).runTask(DiscordLogger.getInstance());
+                new SyncTasks(new FakePlayerCommandSender(playerName), cmd, Task.DISPATCH).runTask(DiscordLogger.getInstance());
             }
         }
 
