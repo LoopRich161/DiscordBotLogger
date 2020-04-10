@@ -23,7 +23,11 @@ tracing:
   server-remote-command: true
   server-broadcast: true
 
+ignored-commands:
+  - we
+  - ban
 
+admin-permission: discordlogger.admin
 
 bot:
   #Статус бота: true - включен, false - выключен

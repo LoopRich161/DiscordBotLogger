@@ -3,7 +3,7 @@ package ru.frostdelta.discord;
 import java.util.HashMap;
 
 public enum Task {
-    COMMAND("Command"), SPAWN("Spawn"), CHAT("Chat"), UNKNOWN("Unknown action");
+    COMMAND("Command"), SPAWN("Spawn"), CHAT("Chat"), DISPATCH("Dispatch command"), UNKNOWN("Unknown action");
 
     private static final HashMap<String, Task> actions = new HashMap<>();
 

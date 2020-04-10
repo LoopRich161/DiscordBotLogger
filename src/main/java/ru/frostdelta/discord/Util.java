@@ -1,22 +1,27 @@
 package ru.frostdelta.discord;
 
 import org.bukkit.ChatColor;
+import ru.looprich.discordlogger.DiscordLogger;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class Util {
 
-    /*public static NPC getFakePlayerNPC(String name){
+    public static String getPermission(){
+        return DiscordLogger.getInstance().getConfig().getString("admin-permission");
+    }
 
-        NPCRegistry registry = CitizensAPI.getNPCRegistry();
-        NPC npc = registry.createNPC(EntityType.PLAYER, name);
-        npc.setProtected(true);
-        npc.setName(name);
-        new SyncTasks(npc, Task.SPAWN).runTask(DiscordLogger.getInstance());
-        //npc.setBukkitEntityType(EntityType.PLAYER);
-        return npc;
-    }*/
+    public static boolean checkContains(String command){
+        for(String cmd : getIgnoredCmds()){
+            if(command.contains(cmd)) return true;
+        }
+        return false;
+    }
+
+    public static List<String> getIgnoredCmds(){
+        return DiscordLogger.getInstance().getConfig().getStringList("ignored-commands");
+    }
 
     public static String removeCodeColors(String message) {
         return ChatColor.stripColor(message);

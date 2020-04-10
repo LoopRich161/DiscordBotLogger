@@ -16,9 +16,8 @@ public class RemoteConfigControl extends ListenerAdapter {
 
     @Override
     public void onMessageReceived(MessageReceivedEvent event) {
-        //Bukkit.broadcastMessage(event.getChannel().getId() + "  Requied: " + DiscordBot.channel);
-        if (!event.getTextChannel().getId().equalsIgnoreCase(DiscordBot.channel)) return;
 
+        if (!event.getTextChannel().getId().equalsIgnoreCase(DiscordBot.channel)) return;
         String[] args = event.getMessage().getContentRaw().split(" ");
         if (args.length == 0) {
             return;
@@ -33,7 +32,7 @@ public class RemoteConfigControl extends ListenerAdapter {
                     prefix + "bot reload - *перезагрузка конфига.*\n" +
                     prefix + "bot disable - *выключение бота.*\n" +
                     prefix + "bot restart - *перезагрузка бота.*\n" +
-                    prefix + "authentication <nickname> - *привязать Discord к Minecraft аккаунту. Необходимо открыть личные сообщения от участников сервера!*\n" +
+                    prefix + "auth <nickname> - *привязать Discord к Minecraft аккаунту. Необходимо открыть личные сообщения от участников сервера!*\n" +
                     prefix + "command <command> - *выполнить команду на Minecraft сервере*\n" +
                     prefix + "chat <message> - *написать сообщение в чат Minecraft*\n" +
                     prefix + "bot developers - *информация о разработчиках.*\n" +
@@ -48,7 +47,7 @@ public class RemoteConfigControl extends ListenerAdapter {
 
         String who = event.getAuthor().getAsTag();
 
-        if (command.equalsIgnoreCase(DiscordBot.prefix + "authentication") && args.length == 2) {
+        if (command.equalsIgnoreCase(DiscordBot.prefix + "auth") && args.length == 2) {
             String playerName = args[1];
             if (DiscordLogger.getInstance().authentication.containsKey(playerName)) {
                 DiscordBot.sendVerifyMessage("Участник " + playerName + " в данный момент уже проходит аутентификацию!");

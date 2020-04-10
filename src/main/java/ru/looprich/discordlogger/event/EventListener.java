@@ -13,7 +13,6 @@ import ru.looprich.discordlogger.module.DiscordBot;
 public class EventListener implements Listener {
 
     public void onPlayerQuitEvent(PlayerQuitEvent event) {
-        DiscordBot.sendMessageChannel(event.getPlayer().getName() + " lost connection: Disconnected");
         DiscordBot.sendMessageChannel(event.getPlayer().getName() + " left the game");
     }
 
@@ -22,7 +21,7 @@ public class EventListener implements Listener {
     }
 
     public void onPlayerCommandPreprocessEvent(PlayerCommandPreprocessEvent event) {
-        if (event.getMessage().contains("we")) return;
+        if (Util.checkContains(event.getMessage())) return;
         DiscordBot.sendMessageChannel(event.getPlayer().getName() + " issued server command: " + Util.removeCodeColors(event.getMessage()));
     }
 
@@ -36,10 +35,12 @@ public class EventListener implements Listener {
     }
 
     public void onServerCommandEvent(ServerCommandEvent event) {
+        if (Util.checkContains(event.getCommand())) return;
         DiscordBot.sendMessageChannel(event.getSender().getName() + " issued server command: " + event.getCommand());
     }
 
     public void onRemoteServerCommandEvent(RemoteServerCommandEvent event) {
+        if (Util.checkContains(event.getCommand())) return;
         DiscordBot.sendMessageChannel(event.getSender().getName() + " issued server command: " + event.getCommand());
     }
 

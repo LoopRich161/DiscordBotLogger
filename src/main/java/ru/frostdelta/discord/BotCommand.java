@@ -14,14 +14,14 @@ public class BotCommand implements CommandExecutor {
 
     public static void reg() {
         DiscordLogger.getInstance().getCommand("bot").setExecutor(new BotCommand());
-        DiscordLogger.getInstance().getCommand("deauthentication").setExecutor(new BotCommand());
-        DiscordLogger.getInstance().getCommand("authentication").setExecutor(new BotCommand());
+        DiscordLogger.getInstance().getCommand("deauth").setExecutor(new BotCommand());
+        DiscordLogger.getInstance().getCommand("auth").setExecutor(new BotCommand());
     }
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         String who = sender.getName();
-        if (command.getName().equalsIgnoreCase("authentication") && args.length != 0) {
+        if (command.getName().equalsIgnoreCase("auth") && args.length != 0) {
             if (args[0].equalsIgnoreCase("accept")) {
                 if (args.length == 1) {
                     sender.sendMessage(ChatColor.RED + "Вы не ввели код подверждения!");
@@ -43,12 +43,12 @@ public class BotCommand implements CommandExecutor {
                     }
                 }
             } else {
-                sender.sendMessage(ChatColor.GOLD + "Доступные команды:  /authentication accept <code> - для завершения аутентификации.\n" +
-                        "/authentication reject - для отказа в завершении аутентификации");
+                sender.sendMessage(ChatColor.GOLD + "Доступные команды:  /auth accept <code> - для завершения аутентификации.\n" +
+                        "/auth reject - для отказа в завершении аутентификации");
             }
             return true;
         }
-        if (command.getName().equalsIgnoreCase("deauthentication")) {
+        if (command.getName().equalsIgnoreCase("deauth")) {
             Deauthentication deauthentication = new Deauthentication((Player) sender);
             deauthentication.deauth();
             return true;
@@ -62,7 +62,7 @@ public class BotCommand implements CommandExecutor {
                             ChatColor.DARK_PURPLE + "/bot disable - выключение бота.\n" +
                             ChatColor.DARK_PURPLE + "/bot restart - перезагрузка бота.\n" +
                             ChatColor.DARK_PURPLE + "/bot developers - информация о разработчиках.\n" +
-                            ChatColor.DARK_PURPLE + "/bot deauthentication - отвязать свой аккаунт от Discord.");
+                            ChatColor.DARK_PURPLE + "/bot deauth - отвязать свой аккаунт от Discord.");
                     break;
                 case "toggle":
                     if (DiscordBot.isLocalEnabled()) {
