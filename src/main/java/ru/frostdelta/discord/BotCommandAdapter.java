@@ -49,6 +49,10 @@ public class BotCommandAdapter extends ListenerAdapter {
         }
 
         if (botCommand.equalsIgnoreCase(DiscordBot.prefix + "dispatch")) {
+            if (!DiscordLogger.getInstance().getNetwork().existUser(event.getAuthor())) {
+                DiscordBot.sendVerifyMessage("Вы не прошли аутентификацию!");
+                return;
+            }
             Permission permission = FakePlayerPermissionManager.getFakePlayerPermissions();
             String playerName = DiscordLogger.getInstance().getNetwork().getAccountMinecraftName(event.getAuthor());
             boolean access = permission.playerHas(Bukkit.getServer().getWorlds().get(0).getName(), Bukkit.getOfflinePlayer(playerName), Util.getPermission());
