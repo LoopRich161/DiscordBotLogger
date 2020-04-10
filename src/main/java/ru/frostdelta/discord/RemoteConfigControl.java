@@ -1,6 +1,7 @@
 package ru.frostdelta.discord;
 
 import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.entities.ChannelType;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import org.bukkit.Bukkit;
@@ -17,7 +18,7 @@ public class RemoteConfigControl extends ListenerAdapter {
     @Override
     public void onMessageReceived(MessageReceivedEvent event) {
 
-        if (!event.getTextChannel().getId().equalsIgnoreCase(DiscordBot.channel)) return;
+        if (!event.getChannelType().equals(ChannelType.TEXT)||!event.getTextChannel().getId().equalsIgnoreCase(DiscordBot.channel)) return;
         String[] args = event.getMessage().getContentRaw().split(" ");
         if (args.length == 0) {
             return;

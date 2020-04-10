@@ -1,5 +1,6 @@
 package ru.frostdelta.discord;
 
+import net.dv8tion.jda.api.entities.ChannelType;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.milkbowl.vault.permission.Permission;
@@ -15,7 +16,7 @@ public class BotCommandAdapter extends ListenerAdapter {
     @Override
     public void onMessageReceived(MessageReceivedEvent event) {
         //НЕБО УРОНИТ, НОЧЬ НА ЛАДОНИ. НАС НЕ ДОГОНЯТ
-        if (!event.getTextChannel().getId().equalsIgnoreCase(DiscordBot.channel)) return;
+        if (!event.getChannelType().equals(ChannelType.TEXT)||!event.getTextChannel().getId().equalsIgnoreCase(DiscordBot.channel)) return;
 
         String[] args = event.getMessage().getContentRaw().split(" ");
         if (args.length == 0) {
