@@ -1,10 +1,13 @@
-package ru.frostdelta.discord;
+package ru.frostdelta.discord.bot;
 
 import net.dv8tion.jda.api.entities.ChannelType;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.milkbowl.vault.permission.Permission;
 import org.bukkit.Bukkit;
+import ru.frostdelta.discord.SyncTasks;
+import ru.frostdelta.discord.Task;
+import ru.frostdelta.discord.Util;
 import ru.frostdelta.discord.fake.FakePlayer;
 import ru.frostdelta.discord.fake.FakePlayerCommandSender;
 import ru.frostdelta.discord.fake.FakePlayerPermissionManager;

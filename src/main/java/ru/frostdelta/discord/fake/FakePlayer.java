@@ -44,7 +44,7 @@ public class FakePlayer extends FakePlayerCommandSender implements Player {
     private net.milkbowl.vault.permission.Permission permission;
     private String offlineName;
 
-    FakePlayer(String name) {
+    public FakePlayer(String name) {
         super(name);
         offlinePlayer = super.getOfflinePlayer();
         player = super.getPlayer();

@@ -21,7 +21,7 @@ public class FakePlayerCommandSender implements CommandSender {
     private boolean isOnline;
     private net.milkbowl.vault.permission.Permission permission;
 
-    FakePlayerCommandSender(String name) {
+    public FakePlayerCommandSender(String name) {
         offlinePlayer = Bukkit.getOfflinePlayer(name);
         player = offlinePlayer.getPlayer();
         isOnline = player != null;

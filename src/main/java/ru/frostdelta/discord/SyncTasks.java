@@ -15,13 +15,13 @@ public class SyncTasks extends BukkitRunnable {
     private String fakePlayerName;
 
 
-    SyncTasks(FakePlayerCommandSender sender, String command, Task task) {
+    public SyncTasks(FakePlayerCommandSender sender, String command, Task task) {
         this.commandSender = sender;
         this.command = command;
         this.task = task;
     }
 
-    SyncTasks(String fakePlayerName, String message, Task task) {
+    public SyncTasks(String fakePlayerName, String message, Task task) {
         this.fakePlayerName = fakePlayerName;
         this.task = task;
         this.message = message;

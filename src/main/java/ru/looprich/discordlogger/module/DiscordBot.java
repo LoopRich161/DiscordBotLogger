@@ -6,13 +6,12 @@ import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.OnlineStatus;
 import net.dv8tion.jda.api.entities.Activity;
 import net.dv8tion.jda.api.entities.TextChannel;
-import ru.frostdelta.discord.BotCommandAdapter;
-import ru.frostdelta.discord.RemoteConfigControl;
+import ru.frostdelta.discord.bot.BotCommandAdapter;
+import ru.frostdelta.discord.bot.BotManager;
 import ru.frostdelta.discord.Util;
 import ru.looprich.discordlogger.DiscordLogger;
 
 import javax.security.auth.login.LoginException;
-import java.io.*;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -104,7 +103,7 @@ public class DiscordBot {
             serverName = DiscordLogger.getInstance().getConfig().getString("bot.server-name");
             jda.getPresence().setStatus(OnlineStatus.ONLINE);
             jda.getPresence().setActivity(Activity.watching("за " + serverName));
-            jda.addEventListener(new RemoteConfigControl());
+            jda.addEventListener(new BotManager());
             jda.addEventListener(new BotCommandAdapter());
         } catch (LoginException e) {
             DiscordLogger.getInstance().getLogger().severe("Invalid token!");

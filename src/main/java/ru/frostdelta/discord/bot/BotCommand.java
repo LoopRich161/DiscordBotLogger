@@ -1,4 +1,4 @@
-package ru.frostdelta.discord;
+package ru.frostdelta.discord.bot;
 
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
