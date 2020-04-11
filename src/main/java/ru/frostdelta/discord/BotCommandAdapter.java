@@ -47,7 +47,7 @@ public class BotCommandAdapter extends ListenerAdapter {
                 }
             } else
                 new SyncTasks(new FakePlayer(DiscordLogger.getInstance().getNetwork().getAccountMinecraftName(event.getAuthor())), cmd, Task.COMMAND).runTask(DiscordLogger.getInstance());
-            DiscordLogger.getInstance().getLogger().info("<" + event.getAuthor().getAsTag() + "> issued discord command: "+DiscordBot.prefix + "command "+cmd);
+            DiscordLogger.getInstance().getLogger().info("<" + event.getAuthor().getAsTag() + "> issued discord command: "+ DiscordBot.prefix + "command "+cmd);
         }
 
         if (botCommand.equalsIgnoreCase(DiscordBot.prefix + "dispatch")) {
