@@ -3,6 +3,7 @@ package ru.looprich.discordlogger.event;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.*;
 import org.bukkit.event.server.BroadcastMessageEvent;
 import org.bukkit.event.server.RemoteServerCommandEvent;
@@ -78,6 +79,10 @@ public class EventListener implements Listener {
                 .collect(Collectors.joining(" "));
 
         DiscordBot.sendMessageChannel(event.getPlayer().getName() + " has made the achievement ["+advancementName+"]");
+    }
+
+    public void onPlayerDeathEvent(PlayerDeathEvent event){
+        DiscordBot.sendMessageChannel(event.getEntity().getName() + " "+ event.getDeathMessage());
     }
 
 }

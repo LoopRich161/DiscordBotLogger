@@ -19,6 +19,7 @@ tracing:
   player-command: true
   player-chat: true
   player-achievement: true
+  player-death: true
   server-command: true
   server-remote-command: true
   server-broadcast: true
