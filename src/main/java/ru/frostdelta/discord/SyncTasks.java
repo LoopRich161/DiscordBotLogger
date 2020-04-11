@@ -30,7 +30,7 @@ public class SyncTasks extends BukkitRunnable {
         switch (task) {
             case DISPATCH:
                 Bukkit.dispatchCommand(Bukkit.getConsoleSender(), command);
-                DiscordBot.sendImportantMessage(commandSender.getName() + "issued server command " + command);
+                DiscordBot.sendImportantMessage(commandSender.getName() + " issued server command: " + command);
                 break;
             case SPAWN:
                 //npc.spawn(new Location(Bukkit.getWorld("world"), 0,0,0));
