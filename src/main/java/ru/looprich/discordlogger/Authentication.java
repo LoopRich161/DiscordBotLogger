@@ -1,6 +1,7 @@
 package ru.looprich.discordlogger;
 
 import net.dv8tion.jda.api.entities.User;
+import net.dv8tion.jda.api.exceptions.ErrorResponseException;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -26,7 +27,7 @@ public class Authentication {
 
     public void auth() {
         if (!searchPlayer() || !searchUser()) return;
-        if (canSendPrivateMsg) {
+        if (!canSendPrivateMsg) {
             DiscordBot.sendVerifyMessage(user.getAsTag() + " откройте личные сообщения!");
             return;
         }
@@ -80,11 +81,15 @@ public class Authentication {
     }
 
     private void sendMessageToUser(String message) {
-        user.openPrivateChannel().queue((channel) -> {
-            channel.sendMessage(message).queue();
+        try{
+            user.openPrivateChannel().queue((channel) -> {
+                channel.sendMessage(message).queue();
+            });
             canSendPrivateMsg = true;
-            return;
-        });
+        }catch (ErrorResponseException ex){
+            canSendPrivateMsg = false;
+        }
+
     }
 
     private void sendingCode() {
