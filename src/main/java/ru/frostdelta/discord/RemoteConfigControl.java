@@ -57,7 +57,7 @@ public class RemoteConfigControl extends ListenerAdapter {
             }
             Authentication authentication = new Authentication(event.getAuthor(), playerName);
             authentication.auth();
-            DiscordLogger.getInstance().getLogger().info("<" + who + "> issued discord command: ~authentication " + playerName);
+            DiscordLogger.getInstance().getLogger().info("<" + who + "> issued discord command: "+DiscordBot.prefix + "auth");
             return;
         }
 
@@ -70,10 +70,11 @@ public class RemoteConfigControl extends ListenerAdapter {
                 case "reload":
                     DiscordLogger.getInstance().reloadConfig();
                     DiscordBot.sendImportantMessage("Я перезагрузил конфиг! (" + who + ")");
+                    DiscordLogger.getInstance().getLogger().info("<" + who + "> issued discord command: "+DiscordBot.prefix + "bot reload");
                     break;
                 case "disable":
                     DiscordBot.sendImportantMessage("Я выключился!");
-                    DiscordLogger.getInstance().getLogger().info("<" + who + "> issued discord command: ~bot disable");
+                    DiscordLogger.getInstance().getLogger().info("<" + who + "> issued discord command: "+DiscordBot.prefix + "bot disable");
                     DiscordBot.shutdown();
                     break;
                 case "restart":
@@ -83,7 +84,7 @@ public class RemoteConfigControl extends ListenerAdapter {
                     }
                     DiscordLogger.getInstance().loadDiscordBot();
 
-                    DiscordLogger.getInstance().getLogger().info("<" + who + "> issued discord command: ~bot restart");
+                    DiscordLogger.getInstance().getLogger().info("<" + who + "> issued discord command: "+DiscordBot.prefix + "bot restart");
                     DiscordBot.sendImportantMessage("Я перезагрузился! (" + who + ")");
                     break;
                 case "developers":
@@ -116,7 +117,7 @@ public class RemoteConfigControl extends ListenerAdapter {
                         DiscordBot.sendImportantMessage("Локальный чат включен! (" + who + ")");
                         DiscordLogger.getInstance().getConfig().set("local-chat", true);
                     }
-                    DiscordLogger.getInstance().getLogger().info("<" + who + "> issued discord command: ~toggle");
+                    DiscordLogger.getInstance().getLogger().info("<" + who + "> issued discord command: "+DiscordBot.prefix + "bot toggle");
                     break;
                 case "version":
                     event.getChannel().sendMessage("Версия бота: v" + DiscordLogger.getInstance().getDescription().getVersion()).queue();

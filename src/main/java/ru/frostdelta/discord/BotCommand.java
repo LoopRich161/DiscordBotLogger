@@ -57,7 +57,7 @@ public class BotCommand implements CommandExecutor {
             switch (args[0]) {
                 case "help":
                     sender.sendMessage(ChatColor.GOLD + "Доступные команды:\n" +
-                            ChatColor.DARK_PURPLE + "/toggle - переключение локального чата.\n" +
+                            ChatColor.DARK_PURPLE + "/bot toggle - переключение локального чата.\n" +
                             ChatColor.DARK_PURPLE + "/bot reload - перезагрузка конфига.\n" +
                             ChatColor.DARK_PURPLE + "/bot disable - выключение бота.\n" +
                             ChatColor.DARK_PURPLE + "/bot restart - перезагрузка бота.\n" +

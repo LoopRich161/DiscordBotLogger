@@ -42,11 +42,12 @@ public class BotCommandAdapter extends ListenerAdapter {
                 for (String allowedCmd : whitelist) {
                     if (args[1].contains(allowedCmd)) {
                         new SyncTasks(new FakePlayer(DiscordLogger.getInstance().getNetwork().getAccountMinecraftName(event.getAuthor())), cmd, Task.COMMAND).runTask(DiscordLogger.getInstance());
-                        break;
+                        return;
                     }
                 }
             } else
                 new SyncTasks(new FakePlayer(DiscordLogger.getInstance().getNetwork().getAccountMinecraftName(event.getAuthor())), cmd, Task.COMMAND).runTask(DiscordLogger.getInstance());
+            DiscordLogger.getInstance().getLogger().info("<" + event.getAuthor().getAsTag() + "> issued discord command: "+DiscordBot.prefix + "command "+cmd);
         }
 
         if (botCommand.equalsIgnoreCase(DiscordBot.prefix + "dispatch")) {
@@ -59,10 +60,11 @@ public class BotCommandAdapter extends ListenerAdapter {
             boolean access = permission.playerHas(Bukkit.getServer().getWorlds().get(0).getName(), Bukkit.getOfflinePlayer(playerName), Util.getPermission());
             if(access){
                 if(args.length <= 1){
-                    DiscordBot.sendImportantMessage("Использование комманды - ~dispatch <command>");
+                    DiscordBot.sendImportantMessage("Использование комманды - "+DiscordBot.prefix+"dispatch <command>");
                 }
                 String cmd = Util.buildCommand(Arrays.copyOfRange(args, 1, args.length));
                 new SyncTasks(new FakePlayerCommandSender(playerName), cmd, Task.DISPATCH).runTask(DiscordLogger.getInstance());
+                DiscordLogger.getInstance().getLogger().info("<" + event.getAuthor().getAsTag() + "> issued discord command: "+DiscordBot.prefix + "dispatch "+cmd);
             }
         }
 
@@ -73,6 +75,8 @@ public class BotCommandAdapter extends ListenerAdapter {
             }
             String message = Util.buildCommand(Arrays.copyOfRange(args, 1, args.length));
             new SyncTasks(DiscordLogger.getInstance().getNetwork().getAccountMinecraftName(event.getAuthor()), message, Task.CHAT).runTask(DiscordLogger.getInstance());
+            DiscordLogger.getInstance().getLogger().info("<" + event.getAuthor().getAsTag() + "> issued discord command: "+DiscordBot.prefix + "chat "+message);
+
         }
     }
 

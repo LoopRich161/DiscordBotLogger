@@ -45,7 +45,7 @@ public class Authentication {
         if (!hasTime()) {
             DiscordLogger.getInstance().getNetwork().deauthentication(player);
             player.sendMessage(ChatColor.RED + "Время для подтверждения кода вышло!");
-            DiscordBot.sendVerifyMessage("Время для подтверждения кода игрока" + playerName + " вышло!");
+            DiscordBot.sendVerifyMessage("Время для подтверждения кода игрока " + playerName + " вышло!");
         } else {
             player.sendMessage(ChatColor.GREEN + "Вы согласились связать Minecraft и Discord аккаунты.");
             DiscordBot.sendVerifyMessage("Игрок " + playerName + " согласился связать Minecraft и Discord аккаунты.");
