@@ -2,6 +2,8 @@ package ru.frostdelta.discord;
 
 import org.bukkit.Bukkit;
 import org.bukkit.scheduler.BukkitRunnable;
+import ru.frostdelta.discord.fake.FakePlayer;
+import ru.frostdelta.discord.fake.FakePlayerCommandSender;
 import ru.looprich.discordlogger.module.DiscordBot;
 
 public class SyncTasks extends BukkitRunnable {

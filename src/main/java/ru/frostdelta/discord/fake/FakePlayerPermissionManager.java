@@ -1,4 +1,4 @@
-package ru.frostdelta.discord;
+package ru.frostdelta.discord.fake;
 
 import net.milkbowl.vault.chat.Chat;
 import net.milkbowl.vault.permission.Permission;

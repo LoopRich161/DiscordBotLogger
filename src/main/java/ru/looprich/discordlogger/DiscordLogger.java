@@ -10,7 +10,7 @@ import org.bukkit.event.server.RemoteServerCommandEvent;
 import org.bukkit.event.server.ServerCommandEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 import ru.frostdelta.discord.BotCommand;
-import ru.frostdelta.discord.FakePlayerPermissionManager;
+import ru.frostdelta.discord.fake.FakePlayerPermissionManager;
 import ru.looprich.discordlogger.event.EventListener;
 import ru.looprich.discordlogger.module.DiscordBot;
 

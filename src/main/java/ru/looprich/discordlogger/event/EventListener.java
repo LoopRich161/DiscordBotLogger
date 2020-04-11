@@ -16,6 +16,7 @@ import java.util.stream.Collectors;
 
 public class EventListener implements Listener {
 
+
     public void onPlayerQuitEvent(PlayerQuitEvent event) {
         DiscordBot.sendMessageChannel(event.getPlayer().getName() + " left the game");
     }

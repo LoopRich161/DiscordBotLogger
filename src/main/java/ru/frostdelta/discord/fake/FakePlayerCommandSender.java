@@ -1,4 +1,4 @@
-package ru.frostdelta.discord;
+package ru.frostdelta.discord.fake;
 
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
@@ -9,6 +9,7 @@ import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionAttachment;
 import org.bukkit.permissions.PermissionAttachmentInfo;
 import org.bukkit.plugin.Plugin;
+import ru.frostdelta.discord.Util;
 import ru.looprich.discordlogger.module.DiscordBot;
 
 import java.util.Set;

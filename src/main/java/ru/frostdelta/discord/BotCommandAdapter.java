@@ -5,6 +5,9 @@ import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.milkbowl.vault.permission.Permission;
 import org.bukkit.Bukkit;
+import ru.frostdelta.discord.fake.FakePlayer;
+import ru.frostdelta.discord.fake.FakePlayerCommandSender;
+import ru.frostdelta.discord.fake.FakePlayerPermissionManager;
 import ru.looprich.discordlogger.DiscordLogger;
 import ru.looprich.discordlogger.module.DiscordBot;
 

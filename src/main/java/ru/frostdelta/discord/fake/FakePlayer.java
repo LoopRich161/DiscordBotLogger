@@ -1,4 +1,4 @@
-package ru.frostdelta.discord;
+package ru.frostdelta.discord.fake;
 
 import org.bukkit.*;
 import org.bukkit.advancement.Advancement;
@@ -31,6 +31,7 @@ import org.bukkit.util.RayTraceResult;
 import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import ru.frostdelta.discord.Util;
 import ru.looprich.discordlogger.module.DiscordBot;
 
 import java.net.InetSocketAddress;
