@@ -108,7 +108,7 @@ public class DiscordLogger extends JavaPlugin {
                     (listener, event) -> eventHandler.onPlayerDeathEvent((PlayerDeathEvent) event), this);
             getLogger().info("Tracing on player death enabled.");
         }
-        if (getConfig().getBoolean("tracing.server-broadcast")) {
+        if (getConfig().getBoolean("tracing.server-broadcast") && !Bukkit.getServer().getBukkitVersion().contains("1.7")) {
             Bukkit.getPluginManager().registerEvent(BroadcastMessageEvent.class, eventHandler, EventPriority.MONITOR,
                     (listener, event) -> eventHandler.onBroadcastMessageEvent((BroadcastMessageEvent) event), this);
             getLogger().info("Tracing on server broadcast enabled.");
