@@ -29,6 +29,7 @@ ignored-commands:
   - ban
 
 admin-permission: discordlogger.admin
+admin-discord: 'Example#9999'
 
 bot:
   #Статус бота: true - включен, false - выключен

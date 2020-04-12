@@ -12,7 +12,7 @@ public class ErrorLogger extends AbstractAppender {
 
     @Override
     public void append(LogEvent logEvent) {
-        //wait test
+        //TODO wait test
         System.out.println("logEvent.getLevel(): " + logEvent.getLevel());
         System.out.println("logEvent.getMessage(): " + logEvent.getMessage());
         System.out.println("logEvent.getThrown().getMessage(): " + logEvent.getThrown().getMessage());

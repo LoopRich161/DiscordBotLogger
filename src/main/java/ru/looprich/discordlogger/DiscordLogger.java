@@ -1,5 +1,9 @@
 package ru.looprich.discordlogger;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.core.Appender;
+import org.apache.logging.log4j.core.LoggerContext;
+import org.apache.logging.log4j.core.config.Configuration;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.event.EventPriority;
@@ -11,6 +15,7 @@ import org.bukkit.event.server.ServerCommandEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 import ru.frostdelta.discord.bot.BotCommand;
 import ru.frostdelta.discord.fake.FakePlayerPermissionManager;
+import ru.looprich.discordlogger.event.ErrorLogger;
 import ru.looprich.discordlogger.event.EventListener;
 import ru.looprich.discordlogger.module.DiscordBot;
 
@@ -40,6 +45,7 @@ public class DiscordLogger extends JavaPlugin {
             loadDiscordBot();
             BotCommand.reg();
             FakePlayerPermissionManager.load();
+            regErrorLogger();
         } else getLogger().info("DiscordBotLogging disabled!");
         getServer().getConsoleSender().sendMessage(ChatColor.WHITE + "Authors: " + getDescription().getAuthors());
         getServer().getConsoleSender().sendMessage(ChatColor.WHITE + "WebSite: " + getDescription().getWebsite());
@@ -54,7 +60,6 @@ public class DiscordLogger extends JavaPlugin {
             getPluginLoader().disablePlugin(this);
         } else getLogger().info("Bot v" + this.getDescription().getVersion() + " successful loaded!");
     }
-
     private void checkDatabase() {
         String url = getConfig().getString("network.url");
         String username = getConfig().getString("network.username");
@@ -130,6 +135,17 @@ public class DiscordLogger extends JavaPlugin {
     public static DiscordLogger getInstance() {
         return plugin;
     }
+
+    private void regErrorLogger() {
+        LoggerContext ctx = (LoggerContext) LogManager.getContext(false);
+        Configuration conf = ctx.getConfiguration();
+
+        Appender consoleAppender = conf.getAppenders().get("TerminalConsole");
+        ErrorLogger errorLogger = new ErrorLogger(consoleAppender);
+        errorLogger.start();
+        ctx.updateLoggers(conf);
+    }
+
 
     @Override
     public void onDisable() {
