@@ -4,6 +4,8 @@ import net.dv8tion.jda.api.utils.MarkdownSanitizer;
 import org.bukkit.ChatColor;
 import ru.looprich.discordlogger.DiscordLogger;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -46,5 +48,15 @@ public class Util {
 
     public static String cancelFormatMessage(String message) {
         return MarkdownSanitizer.escape(message);
+    }
+
+    public static boolean isDate(String date) {
+        SimpleDateFormat formatForDateNow = new SimpleDateFormat("yyyy-MM-dd");
+        try {
+            formatForDateNow.parse(date);
+            return true;
+        } catch (ParseException e) {
+            return false;
+        }
     }
 }

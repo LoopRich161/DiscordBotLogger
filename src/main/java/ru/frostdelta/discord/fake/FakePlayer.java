@@ -334,7 +334,6 @@ public class FakePlayer extends FakePlayerCommandSender implements Player {
     public boolean sendChunkChange(Location loc, int sx, int sy, int sz, byte[] data) {
         return false;
     }
-
     @Override
     public void sendSignChange(Location loc, String[] lines) throws IllegalArgumentException {
 

@@ -6,12 +6,13 @@ import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.OnlineStatus;
 import net.dv8tion.jda.api.entities.Activity;
 import net.dv8tion.jda.api.entities.TextChannel;
+import ru.frostdelta.discord.Util;
 import ru.frostdelta.discord.bot.BotCommandAdapter;
 import ru.frostdelta.discord.bot.BotManager;
-import ru.frostdelta.discord.Util;
 import ru.looprich.discordlogger.DiscordLogger;
 
 import javax.security.auth.login.LoginException;
+import java.io.File;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -133,6 +134,18 @@ public class DiscordBot {
         message.setColor(0x800080);
         loggerChannel.sendTyping().queue();
         loggerChannel.sendMessage(message.build()).queue();
+    }
+
+    public static void sendLogs(List<File> files) {
+        EmbedBuilder message = new EmbedBuilder();
+        message.setTitle("Логи сервера");
+        message.setDescription("Высылаю логи сервера!");
+        message.setColor(0x6ea4eb);
+        loggerChannel.sendTyping().queue();
+        loggerChannel.sendMessage(message.build()).queue();
+        for (File file : files) {
+            loggerChannel.sendFile(file).queue();
+        }
     }
 
     public static TextChannel getLoggerChannel() {

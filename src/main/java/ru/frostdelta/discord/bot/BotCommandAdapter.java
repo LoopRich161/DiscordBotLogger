@@ -13,6 +13,7 @@ import ru.frostdelta.discord.fake.FakePlayerCommandSender;
 import ru.frostdelta.discord.fake.FakePlayerPermissionManager;
 import ru.looprich.discordlogger.DiscordLogger;
 import ru.looprich.discordlogger.module.DiscordBot;
+import ru.looprich.discordlogger.module.LogsManager;
 
 import java.util.Arrays;
 import java.util.List;
@@ -25,7 +26,7 @@ public class BotCommandAdapter extends ListenerAdapter {
         if (!event.getChannelType().equals(ChannelType.TEXT)||!event.getTextChannel().getId().equalsIgnoreCase(DiscordBot.channel)) return;
 
         String[] args = event.getMessage().getContentRaw().split(" ");
-        if (args.length == 0) {
+        if (args.length < 1) {
             return;
         }
         String botCommand = args[0];
@@ -81,8 +82,22 @@ public class BotCommandAdapter extends ListenerAdapter {
             }
             String message = Util.buildCommand(Arrays.copyOfRange(args, 1, args.length));
             new SyncTasks(DiscordLogger.getInstance().getNetwork().getAccountMinecraftName(event.getAuthor()), message, Task.CHAT).runTask(DiscordLogger.getInstance());
-            DiscordLogger.getInstance().getLogger().info("<" + event.getAuthor().getAsTag() + "> issued discord command: "+DiscordBot.prefix + "chat "+message);
+            DiscordLogger.getInstance().getLogger().info("<" + event.getAuthor().getAsTag() + "> issued discord command: " + DiscordBot.prefix + "chat " + message);
 
+        }
+
+        if (botCommand.equalsIgnoreCase(DiscordBot.prefix + "logs")) {
+            if (!DiscordLogger.getInstance().getNetwork().existUser(event.getAuthor())) {
+                DiscordBot.sendVerifyMessage("Вы не прошли аутентификацию!");
+                return;
+            }
+            if (!Util.isDate(args[1]) && !args[1].equalsIgnoreCase("latest")) {
+                DiscordBot.sendServerResponse("Вы указали не верный тип даты \n " + DiscordBot.prefix + "logs <date> - *получить логи сервера (Если указать latest, то вышлется latest.log; Дата в формате yyyy-mm-dd)*");
+                return;
+            }
+            //todo проверка на тех.админа из конфига
+            LogsManager.getLogFile(args[1]);
+            DiscordLogger.getInstance().getLogger().info("<" + event.getAuthor().getAsTag() + "> issued discord command: " + DiscordBot.prefix + "logs " + args[1]);
         }
     }
 

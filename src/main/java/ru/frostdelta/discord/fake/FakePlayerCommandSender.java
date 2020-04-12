@@ -26,8 +26,6 @@ public class FakePlayerCommandSender implements CommandSender {
         player = offlinePlayer.getPlayer();
         isOnline = player != null;
         permission = FakePlayerPermissionManager.getFakePlayerPermissions();
-        //Bukkit.broadcastMessage(String.valueOf(npc.isSpawned()));
-        //Bukkit.broadcastMessage(Util.getFakePlayerNPC(name).getEntity().toString());
     }
 
     public void setRotation(float yaw, float pitch) {
