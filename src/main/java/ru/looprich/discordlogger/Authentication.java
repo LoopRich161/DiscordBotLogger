@@ -1,7 +1,6 @@
 package ru.looprich.discordlogger;
 
 import net.dv8tion.jda.api.entities.User;
-import net.dv8tion.jda.api.exceptions.ErrorResponseException;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -14,7 +13,7 @@ public class Authentication {
     private User user;
     private Player player;
     private String playerName;
-    private boolean canSendPrivateMsg;
+    private boolean canSendPrivateMsg = false;
     private StringBuilder code = new StringBuilder();
     private final String[] allLetter = {"Q", "W", "E", "R", "T", "Y", "U", "I", "O", "P", "A", "S", "D", "F", "G", "H", "J",
             "K", "L", "Z", "X", "C", "V", "B", "N", "M", "1", "2", "3", "4", "5", "6", "7", "8", "9", "0"};
@@ -80,25 +79,15 @@ public class Authentication {
 
     }
 
-    private void sendMessageToUser(String message) {
-        try{
-            user.openPrivateChannel().queue((channel) -> {
-                channel.sendMessage(message).queue();
-            });
-            canSendPrivateMsg = true;
-        }catch (ErrorResponseException ex){
-            canSendPrivateMsg = false;
-        }
-
-    }
-
     private void sendingCode() {
         for (int i = 1; i < 7; i++)
             code.append(allLetter[random.nextInt(allLetter.length)]);
         DiscordBot.sendVerifyMessage(user.getAsTag() + " проверьте личные сообщения. Вам выслан код подтверждения!");
-        sendMessageToUser("Код подтверждения: " + code.toString() + "\n" +
+        if (DiscordBot.sendMessageUser(user, "Код подтверждения: " + code.toString() + "\n" +
                 "Введите на сервере: /auth accept <code> - для завершения аутентификации.\n" +
-                "Введите на сервере: /auth reject - для отказа в завершении аутентификации");
+                "Введите на сервере: /auth reject - для отказа в завершении аутентификации")) {
+            canSendPrivateMsg = true;
+        }
     }
 
     private boolean hasTime() {

@@ -2,6 +2,7 @@ package ru.looprich.discordlogger;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.core.Appender;
+import org.apache.logging.log4j.core.Logger;
 import org.apache.logging.log4j.core.LoggerContext;
 import org.apache.logging.log4j.core.config.Configuration;
 import org.bukkit.Bukkit;
@@ -45,7 +46,6 @@ public class DiscordLogger extends JavaPlugin {
             loadDiscordBot();
             BotCommand.reg();
             FakePlayerPermissionManager.load();
-            regErrorLogger();
         } else getLogger().info("DiscordBotLogging disabled!");
         getServer().getConsoleSender().sendMessage(ChatColor.WHITE + "Authors: " + getDescription().getAuthors());
         getServer().getConsoleSender().sendMessage(ChatColor.WHITE + "WebSite: " + getDescription().getWebsite());
@@ -60,6 +60,7 @@ public class DiscordLogger extends JavaPlugin {
             getPluginLoader().disablePlugin(this);
         } else getLogger().info("Bot v" + this.getDescription().getVersion() + " successful loaded!");
     }
+
     private void checkDatabase() {
         String url = getConfig().getString("network.url");
         String username = getConfig().getString("network.username");
@@ -106,7 +107,7 @@ public class DiscordLogger extends JavaPlugin {
                     (listener, event) -> eventHandler.onPlayerAdvancementDoneEvent((PlayerAdvancementDoneEvent) event), this);
             getLogger().info("Tracing on player achievement enabled.");
         }
-        if (getConfig().getBoolean("tracing.player-death")){
+        if (getConfig().getBoolean("tracing.player-death")) {
             Bukkit.getPluginManager().registerEvent(PlayerDeathEvent.class, eventHandler, EventPriority.MONITOR,
                     (listener, event) -> eventHandler.onPlayerDeathEvent((PlayerDeathEvent) event), this);
             getLogger().info("Tracing on player death enabled.");
@@ -136,14 +137,17 @@ public class DiscordLogger extends JavaPlugin {
         return plugin;
     }
 
-    private void regErrorLogger() {
+    public void regErrorLogger() {
         LoggerContext ctx = (LoggerContext) LogManager.getContext(false);
         Configuration conf = ctx.getConfiguration();
+        Appender terminalAppender = conf.getAppenders().get("TerminalConsole");
+        Logger rootLogger = ((Logger) LogManager.getRootLogger());
 
-        Appender consoleAppender = conf.getAppenders().get("TerminalConsole");
-        ErrorLogger errorLogger = new ErrorLogger(consoleAppender);
+        ErrorLogger errorLogger = new ErrorLogger(terminalAppender);
         errorLogger.start();
-        ctx.updateLoggers(conf);
+
+        rootLogger.addAppender(errorLogger);
+
     }
 
 

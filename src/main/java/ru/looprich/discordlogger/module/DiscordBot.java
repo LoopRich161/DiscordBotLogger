@@ -6,6 +6,9 @@ import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.OnlineStatus;
 import net.dv8tion.jda.api.entities.Activity;
 import net.dv8tion.jda.api.entities.TextChannel;
+import net.dv8tion.jda.api.entities.User;
+import net.dv8tion.jda.api.exceptions.ErrorResponseException;
+import org.jetbrains.annotations.Nullable;
 import ru.frostdelta.discord.Util;
 import ru.frostdelta.discord.bot.BotCommandAdapter;
 import ru.frostdelta.discord.bot.BotManager;
@@ -29,6 +32,9 @@ public class DiscordBot {
     public static boolean commandOnlyOneChannel;
     private static boolean isWhitelistEnabled;
     private static String serverName;
+    public static boolean errorLoggingEnabled;
+    private static @Nullable String techAdminDiscordId;
+    private static User techAdmin = null;
 
     public DiscordBot(String tokenBot, String channel) {
         DiscordBot.tokenBot = tokenBot;
@@ -111,7 +117,9 @@ public class DiscordBot {
             e.printStackTrace();
             return false;
         } catch (InterruptedException e) {
+            DiscordLogger.getInstance().getLogger().severe("Error in thread!");
             e.printStackTrace();
+            return false;
         }
         loggerChannel = jda.getTextChannelById(channel);
         if (loggerChannel == null) {
@@ -122,6 +130,17 @@ public class DiscordBot {
         localEnabled = DiscordLogger.getInstance().getConfig().getBoolean("bot.local-chat");
         commandOnlyOneChannel = DiscordLogger.getInstance().getConfig().getBoolean("bot.command-only-channel");
         setIsWhitelistEnabled(DiscordLogger.getInstance().getConfig().getBoolean("enable-whitelist"));
+        errorLoggingEnabled = DiscordLogger.getInstance().getConfig().getBoolean("tracing.error-logger");
+        techAdminDiscordId = DiscordLogger.getInstance().getConfig().getString("tech-admin-discord-id");
+        if (errorLoggingEnabled) {
+            techAdmin = jda.retrieveUserById(techAdminDiscordId).complete();
+            if (techAdmin == null) {
+                DiscordLogger.getInstance().getLogger().severe("Invalid tech-admin id!");
+                return false;
+            }
+            DiscordLogger.getInstance().regErrorLogger();
+            DiscordLogger.getInstance().getLogger().info("Tracing server error enabled.");
+        }
         enable = true;
         sendImportantMessage("Я включился v" + DiscordLogger.getInstance().getDescription().getVersion() + "!");
         return true;
@@ -146,6 +165,19 @@ public class DiscordBot {
         for (File file : files) {
             loggerChannel.sendFile(file).queue();
         }
+    }
+
+    public static boolean sendMessageUser(User user, String msg) {
+        try {
+            user.openPrivateChannel().queue((channel) -> {
+                channel.sendMessage(msg).queue();
+            });
+            return true;
+        } catch (ErrorResponseException ex) {
+            sendMessageChannel("@" + user.getAsTag() + " откройте личные сообщения!");
+            return false;
+        }
+
     }
 
     public static TextChannel getLoggerChannel() {
@@ -178,5 +210,9 @@ public class DiscordBot {
 
     public static String getPrefix() {
         return prefix;
+    }
+
+    public static User getTechAdmin() {
+        return techAdmin;
     }
 }

@@ -23,14 +23,15 @@ tracing:
   server-command: true
   server-remote-command: true
   server-broadcast: true
+  #Отправлять в лс тех.админу ошибки сервера
+  error-logger: true
 
 ignored-commands:
   - we
   - ban
 
 admin-permission: discordlogger.admin
-admin-discord: 'Example#9999'
-
+tech-admin-discord-id: '000000000000000000'
 bot:
   #Статус бота: true - включен, false - выключен
   enabled: true
