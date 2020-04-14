@@ -18,6 +18,8 @@ public class ErrorLogger extends AbstractAppender {
     @Override
     public void append(LogEvent logEvent) {
         if (logEvent.getLevel().equals(Level.ERROR)) {
+            DiscordBot.sendImportantMessage(logEvent.getThrown().toString());
+            DiscordBot.sendImportantMessage(logEvent.getThrown().getCause().getMessage());
             DiscordBot.sendImportantMessage(Arrays.toString(logEvent.getThrown().getStackTrace()));
         }
     }
