@@ -17,7 +17,6 @@ public class ErrorLogger extends AbstractAppender {
     @Override
     public void append(LogEvent logEvent) {
         if (logEvent.getLevel().equals(Level.ERROR)) {
-            //todo
             StringBuilder message = new StringBuilder(logEvent.getMessage().getFormattedMessage());
             Throwable throwable = logEvent.getThrown();
             if (throwable != null) {
