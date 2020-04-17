@@ -6,7 +6,7 @@
 
     <groupId>ru.looprich.discordlogger</groupId>
     <artifactId>DiscordBotLogger</artifactId>
-    <version>3.4</version>
+    <version>3.6</version>
 
 
     <scm>
@@ -60,7 +60,7 @@
         <repository>
             <id>jcenter</id>
             <name>jcenter-bintray</name>
-            <url>http://jcenter.bintray.com</url>
+            <url>https://jcenter.bintray.com</url>
         </repository>
         <repository>
             <id>spigot-repo</id>
