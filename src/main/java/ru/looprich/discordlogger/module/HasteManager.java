@@ -30,6 +30,7 @@ public class HasteManager {
         try (DataOutputStream dos = new DataOutputStream(connection.getOutputStream())){
 
             for(String in : input) {
+                in += "\n";
                 dos.write(in.getBytes(StandardCharsets.UTF_8));
             }
             dos.flush();

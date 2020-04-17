@@ -7,6 +7,11 @@ import org.apache.logging.log4j.core.LogEvent;
 import org.apache.logging.log4j.core.appender.AbstractAppender;
 import org.apache.logging.log4j.core.util.Throwables;
 import ru.looprich.discordlogger.module.DiscordBot;
+import ru.looprich.discordlogger.module.HasteManager;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class ErrorLogger extends AbstractAppender {
@@ -17,13 +22,20 @@ public class ErrorLogger extends AbstractAppender {
     @Override
     public void append(LogEvent logEvent) {
         if (logEvent.getLevel().equals(Level.ERROR)) {
-            StringBuilder message = new StringBuilder(logEvent.getMessage().getFormattedMessage());
+            List<String> errorMessage = new ArrayList<>();
+            errorMessage.add(logEvent.getMessage().getFormattedMessage());
             Throwable throwable = logEvent.getThrown();
             if (throwable != null) {
-                for (String s : Throwables.toStringList(throwable)) {
-                    message.append("\n").append(s);
+                errorMessage.addAll(Throwables.toStringList(throwable));
+                try {
+                    String url = HasteManager.post(errorMessage);
+                    DiscordBot.sendMessageUser(DiscordBot.getTechAdmin(), "Найдена ошибка на сервере: " + url);
+                } catch (IOException e) {
+                    DiscordBot.sendMessageUser(DiscordBot.getTechAdmin(), "Найдена ошибка на сервере: " + errorMessage.toString()
+                            .replaceAll(", ", "\n")
+                            .replace("[", "").replace("]", ""));
                 }
-                DiscordBot.sendMessageTechAdmin(message.toString());
+
             }
         }
     }
