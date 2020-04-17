@@ -176,6 +176,18 @@ public class DiscordBot {
         }
     }
 
+    public static void sendMessageTechAdmin(String msg) {
+        EmbedBuilder message = new EmbedBuilder();
+        message.setTitle("Ошибка на сервере");
+        message.setDescription(msg);
+        message.setColor(0xf45642);
+        try {
+            getTechAdmin().openPrivateChannel().complete().sendMessage(message.build()).complete();
+        } catch (ErrorResponseException e) {
+            loggerChannel.sendMessage(getTechAdmin().getAsMention() + " откройте личные сообщения!").queue();
+        }
+    }
+
     public static TextChannel getLoggerChannel() {
         return loggerChannel;
     }

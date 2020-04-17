@@ -5,9 +5,8 @@ import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.core.Appender;
 import org.apache.logging.log4j.core.LogEvent;
 import org.apache.logging.log4j.core.appender.AbstractAppender;
+import org.apache.logging.log4j.core.util.Throwables;
 import ru.looprich.discordlogger.module.DiscordBot;
-
-import java.util.Arrays;
 
 
 public class ErrorLogger extends AbstractAppender {
@@ -18,9 +17,15 @@ public class ErrorLogger extends AbstractAppender {
     @Override
     public void append(LogEvent logEvent) {
         if (logEvent.getLevel().equals(Level.ERROR)) {
-            DiscordBot.sendImportantMessage(logEvent.getThrown().toString());
-            DiscordBot.sendImportantMessage(logEvent.getThrown().getCause().getMessage());
-            DiscordBot.sendImportantMessage(Arrays.toString(logEvent.getThrown().getStackTrace()));
+            //todo
+            StringBuilder message = new StringBuilder(logEvent.getMessage().getFormattedMessage());
+            Throwable throwable = logEvent.getThrown();
+            if (throwable != null) {
+                for (String s : Throwables.toStringList(throwable)) {
+                    message.append("\n").append(s);
+                }
+                DiscordBot.sendMessageTechAdmin(message.toString());
+            }
         }
     }
 }
