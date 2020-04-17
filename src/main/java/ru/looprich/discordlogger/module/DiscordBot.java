@@ -8,7 +8,6 @@ import net.dv8tion.jda.api.entities.Activity;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.exceptions.ErrorResponseException;
-import org.jetbrains.annotations.Nullable;
 import ru.frostdelta.discord.Util;
 import ru.frostdelta.discord.bot.BotCommandAdapter;
 import ru.frostdelta.discord.bot.BotManager;
@@ -33,7 +32,7 @@ public class DiscordBot {
     private static boolean isWhitelistEnabled;
     private static String serverName;
     public static boolean errorLoggingEnabled;
-    private static @Nullable String techAdminDiscordId;
+    private static String techAdminDiscordId;
     private static User techAdmin = null;
 
     public DiscordBot(String tokenBot, String channel) {
@@ -169,15 +168,12 @@ public class DiscordBot {
 
     public static boolean sendMessageUser(User user, String msg) {
         try {
-            user.openPrivateChannel().queue((channel) -> {
-                channel.sendMessage(msg).queue();
-            });
+            user.openPrivateChannel().complete().sendMessage(msg).complete();
             return true;
-        } catch (ErrorResponseException ex) {
-            sendMessageChannel("@" + user.getAsTag() + " откройте личные сообщения!");
+        } catch (ErrorResponseException e) {
+            loggerChannel.sendMessage(user.getAsMention() + " откройте личные сообщения!").queue();
             return false;
         }
-
     }
 
     public static TextChannel getLoggerChannel() {
