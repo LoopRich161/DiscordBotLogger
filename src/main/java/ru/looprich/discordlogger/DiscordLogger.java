@@ -8,7 +8,6 @@ import org.apache.logging.log4j.core.config.Configuration;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.event.EventPriority;
-import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.*;
 import org.bukkit.event.server.BroadcastMessageEvent;
 import org.bukkit.event.server.RemoteServerCommandEvent;
@@ -106,11 +105,6 @@ public class DiscordLogger extends JavaPlugin {
             Bukkit.getPluginManager().registerEvent(PlayerAdvancementDoneEvent.class, eventHandler, EventPriority.MONITOR,
                     (listener, event) -> eventHandler.onPlayerAdvancementDoneEvent((PlayerAdvancementDoneEvent) event), this);
             getLogger().info("Tracing on player achievement enabled.");
-        }
-        if (getConfig().getBoolean("tracing.player-death")) {
-            Bukkit.getPluginManager().registerEvent(PlayerDeathEvent.class, eventHandler, EventPriority.MONITOR,
-                    (listener, event) -> eventHandler.onPlayerDeathEvent((PlayerDeathEvent) event), this);
-            getLogger().info("Tracing on player death enabled.");
         }
         if (getConfig().getBoolean("tracing.server-broadcast") && !Bukkit.getServer().getBukkitVersion().contains("1.7")) {
             Bukkit.getPluginManager().registerEvent(BroadcastMessageEvent.class, eventHandler, EventPriority.MONITOR,
