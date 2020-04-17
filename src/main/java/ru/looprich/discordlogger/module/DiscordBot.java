@@ -184,6 +184,10 @@ public class DiscordBot {
         return jda;
     }
 
+    public static String getServerName() {
+        return serverName;
+    }
+
     public static boolean isIsWhitelistEnabled() {
         return isWhitelistEnabled;
     }

@@ -29,9 +29,9 @@ public class ErrorLogger extends AbstractAppender {
                 errorMessage.addAll(Throwables.toStringList(throwable));
                 try {
                     String url = HasteManager.post(errorMessage);
-                    DiscordBot.sendMessageUser(DiscordBot.getTechAdmin(), "Найдена ошибка на сервере: " + url);
+                    DiscordBot.sendMessageUser(DiscordBot.getTechAdmin(), "Найдена ошибка на сервере " + DiscordBot.getServerName() + ": " + url);
                 } catch (IOException e) {
-                    DiscordBot.sendMessageUser(DiscordBot.getTechAdmin(), "Найдена ошибка на сервере: " + errorMessage.toString()
+                    DiscordBot.sendMessageUser(DiscordBot.getTechAdmin(), "Найдена ошибка на сервере " + DiscordBot.getServerName() + ": " + errorMessage.toString()
                             .replaceAll(", ", "\n")
                             .replace("[", "").replace("]", ""));
                 }
