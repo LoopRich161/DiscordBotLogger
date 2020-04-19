@@ -13,16 +13,24 @@ import ru.frostdelta.discord.Util;
 import ru.looprich.discordlogger.module.DiscordBot;
 
 import java.util.Set;
+import java.util.UUID;
 
 public class FakePlayerCommandSender implements CommandSender {
 
-    private OfflinePlayer offlinePlayer;
-    private Player player;
-    private boolean isOnline;
-    private net.milkbowl.vault.permission.Permission permission;
+    private final OfflinePlayer offlinePlayer;
+    private final Player player;
+    private final boolean isOnline;
+    private final net.milkbowl.vault.permission.Permission permission;
 
     public FakePlayerCommandSender(String name) {
         offlinePlayer = Bukkit.getOfflinePlayer(name);
+        player = offlinePlayer.getPlayer();
+        isOnline = player != null;
+        permission = FakePlayerPermissionManager.getFakePlayerPermissions();
+    }
+
+    public FakePlayerCommandSender(UUID uuid) {
+        offlinePlayer = Bukkit.getOfflinePlayer(uuid);
         player = offlinePlayer.getPlayer();
         isOnline = player != null;
         permission = FakePlayerPermissionManager.getFakePlayerPermissions();

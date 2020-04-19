@@ -7,13 +7,16 @@ import ru.frostdelta.discord.fake.FakePlayer;
 import ru.frostdelta.discord.fake.FakePlayerCommandSender;
 import ru.looprich.discordlogger.module.DiscordBot;
 
+import java.util.UUID;
+
 public class SyncTasks extends BukkitRunnable {
 
-    private Task task;
+    private final Task task;
     private String command;
     private FakePlayerCommandSender commandSender;
     private String message;
     private String fakePlayerName;
+    private UUID fakePlayerUUID;
 
 
     public SyncTasks(FakePlayerCommandSender sender, String command, Task task) {
@@ -24,6 +27,12 @@ public class SyncTasks extends BukkitRunnable {
 
     public SyncTasks(String fakePlayerName, String message, Task task) {
         this.fakePlayerName = fakePlayerName;
+        this.task = task;
+        this.message = message;
+    }
+
+    public SyncTasks(UUID uuid, String message, Task task) {
+        this.fakePlayerUUID = uuid;
         this.task = task;
         this.message = message;
     }
@@ -42,7 +51,7 @@ public class SyncTasks extends BukkitRunnable {
                 Bukkit.dispatchCommand(commandSender, command);
                 break;
             case CHAT:
-                new FakePlayer(fakePlayerName).chat(message);
+                new FakePlayer(fakePlayerUUID).chat(message);
                 break;
             case UNKNOWN:
                 break;

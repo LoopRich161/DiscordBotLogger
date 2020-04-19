@@ -82,7 +82,7 @@ public class BotCommandAdapter extends ListenerAdapter {
                 return;
             }
             String message = Util.buildCommand(Arrays.copyOfRange(args, 1, args.length));
-            new SyncTasks(DiscordLogger.getInstance().getNetwork().getAccountMinecraftName(event.getAuthor()), message, Task.CHAT).runTask(DiscordLogger.getInstance());
+            new SyncTasks(DiscordLogger.getInstance().getNetwork().getAccountMinecraftUUID(event.getAuthor()), message, Task.CHAT).runTask(DiscordLogger.getInstance());
             DiscordLogger.getInstance().getLogger().info("<" + event.getAuthor().getAsTag() + "> issued discord command: " + DiscordBot.prefix + "chat " + message);
 
         }

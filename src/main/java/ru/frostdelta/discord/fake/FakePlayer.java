@@ -14,6 +14,7 @@ import org.bukkit.conversations.ConversationAbandonedEvent;
 import org.bukkit.entity.*;
 import org.bukkit.entity.memory.MemoryKey;
 import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.inventory.*;
 import org.bukkit.map.MapView;
@@ -23,6 +24,7 @@ import org.bukkit.permissions.PermissionAttachment;
 import org.bukkit.permissions.PermissionAttachmentInfo;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.plugin.Plugin;
+import org.bukkit.plugin.PluginManager;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scoreboard.Scoreboard;
@@ -39,10 +41,12 @@ import java.util.*;
 
 public class FakePlayer extends FakePlayerCommandSender implements Player {
 
-    private OfflinePlayer offlinePlayer;
-    private Player player;
-    private net.milkbowl.vault.permission.Permission permission;
-    private String offlineName;
+    private final OfflinePlayer offlinePlayer;
+    private final Player player;
+    private final net.milkbowl.vault.permission.Permission permission;
+    private final String offlineName;
+    private final PluginManager pluginManager = Bukkit.getPluginManager();
+    private final FakePlayer thisFakePlayer = this;
 
     public FakePlayer(String name) {
         super(name);
@@ -50,6 +54,14 @@ public class FakePlayer extends FakePlayerCommandSender implements Player {
         player = super.getPlayer();
         permission = FakePlayerPermissionManager.getFakePlayerPermissions();
         offlineName = name;
+    }
+
+    public FakePlayer(UUID uuid) {
+        super(uuid);
+        offlinePlayer = super.getOfflinePlayer();
+        player = super.getPlayer();
+        permission = FakePlayerPermissionManager.getFakePlayerPermissions();
+        offlineName = offlinePlayer.getName();
     }
 
     private String sendError() {
@@ -205,7 +217,33 @@ public class FakePlayer extends FakePlayerCommandSender implements Player {
     public void chat(@NotNull String msg) {
         if (isOnline()) {
             player.chat(msg);
-        } else sendError();//else fakePlayer.chat(msg);
+        } else new Thread() {
+            @Override
+            public void run() {
+                Bukkit.getPluginManager().callEvent(new AsyncPlayerChatEvent(true, thisFakePlayer, msg, getOnlinePlayerSet(msg)));
+            }
+            //
+        }.start();
+
+        //sendError();
+    }
+
+    private Set<Player> getOnlinePlayerSet(@NotNull String msg) {
+        if (msg.startsWith("!")) {
+            return new HashSet<>(Bukkit.getOnlinePlayers());
+        } else {
+            Set<Player> playerSet = new HashSet<>();
+            //todo work with local chat
+//            double maxDist = 200;
+//            DiscordBot.sendMessageChannel("player==null: "+String.valueOf(player==null));
+//            DiscordBot.sendMessageChannel(String.valueOf(this.getLocation().toString()));
+//            for (Player other : Bukkit.getOnlinePlayers()) {
+//                if (other.getLocation().distance(this.getLocation()) <= maxDist) {
+//                    playerSet.add(other);
+//                }
+//            }
+            return playerSet;
+        }
     }
 
     @Override
@@ -1499,7 +1537,9 @@ public class FakePlayer extends FakePlayerCommandSender implements Player {
 
     @Override
     public Location getLocation() {
-        return null;
+        if (player != null)
+            return player.getLocation();
+        else return null;
     }
 
     @Override

@@ -4,6 +4,7 @@ import net.dv8tion.jda.api.entities.User;
 import org.bukkit.entity.Player;
 
 import java.sql.*;
+import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Logger;
 
@@ -15,7 +16,7 @@ public class Network {
     private final String url, user, password;
     private Connection connection;
     private long lastExecute = 0L;
-    private Logger logger;
+    private final Logger logger;
 
     Network(Logger logger, String url, String user, String password) {
         this.logger = logger;
@@ -55,6 +56,25 @@ public class Network {
                 try (ResultSet rs = preparedStatement.executeQuery()) {
                     if (rs.next()) {
                         return rs.getString("player");
+                    }
+                }
+            } catch (SQLException ex) {
+                logger.severe("Error getAccountMinecraftName");
+                ex.printStackTrace();
+            }
+        }
+        flushLastExecute();
+        return null;
+    }
+
+    public UUID getAccountMinecraftUUID(User user) {
+        this.connection = getConnection();
+        if (this.connection != null) {
+            try (PreparedStatement preparedStatement = this.connection.prepareStatement(SELECT_QUERY_USER)) {
+                preparedStatement.setString(1, user.getAsTag());
+                try (ResultSet rs = preparedStatement.executeQuery()) {
+                    if (rs.next()) {
+                        return UUID.fromString(rs.getString("playerUUID"));
                     }
                 }
             } catch (SQLException ex) {
