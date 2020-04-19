@@ -2,6 +2,7 @@ package ru.looprich.discordlogger.module;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
@@ -14,6 +15,27 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class HasteManager {
+
+    public static String post(String string) throws IOException {
+
+        Gson gson = new Gson();
+        HttpURLConnection connection = (HttpURLConnection) new URL("https://hastebin.com/documents").openConnection();
+        connection.setDoInput(true);
+        connection.setDoOutput(true);
+        connection.setUseCaches(false);
+        connection.setRequestMethod( "POST" );
+        connection.setRequestProperty("User-Agent", "Mozilla/5.0");
+        connection.setRequestProperty( "Charset", "UTF-8" );
+        connection.setRequestProperty( "Content-Type", "text/plain" );
+        connection.connect();
+        try (DataOutputStream dos = new DataOutputStream(connection.getOutputStream())){
+            dos.write(string.getBytes(StandardCharsets.UTF_8));
+            dos.flush();
+        }
+
+        return getLink(gson, connection);
+    }
+
 
     public static String post(List<String> input) throws IOException {
 
@@ -36,6 +58,11 @@ public class HasteManager {
             dos.flush();
         }
 
+        return getLink(gson, connection);
+    }
+
+    @NotNull
+    private static String getLink(Gson gson, HttpURLConnection connection) throws IOException {
         String result;
         try (BufferedReader br = new BufferedReader(new InputStreamReader(connection.getInputStream(), StandardCharsets.UTF_8)))
         {
