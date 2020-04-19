@@ -34,6 +34,7 @@ import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import ru.frostdelta.discord.Util;
+import ru.looprich.discordlogger.DiscordLogger;
 import ru.looprich.discordlogger.module.DiscordBot;
 
 import java.net.InetSocketAddress;
@@ -233,15 +234,12 @@ public class FakePlayer extends FakePlayerCommandSender implements Player {
             return new HashSet<>(Bukkit.getOnlinePlayers());
         } else {
             Set<Player> playerSet = new HashSet<>();
-            //todo work with local chat
-//            double maxDist = 200;
-//            DiscordBot.sendMessageChannel("player==null: "+String.valueOf(player==null));
-//            DiscordBot.sendMessageChannel(String.valueOf(this.getLocation().toString()));
-//            for (Player other : Bukkit.getOnlinePlayers()) {
-//                if (other.getLocation().distance(this.getLocation()) <= maxDist) {
-//                    playerSet.add(other);
-//                }
-//            }
+            double maxDist = DiscordLogger.getInstance().getConfig().getDouble("local-chat-radius");
+            for (Player other : Bukkit.getOnlinePlayers()) {
+                if (other.getLocation().distance(this.getLocation()) <= maxDist) {
+                    playerSet.add(other);
+                }
+            }
             return playerSet;
         }
     }
@@ -372,6 +370,7 @@ public class FakePlayer extends FakePlayerCommandSender implements Player {
     public boolean sendChunkChange(Location loc, int sx, int sy, int sz, byte[] data) {
         return false;
     }
+
     @Override
     public void sendSignChange(Location loc, String[] lines) throws IllegalArgumentException {
 
@@ -716,7 +715,7 @@ public class FakePlayer extends FakePlayerCommandSender implements Player {
     public void hidePlayer(Player player) {
         if (isOnline()) {
             player.hidePlayer(player);
-        }else sendError();
+        } else sendError();
     }
 
     @Override
@@ -730,14 +729,14 @@ public class FakePlayer extends FakePlayerCommandSender implements Player {
     public void showPlayer(Player player) {
         if (isOnline()) {
             player.hidePlayer(player);
-        }else sendError();
+        } else sendError();
     }
 
     @Override
     public void showPlayer(Plugin plugin, Player player) {
         if (isOnline()) {
             player.hidePlayer(plugin, player);
-        }else sendError();
+        } else sendError();
     }
 
     @Override
@@ -759,7 +758,7 @@ public class FakePlayer extends FakePlayerCommandSender implements Player {
     public void setFlying(boolean value) {
         if (isOnline()) {
             player.setFlying(value);
-        }else sendError();
+        } else sendError();
     }
 
     @Override
@@ -773,7 +772,7 @@ public class FakePlayer extends FakePlayerCommandSender implements Player {
     public void setWalkSpeed(float value) throws IllegalArgumentException {
         if (isOnline()) {
             player.setWalkSpeed(value);
-        }else sendError();
+        } else sendError();
     }
 
     @Override
@@ -1539,7 +1538,7 @@ public class FakePlayer extends FakePlayerCommandSender implements Player {
     public Location getLocation() {
         if (player != null)
             return player.getLocation();
-        else return null;
+        else return Util.getLocationOfflinePlayer(getUniqueId());
     }
 
     @Override
@@ -1933,7 +1932,7 @@ public class FakePlayer extends FakePlayerCommandSender implements Player {
     public void setCustomName(String name) {
         if (isOnline()) {
             player.setCustomName(name);
-        }else sendError();
+        } else sendError();
     }
 
     @Override

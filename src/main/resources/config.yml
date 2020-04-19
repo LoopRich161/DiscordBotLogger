@@ -29,6 +29,8 @@ ignored-commands:
   - we
   - ban
 
+local-chat-radius: 200
+
 admin-permission: discordlogger.admin
 tech-admin-discord-id: '000000000000000000'
 bot:
