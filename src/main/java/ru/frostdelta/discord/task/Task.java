@@ -1,4 +1,4 @@
-package ru.frostdelta.discord;
+package ru.frostdelta.discord.task;
 
 import java.util.HashMap;
 
@@ -15,7 +15,7 @@ public enum Task {
 
     private final String action;
 
-    private Task(String action) {
+    Task(String action) {
         this.action = action;
     }
 

@@ -9,7 +9,6 @@ import org.jnbt.CompoundTag;
 import org.jnbt.ListTag;
 import org.jnbt.NBTInputStream;
 import ru.looprich.discordlogger.DiscordLogger;
-import ru.looprich.discordlogger.module.DiscordBot;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -70,8 +69,44 @@ public class Util {
                 if (playerd.getName().startsWith(uuid.toString())) {
                     playerData = playerd;
                     worldPlayer = world;
-                    DiscordBot.sendMessageChannel("playerdataFolder: " + playerData.getAbsolutePath());
-                    DiscordBot.sendMessageChannel("worldPlayer: " + worldPlayer.getName());
+                    break;
+                }
+            }
+        }
+
+        NBTInputStream NBTIStream = null;
+        try {
+            NBTIStream = new NBTInputStream(new FileInputStream(playerData));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        CompoundTag rootCompoundTag = null;
+        try {
+            rootCompoundTag = (CompoundTag) NBTIStream.readTag();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        ListTag position = (ListTag) rootCompoundTag.getValue().get("Pos");
+        ListTag rotation = (ListTag) rootCompoundTag.getValue().get("Rotation");
+
+        double x = (double) position.getValue().get(0).getValue();
+        double y = (double) position.getValue().get(1).getValue();
+        double z = (double) position.getValue().get(2).getValue();
+        float yaw = (float) rotation.getValue().get(0).getValue();
+        float pitch = (float) rotation.getValue().get(1).getValue();
+        return new Location(worldPlayer, x, y, z, yaw, pitch);
+    }
+
+    public static Location getLocationOfflinePlayer(String playerName) {
+        UUID uuid = Bukkit.getOfflinePlayer(playerName).getUniqueId();
+        File playerData = null;
+        World worldPlayer = null;
+        for (World world : Bukkit.getWorlds()) {
+            File tempPlayerdata = new File(world.getWorldFolder(), "playerdata");
+            for (File playerd : tempPlayerdata.listFiles()) {
+                if (playerd.getName().startsWith(uuid.toString())) {
+                    playerData = playerd;
+                    worldPlayer = world;
                     break;
                 }
             }

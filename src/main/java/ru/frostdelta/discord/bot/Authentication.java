@@ -1,20 +1,21 @@
-package ru.looprich.discordlogger;
+package ru.frostdelta.discord.bot;
 
 import net.dv8tion.jda.api.entities.User;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
+import ru.looprich.discordlogger.DiscordLogger;
 import ru.looprich.discordlogger.module.DiscordBot;
 
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
 public class Authentication {
-    private User user;
+    private final User user;
     private Player player;
-    private String playerName;
+    private final String playerName;
     private boolean canSendPrivateMsg = false;
-    private StringBuilder code = new StringBuilder();
+    private final StringBuilder code = new StringBuilder();
     private final String[] allLetter = {"Q", "W", "E", "R", "T", "Y", "U", "I", "O", "P", "A", "S", "D", "F", "G", "H", "J",
             "K", "L", "Z", "X", "C", "V", "B", "N", "M", "1", "2", "3", "4", "5", "6", "7", "8", "9", "0"};
     private final Random random = new Random();

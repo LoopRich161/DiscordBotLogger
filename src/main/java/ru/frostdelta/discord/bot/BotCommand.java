@@ -5,8 +5,6 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import ru.looprich.discordlogger.Authentication;
-import ru.looprich.discordlogger.Deauthentication;
 import ru.looprich.discordlogger.DiscordLogger;
 import ru.looprich.discordlogger.module.DiscordBot;
 

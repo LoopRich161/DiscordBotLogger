@@ -60,7 +60,7 @@ public class EventListener implements Listener {
             DiscordBot.sendMessageChannel("[L]<" + event.getPlayer().getName() + "> " + Util.removeCodeColors(event.getMessage()));
     }
 
-    public void onPlayerAdvancementDoneEvent (PlayerAdvancementDoneEvent  event) {
+    public void onPlayerAdvancementDoneEvent(PlayerAdvancementDoneEvent event) {
         try {
             Object craftAdvancement = ((Object) event.getAdvancement()).getClass().getMethod("getHandle").invoke(event.getAdvancement());
             Object advancementDisplay = craftAdvancement.getClass().getMethod("c").invoke(craftAdvancement);
@@ -78,7 +78,7 @@ public class EventListener implements Listener {
                 .map(s -> s.substring(0, 1).toUpperCase() + s.substring(1))
                 .collect(Collectors.joining(" "));
 
-        DiscordBot.sendMessageChannel(event.getPlayer().getName() + " has made the achievement ["+advancementName+"]");
+        DiscordBot.sendMessageChannel(event.getPlayer().getName() + " has made the achievement [" + advancementName + "]");
     }
 
 }

@@ -91,6 +91,12 @@
             <version>1.14.2-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
+        <dependency>
+            <groupId>org.jnbt</groupId>
+            <artifactId>jnbt</artifactId>
+            <version>1.1</version>
+            <systemPath>${project.basedir}/libs/jnbt-1.1.jar</systemPath>
+        </dependency>
     </dependencies>
 
 </project>

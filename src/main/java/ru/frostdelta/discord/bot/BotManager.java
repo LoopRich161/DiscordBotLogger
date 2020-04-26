@@ -7,7 +7,6 @@ import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import ru.frostdelta.discord.Util;
-import ru.looprich.discordlogger.Authentication;
 import ru.looprich.discordlogger.DiscordLogger;
 import ru.looprich.discordlogger.module.DiscordBot;
 

@@ -1,4 +1,4 @@
-package ru.frostdelta.discord;
+package ru.frostdelta.discord.task;
 
 import org.bukkit.Bukkit;
 import org.bukkit.scheduler.BukkitRunnable;

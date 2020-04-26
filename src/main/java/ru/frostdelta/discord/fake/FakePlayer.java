@@ -223,10 +223,7 @@ public class FakePlayer extends FakePlayerCommandSender implements Player {
             public void run() {
                 Bukkit.getPluginManager().callEvent(new AsyncPlayerChatEvent(true, thisFakePlayer, msg, getOnlinePlayerSet(msg)));
             }
-            //
         }.start();
-
-        //sendError();
     }
 
     private Set<Player> getOnlinePlayerSet(@NotNull String msg) {

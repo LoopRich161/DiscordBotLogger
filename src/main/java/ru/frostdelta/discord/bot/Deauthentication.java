@@ -1,10 +1,11 @@
-package ru.looprich.discordlogger;
+package ru.frostdelta.discord.bot;
 
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
+import ru.looprich.discordlogger.DiscordLogger;
 
 public class Deauthentication {
-    private Player player;
+    private final Player player;
 
     public Deauthentication(Player player) {
         this.player = player;
