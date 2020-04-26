@@ -13,6 +13,7 @@ import org.bukkit.event.server.BroadcastMessageEvent;
 import org.bukkit.event.server.RemoteServerCommandEvent;
 import org.bukkit.event.server.ServerCommandEvent;
 import org.bukkit.plugin.java.JavaPlugin;
+import ru.frostdelta.discord.bot.Authentication;
 import ru.frostdelta.discord.bot.BotCommand;
 import ru.frostdelta.discord.fake.FakePlayerPermissionManager;
 import ru.looprich.discordlogger.event.ErrorLogger;
@@ -29,6 +30,7 @@ public class DiscordLogger extends JavaPlugin {
     private Network network;
     public Map<String, Authentication> authentication = new HashMap<>();
     private EventListener eventHandler;
+    private ErrorLogger errorLogger;
 
     @Override
     public void onEnable() {
@@ -137,11 +139,15 @@ public class DiscordLogger extends JavaPlugin {
         Appender terminalAppender = conf.getAppenders().get("TerminalConsole");
         Logger rootLogger = ((Logger) LogManager.getRootLogger());
 
-        ErrorLogger errorLogger = new ErrorLogger(terminalAppender);
+        errorLogger = new ErrorLogger(terminalAppender);
         errorLogger.start();
 
         rootLogger.addAppender(errorLogger);
+    }
 
+    private void unRegErrorLogger() {
+        Logger rootLogger = ((Logger) LogManager.getRootLogger());
+        rootLogger.removeAppender(errorLogger);
     }
 
 
@@ -150,6 +156,7 @@ public class DiscordLogger extends JavaPlugin {
         getLogger().info(String.format("[%s] Disabled Version %s", getDescription().getName(), getDescription().getVersion()));
         if (DiscordBot.isEnabled()) {
             DiscordBot.sendImportantMessage("Я выключился!");
+            unRegErrorLogger();
             DiscordBot.shutdown();
         }
         network.close();
