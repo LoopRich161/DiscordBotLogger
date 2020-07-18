@@ -14,7 +14,6 @@ public class Authentication {
     private final User user;
     private Player player;
     private final String playerName;
-    private boolean canSendPrivateMsg = false;
     private final StringBuilder code = new StringBuilder();
     private final String[] allLetter = {"Q", "W", "E", "R", "T", "Y", "U", "I", "O", "P", "A", "S", "D", "F", "G", "H", "J",
             "K", "L", "Z", "X", "C", "V", "B", "N", "M", "1", "2", "3", "4", "5", "6", "7", "8", "9", "0"};
@@ -27,10 +26,6 @@ public class Authentication {
 
     public void auth() {
         if (!searchPlayer() || !searchUser()) return;
-        if (!canSendPrivateMsg) {
-            DiscordBot.sendVerifyMessage(user.getAsTag() + " откройте личные сообщения!");
-            return;
-        }
         sendingCode();
         DiscordLogger.getInstance().getNetwork().needAuthentication(player, user, code.toString());
         DiscordLogger.getInstance().authentication.put(playerName, this);
@@ -87,7 +82,6 @@ public class Authentication {
         if (DiscordBot.sendMessageUser(user, "Код подтверждения: " + code.toString() + "\n" +
                 "Введите на сервере: /auth accept <code> - для завершения аутентификации.\n" +
                 "Введите на сервере: /auth reject - для отказа в завершении аутентификации")) {
-            canSendPrivateMsg = true;
         }
     }
 

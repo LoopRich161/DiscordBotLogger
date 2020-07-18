@@ -168,7 +168,12 @@ public class DiscordBot {
 
     public static boolean sendMessageUser(User user, String msg) {
         try {
-            user.openPrivateChannel().complete().sendMessage(msg).complete();
+//            user.openPrivateChannel().complete().sendMessage(msg).complete();
+//            user.openPrivateChannel().complete().sendMessage(msg).queue();
+            user.openPrivateChannel().queue((channel) ->
+            {
+                channel.sendMessage(msg).queue();
+            });
             return true;
         } catch (ErrorResponseException e) {
             loggerChannel.sendMessage(user.getAsMention() + " откройте личные сообщения!").queue();

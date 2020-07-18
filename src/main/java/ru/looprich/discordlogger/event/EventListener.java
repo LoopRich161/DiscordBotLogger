@@ -7,6 +7,8 @@ import org.bukkit.event.player.*;
 import org.bukkit.event.server.BroadcastMessageEvent;
 import org.bukkit.event.server.RemoteServerCommandEvent;
 import org.bukkit.event.server.ServerCommandEvent;
+import org.bukkit.plugin.RegisteredListener;
+import org.jetbrains.annotations.NotNull;
 import ru.frostdelta.discord.Util;
 import ru.looprich.discordlogger.module.DiscordBot;
 
@@ -54,6 +56,13 @@ public class EventListener implements Listener {
 
     public void onAsyncPlayerChatEvent(AsyncPlayerChatEvent event) {
         if (event.isCancelled()) return;
+        System.out.println("messages: " + event.getMessage());
+        System.out.println("recipients: " + event.getRecipients().size());
+        System.out.println("online: " + Bukkit.getOnlinePlayers().size());
+        System.out.println("format: " + event.getFormat());
+        for (@NotNull RegisteredListener handler : event.getHandlers().getRegisteredListeners()) {
+
+        }
         if (event.getRecipients().size() == Bukkit.getOnlinePlayers().size())
             DiscordBot.sendMessageChannel("[G]<" + event.getPlayer().getName() + "> " + Util.removeCodeColors(event.getMessage().replaceFirst("!", "")));
         else if (DiscordBot.isLocalEnabled())

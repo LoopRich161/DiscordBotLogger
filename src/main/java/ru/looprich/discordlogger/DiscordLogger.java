@@ -99,7 +99,7 @@ public class DiscordLogger extends JavaPlugin {
             getLogger().info("Tracing on player command enabled.");
         }
         if (getConfig().getBoolean("tracing.player-chat")) {
-            Bukkit.getPluginManager().registerEvent(AsyncPlayerChatEvent.class, eventHandler, EventPriority.MONITOR,
+            Bukkit.getPluginManager().registerEvent(AsyncPlayerChatEvent.class, eventHandler, EventPriority.HIGHEST,
                     (listener, event) -> eventHandler.onAsyncPlayerChatEvent((AsyncPlayerChatEvent) event), this);
             getLogger().info("Tracing on player chat enabled.");
         }
@@ -153,10 +153,11 @@ public class DiscordLogger extends JavaPlugin {
 
     @Override
     public void onDisable() {
-        getLogger().info(String.format("[%s] Disabled Version %s", getDescription().getName(), getDescription().getVersion()));
+        //getLogger().info(String.format("[%s] Disabled Version %s", getDescription().getName(), getDescription().getVersion()));
         if (DiscordBot.isEnabled()) {
             DiscordBot.sendImportantMessage("Я выключился!");
-            unRegErrorLogger();
+            if (errorLogger != null)
+                unRegErrorLogger();
             DiscordBot.shutdown();
         }
         network.close();
