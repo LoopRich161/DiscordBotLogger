@@ -74,6 +74,8 @@ public class BotCommandAdapter extends ListenerAdapter {
                 String cmd = Util.buildCommand(Arrays.copyOfRange(args, 1, args.length));
                 new SyncTasks(new FakePlayerCommandSender(playerName), cmd, Task.DISPATCH).runTask(DiscordLogger.getInstance());
                 DiscordLogger.getInstance().getLogger().info("<" + event.getAuthor().getAsTag() + "> issued discord command: " + DiscordBot.prefix + "dispatch " + cmd);
+            } else {
+                DiscordBot.sendServerResponse("У вас не достаточно прав!");
             }
         }
 
@@ -97,7 +99,10 @@ public class BotCommandAdapter extends ListenerAdapter {
                 DiscordBot.sendServerResponse("Вы указали не верный тип даты \n " + DiscordBot.prefix + "logs <date> - *получить логи сервера (Если указать latest, то вышлется latest.log; Дата в формате yyyy-mm-dd)*");
                 return;
             }
-            //todo проверка на тех.админа из конфига
+            if (!DiscordBot.getTechAdmin().getId().equalsIgnoreCase(event.getAuthor().getId())) {
+                DiscordBot.sendServerResponse("У вас не достаточно прав!");
+                return;
+            }
             LogsManager.getLogFile(args[1]);
             DiscordLogger.getInstance().getLogger().info("<" + event.getAuthor().getAsTag() + "> issued discord command: " + DiscordBot.prefix + "logs " + args[1]);
         }
