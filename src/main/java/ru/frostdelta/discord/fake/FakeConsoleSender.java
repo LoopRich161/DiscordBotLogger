@@ -50,7 +50,7 @@ public class FakeConsoleSender implements ConsoleCommandSender {
 
     @Override
     public boolean beginConversation(@NotNull Conversation conversation) {
-        return  Bukkit.getConsoleSender().beginConversation(conversation);
+        return Bukkit.getConsoleSender().beginConversation(conversation);
     }
 
     @Override
@@ -70,42 +70,42 @@ public class FakeConsoleSender implements ConsoleCommandSender {
 
     @Override
     public boolean isPermissionSet(@NotNull String s) {
-        return  Bukkit.getConsoleSender().isPermissionSet(s);
+        return Bukkit.getConsoleSender().isPermissionSet(s);
     }
 
     @Override
     public boolean isPermissionSet(@NotNull Permission permission) {
-        return  Bukkit.getConsoleSender().isPermissionSet(permission);
+        return Bukkit.getConsoleSender().isPermissionSet(permission);
     }
 
     @Override
     public boolean hasPermission(@NotNull String s) {
-        return  Bukkit.getConsoleSender().hasPermission(s);
+        return Bukkit.getConsoleSender().hasPermission(s);
     }
 
     @Override
     public boolean hasPermission(@NotNull Permission permission) {
-        return  Bukkit.getConsoleSender().hasPermission(permission);
+        return Bukkit.getConsoleSender().hasPermission(permission);
     }
 
     @Override
     public @NotNull PermissionAttachment addAttachment(@NotNull Plugin plugin, @NotNull String s, boolean b) {
-        return  Bukkit.getConsoleSender().addAttachment(plugin, s, b);
+        return Bukkit.getConsoleSender().addAttachment(plugin, s, b);
     }
 
     @Override
     public @NotNull PermissionAttachment addAttachment(@NotNull Plugin plugin) {
-        return  Bukkit.getConsoleSender().addAttachment(plugin);
+        return Bukkit.getConsoleSender().addAttachment(plugin);
     }
 
     @Override
     public @Nullable PermissionAttachment addAttachment(@NotNull Plugin plugin, @NotNull String s, boolean b, int i) {
-        return  Bukkit.getConsoleSender().addAttachment(plugin, s, b, i);
+        return Bukkit.getConsoleSender().addAttachment(plugin, s, b, i);
     }
 
     @Override
     public @Nullable PermissionAttachment addAttachment(@NotNull Plugin plugin, int i) {
-        return  Bukkit.getConsoleSender().addAttachment(plugin, i);
+        return Bukkit.getConsoleSender().addAttachment(plugin, i);
     }
 
     @Override
@@ -125,7 +125,7 @@ public class FakeConsoleSender implements ConsoleCommandSender {
 
     @Override
     public boolean isOp() {
-        return  Bukkit.getConsoleSender().isOp();
+        return Bukkit.getConsoleSender().isOp();
     }
 
     @Override

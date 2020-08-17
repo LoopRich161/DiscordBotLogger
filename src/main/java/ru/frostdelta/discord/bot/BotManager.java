@@ -18,7 +18,8 @@ public class BotManager extends ListenerAdapter {
     @Override
     public void onMessageReceived(MessageReceivedEvent event) {
 
-        if (!event.getChannelType().equals(ChannelType.TEXT)||!event.getTextChannel().getId().equalsIgnoreCase(DiscordBot.channel)) return;
+        if (!event.getChannelType().equals(ChannelType.TEXT) || !event.getTextChannel().getId().equalsIgnoreCase(DiscordBot.channel))
+            return;
         String[] args = event.getMessage().getContentRaw().split(" ");
         if (args.length == 0) {
             return;
@@ -36,7 +37,7 @@ public class BotManager extends ListenerAdapter {
                     prefix + "auth <nickname> - *привязать Discord к Minecraft аккаунту. Необходимо открыть личные сообщения от участников сервера!*\n" +
                     prefix + "command <command> - *выполнить команду на Minecraft сервере от своего имени*\n" +
                     prefix + "dispatch <command> - *выполнить команду на Minecraft сервере от имени консоли*\n" +
-                    prefix + "chat <message> - *написать сообщение в чат Minecraft*\n" +
+                    prefix + "chat <message> - *написать сообщение в чат Minecraft (не работает)*\n" +
                     prefix + "logs <date> - *получить логи сервера (Если указать latest, то вышлется latest.log; Дата в формате yyyy-mm-dd)*\n" +
                     prefix + "bot developers - *информация о разработчиках.*\n" +
                     prefix + "bot online - *просмотреть кто находится на сервере.*\n" +
@@ -58,7 +59,7 @@ public class BotManager extends ListenerAdapter {
             }
             Authentication authentication = new Authentication(event.getAuthor(), playerName);
             authentication.auth();
-            DiscordLogger.getInstance().getLogger().info("<" + who + "> issued discord command: "+DiscordBot.prefix + "auth");
+            DiscordLogger.getInstance().getLogger().info("<" + who + "> issued discord command: " + DiscordBot.prefix + "auth");
             return;
         }
 
@@ -71,11 +72,11 @@ public class BotManager extends ListenerAdapter {
                 case "reload":
                     DiscordLogger.getInstance().reloadConfig();
                     DiscordBot.sendImportantMessage("Я перезагрузил конфиг! (" + who + ")");
-                    DiscordLogger.getInstance().getLogger().info("<" + who + "> issued discord command: "+DiscordBot.prefix + "bot reload");
+                    DiscordLogger.getInstance().getLogger().info("<" + who + "> issued discord command: " + DiscordBot.prefix + "bot reload");
                     break;
                 case "disable":
                     DiscordBot.sendImportantMessage("Я выключился!");
-                    DiscordLogger.getInstance().getLogger().info("<" + who + "> issued discord command: "+DiscordBot.prefix + "bot disable");
+                    DiscordLogger.getInstance().getLogger().info("<" + who + "> issued discord command: " + DiscordBot.prefix + "bot disable");
                     DiscordBot.shutdown();
                     break;
                 case "restart":
@@ -85,7 +86,7 @@ public class BotManager extends ListenerAdapter {
                     }
                     DiscordLogger.getInstance().loadDiscordBot();
 
-                    DiscordLogger.getInstance().getLogger().info("<" + who + "> issued discord command: "+DiscordBot.prefix + "bot restart");
+                    DiscordLogger.getInstance().getLogger().info("<" + who + "> issued discord command: " + DiscordBot.prefix + "bot restart");
                     DiscordBot.sendImportantMessage("Я перезагрузился! (" + who + ")");
                     break;
                 case "developers":
@@ -118,7 +119,7 @@ public class BotManager extends ListenerAdapter {
                         DiscordBot.sendImportantMessage("Локальный чат включен! (" + who + ")");
                         DiscordLogger.getInstance().getConfig().set("local-chat", true);
                     }
-                    DiscordLogger.getInstance().getLogger().info("<" + who + "> issued discord command: "+DiscordBot.prefix + "bot toggle");
+                    DiscordLogger.getInstance().getLogger().info("<" + who + "> issued discord command: " + DiscordBot.prefix + "bot toggle");
                     break;
                 case "version":
                     event.getChannel().sendMessage("Версия бота: v" + DiscordLogger.getInstance().getDescription().getVersion()).queue();

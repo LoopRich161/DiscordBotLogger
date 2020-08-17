@@ -23,12 +23,12 @@ public class HasteManager {
         connection.setDoInput(true);
         connection.setDoOutput(true);
         connection.setUseCaches(false);
-        connection.setRequestMethod( "POST" );
+        connection.setRequestMethod("POST");
         connection.setRequestProperty("User-Agent", "Mozilla/5.0");
-        connection.setRequestProperty( "Charset", "UTF-8" );
-        connection.setRequestProperty( "Content-Type", "text/plain" );
+        connection.setRequestProperty("Charset", "UTF-8");
+        connection.setRequestProperty("Content-Type", "text/plain");
         connection.connect();
-        try (DataOutputStream dos = new DataOutputStream(connection.getOutputStream())){
+        try (DataOutputStream dos = new DataOutputStream(connection.getOutputStream())) {
             dos.write(string.getBytes(StandardCharsets.UTF_8));
             dos.flush();
         }
@@ -44,14 +44,14 @@ public class HasteManager {
         connection.setDoInput(true);
         connection.setDoOutput(true);
         connection.setUseCaches(false);
-        connection.setRequestMethod( "POST" );
+        connection.setRequestMethod("POST");
         connection.setRequestProperty("User-Agent", "Mozilla/5.0");
-        connection.setRequestProperty( "Charset", "UTF-8" );
-        connection.setRequestProperty( "Content-Type", "text/plain" );
+        connection.setRequestProperty("Charset", "UTF-8");
+        connection.setRequestProperty("Content-Type", "text/plain");
         connection.connect();
-        try (DataOutputStream dos = new DataOutputStream(connection.getOutputStream())){
+        try (DataOutputStream dos = new DataOutputStream(connection.getOutputStream())) {
 
-            for(String in : input) {
+            for (String in : input) {
                 in += "\n";
                 dos.write(in.getBytes(StandardCharsets.UTF_8));
             }
@@ -64,13 +64,12 @@ public class HasteManager {
     @NotNull
     private static String getLink(Gson gson, HttpURLConnection connection) throws IOException {
         String result;
-        try (BufferedReader br = new BufferedReader(new InputStreamReader(connection.getInputStream(), StandardCharsets.UTF_8)))
-        {
+        try (BufferedReader br = new BufferedReader(new InputStreamReader(connection.getInputStream(), StandardCharsets.UTF_8))) {
             result = br.lines().collect(Collectors.joining());
         }
         connection.disconnect();
 
-        return "https://hastebin.com/" +  gson.fromJson(result, JsonObject.class).get("key").getAsString();
+        return "https://hastebin.com/" + gson.fromJson(result, JsonObject.class).get("key").getAsString();
     }
 
 }

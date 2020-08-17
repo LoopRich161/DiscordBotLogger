@@ -1535,7 +1535,7 @@ public class FakePlayer extends FakePlayerCommandSender implements Player {
     public Location getLocation() {
         if (player != null)
             return player.getLocation();
-        else return Util.getLocationOfflinePlayer(getUniqueId());
+        else return new Location(Bukkit.getWorlds().get(0), 1, 2, 3);
     }
 
     @Override
