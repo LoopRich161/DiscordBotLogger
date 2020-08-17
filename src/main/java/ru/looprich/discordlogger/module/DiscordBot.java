@@ -1,10 +1,8 @@
 package ru.looprich.discordlogger.module;
 
-import net.dv8tion.jda.api.EmbedBuilder;
-import net.dv8tion.jda.api.JDA;
-import net.dv8tion.jda.api.JDABuilder;
-import net.dv8tion.jda.api.OnlineStatus;
+import net.dv8tion.jda.api.*;
 import net.dv8tion.jda.api.entities.Activity;
+import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.exceptions.ErrorResponseException;
@@ -48,7 +46,7 @@ public class DiscordBot {
         channel = null;
         loggerChannel = null;
         enable = false;
-        serverName=null;
+        serverName = null;
         DiscordLogger.getInstance().discordBot = null;
         jda.shutdown();
     }
@@ -56,7 +54,9 @@ public class DiscordBot {
     public static void sendMessageChannel(String message) {
         if (!isEnabled()) return;
         String msg = Util.cancelFormatMessage(message);
-        loggerChannel.sendMessage(getDate() + msg).queue();
+        MessageBuilder builder = new MessageBuilder(getDate() + msg);
+        builder.stripMentions(getJDA(), Message.MentionType.values());
+        loggerChannel.sendMessage(builder.build()).queue();
     }
 
     public static void sendServerResponse(List<String> msgs) {
@@ -168,8 +168,6 @@ public class DiscordBot {
 
     public static boolean sendMessageUser(User user, String msg) {
         try {
-//            user.openPrivateChannel().complete().sendMessage(msg).complete();
-//            user.openPrivateChannel().complete().sendMessage(msg).queue();
             user.openPrivateChannel().queue((channel) ->
             {
                 channel.sendMessage(msg).queue();
