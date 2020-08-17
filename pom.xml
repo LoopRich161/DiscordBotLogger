@@ -6,7 +6,7 @@
 
     <groupId>ru.looprich.discordlogger</groupId>
     <artifactId>DiscordBotLogger</artifactId>
-    <version>3.7</version>
+    <version>3.9</version>
 
     <scm>
         <connection>scm:git:https://github.com/LoopRich161/DiscordBotLogger.git</connection>
