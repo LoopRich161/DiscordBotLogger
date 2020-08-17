@@ -153,7 +153,6 @@ public class DiscordLogger extends JavaPlugin {
 
     @Override
     public void onDisable() {
-        //getLogger().info(String.format("[%s] Disabled Version %s", getDescription().getName(), getDescription().getVersion()));
         if (DiscordBot.isEnabled()) {
             DiscordBot.sendImportantMessage("Я выключился!");
             if (errorLogger != null)
