@@ -99,12 +99,12 @@ public class BotCommand implements CommandExecutor {
                     if (DiscordBot.isEnabled())
                         DiscordBot.getJDA().shutdownNow();
                     DiscordLogger.getInstance().loadDiscordBot();
-                    sender.sendMessage(ChatColor.GREEN+"Бот успешно перезагружен!");
+                    sender.sendMessage(ChatColor.GREEN + "Бот успешно перезагружен!");
                     DiscordBot.sendImportantMessage("Я перезагрузился! (" + who + ")");
                     break;
                 case "developers":
-                    sender.sendMessage(ChatColor.GOLD+"LoopRich161 - создатель плагина.\n" +
-                            "                 FrostDelta123 - человек-идея, а так же фиксящий ошибки и исправляющий костыли.");
+                    sender.sendMessage(ChatColor.GOLD + "LoopRich161 - создатель плагина.\n" +
+                            "                 FrostDelta123 - человек-идея.");
                     break;
                 default:
                     sender.sendMessage(ChatColor.RED + "Доступные команды: " + ChatColor.GOLD + "/bot <help/enable/disable/restart>");
