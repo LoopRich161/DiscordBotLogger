@@ -218,12 +218,8 @@ public class FakePlayer extends FakePlayerCommandSender implements Player {
     public void chat(@NotNull String msg) {
         if (isOnline()) {
             player.chat(msg);
-        } else new Thread() {
-            @Override
-            public void run() {
-                Bukkit.getPluginManager().callEvent(new AsyncPlayerChatEvent(true, thisFakePlayer, msg, getOnlinePlayerSet(msg)));
-            }
-        }.start();
+        } else
+            DiscordLogger.getInstance().getServer().getScheduler().runTaskAsynchronously(DiscordLogger.getInstance(), () -> pluginManager.callEvent(new AsyncPlayerChatEvent(true, thisFakePlayer, msg, getOnlinePlayerSet(msg))));
     }
 
     private Set<Player> getOnlinePlayerSet(@NotNull String msg) {
@@ -233,7 +229,7 @@ public class FakePlayer extends FakePlayerCommandSender implements Player {
             Set<Player> playerSet = new HashSet<>();
             double maxDist = DiscordLogger.getInstance().getConfig().getDouble("local-chat-radius");
             for (Player other : Bukkit.getOnlinePlayers()) {
-                if (other.getLocation().distance(this.getLocation()) <= maxDist) {
+                if (other.getLocation().getWorld().getUID().equals(this.getWorld().getUID()) && other.getLocation().distance(this.getLocation()) <= maxDist) {
                     playerSet.add(other);
                 }
             }
@@ -1535,12 +1531,14 @@ public class FakePlayer extends FakePlayerCommandSender implements Player {
     public Location getLocation() {
         if (player != null)
             return player.getLocation();
-        else return new Location(Bukkit.getWorlds().get(0), 1, 2, 3);
+        else return new Location(Bukkit.getWorlds().get(0), 1, 2, 3); //TODO ДОДЕЛАТЬ (ПАРСИТЬ ИНФУ ИЗ uuid.dat ? )
     }
 
     @Override
     public Location getLocation(Location loc) {
-        return null;
+        if (player != null)
+            return player.getLocation();
+        else return new Location(Bukkit.getWorlds().get(0), 1, 2, 3); //TODO ДОДЕЛАТЬ (ПАРСИТЬ ИНФУ ИЗ uuid.dat ? )
     }
 
     @Override
@@ -1583,7 +1581,7 @@ public class FakePlayer extends FakePlayerCommandSender implements Player {
 
     @Override
     public World getWorld() {
-        return null;
+        return getLocation().getWorld();
     }
 
     /**
@@ -1623,7 +1621,7 @@ public class FakePlayer extends FakePlayerCommandSender implements Player {
 
     @Override
     public List<Entity> getNearbyEntities(double x, double y, double z) {
-        return null;
+        return new ArrayList<Entity>(getOnlinePlayerSet(""));
     }
 
     @Override
@@ -1658,7 +1656,7 @@ public class FakePlayer extends FakePlayerCommandSender implements Player {
 
     @Override
     public boolean isValid() {
-        return false;
+        return true;
     }
 
     @Override
@@ -1796,7 +1794,7 @@ public class FakePlayer extends FakePlayerCommandSender implements Player {
 
     @Override
     public EntityType getType() {
-        return null;
+        return EntityType.PLAYER;
     }
 
     @Override
@@ -1909,12 +1907,12 @@ public class FakePlayer extends FakePlayerCommandSender implements Player {
      */
     @Override
     public @NotNull BlockFace getFacing() {
-        return null;
+        return BlockFace.NORTH_EAST;
     }
 
     @Override
     public @NotNull Pose getPose() {
-        return null;
+        return Pose.STANDING;
     }
 
     @Override
@@ -2011,7 +2009,8 @@ public class FakePlayer extends FakePlayerCommandSender implements Player {
     public Set<PermissionAttachmentInfo> getEffectivePermissions() {
         if (isOnline()) {
             return player.getEffectivePermissions();
-        } else return null;
+        } else return new HashSet<PermissionAttachmentInfo>(); //TODO ДОДЕЛАТЬ
+
     }
 
     @Override
