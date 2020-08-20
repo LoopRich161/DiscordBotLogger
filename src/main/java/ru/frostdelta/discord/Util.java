@@ -50,6 +50,14 @@ public class Util {
         return MarkdownSanitizer.escape(message);
     }
 
+    public static List<String> cancelFormatMessage(List<String> message) {
+        List<String> result = new ArrayList<>();
+        for (String msg : message) {
+            result.add(MarkdownSanitizer.escape(msg));
+        }
+        return result;
+    }
+
     public static boolean isDate(String date) {
         SimpleDateFormat formatForDateNow = new SimpleDateFormat("yyyy-MM-dd");
         try {
