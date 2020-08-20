@@ -60,9 +60,10 @@ public class DiscordBot {
     }
 
     public static void sendServerResponse(List<String> msgs) {
+        List<String> messages = Util.cancelFormatMessage(msgs);
         EmbedBuilder message = new EmbedBuilder();
         StringBuilder formatted = new StringBuilder();
-        for (String msg : msgs) {
+        for (String msg : messages) {
             formatted.append(msg).append("\n");
         }
         message.setTitle("Ответ сервера.");
@@ -73,9 +74,10 @@ public class DiscordBot {
     }
 
     public static void sendServerResponse(String msg) {
+        String messages = Util.cancelFormatMessage(msg);
         EmbedBuilder message = new EmbedBuilder();
         message.setTitle("Ответ сервера.");
-        message.setDescription(msg);
+        message.setDescription(messages);
         message.setColor(0xffa500);
         loggerChannel.sendTyping().queue();
         loggerChannel.sendMessage(message.build()).queue();
