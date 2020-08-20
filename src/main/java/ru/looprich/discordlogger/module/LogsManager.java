@@ -30,12 +30,13 @@ public class LogsManager {
                     logFiles.add(getLogInArchive(file));
                 }
             }
-        }
+        } else logFiles.add(latestFile);
+
         if (logFiles.size() == 0 && !date.equalsIgnoreCase("latest")) {
             DiscordBot.sendServerResponse("Логов с такой датой не найдено!");
             return;
         }
-        logFiles.add(latestFile);
+        //logFiles.add(latestFile);
         DiscordBot.sendLogs(logFiles);
 
         for (File file : logFiles)
