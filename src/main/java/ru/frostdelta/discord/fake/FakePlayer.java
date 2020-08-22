@@ -33,10 +33,15 @@ import org.bukkit.util.RayTraceResult;
 import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.jnbt.CompoundTag;
+import org.jnbt.ListTag;
+import org.jnbt.NBTInputStream;
 import ru.frostdelta.discord.Util;
 import ru.looprich.discordlogger.DiscordLogger;
 import ru.looprich.discordlogger.module.DiscordBot;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.net.InetSocketAddress;
 import java.util.*;
 
@@ -218,8 +223,15 @@ public class FakePlayer extends FakePlayerCommandSender implements Player {
     public void chat(@NotNull String msg) {
         if (isOnline()) {
             player.chat(msg);
-        } else
-            DiscordLogger.getInstance().getServer().getScheduler().runTaskAsynchronously(DiscordLogger.getInstance(), () -> pluginManager.callEvent(new AsyncPlayerChatEvent(true, thisFakePlayer, msg, getOnlinePlayerSet(msg))));
+        } else {
+
+            DiscordLogger.getInstance().getServer().getScheduler().runTaskAsynchronously(DiscordLogger.getInstance(), () -> {
+                AsyncPlayerChatEvent event = new AsyncPlayerChatEvent(true, thisFakePlayer, msg, getOnlinePlayerSet(msg));
+                pluginManager.callEvent(event);
+                DiscordBot.sendMessageChannel("message: " + event.getMessage()); //test
+                DiscordBot.sendMessageChannel("format: " + event.getFormat()); //test
+            });
+        }
     }
 
     private Set<Player> getOnlinePlayerSet(@NotNull String msg) {
@@ -1527,18 +1539,54 @@ public class FakePlayer extends FakePlayerCommandSender implements Player {
 
     }
 
+    private Location offlinePlayerLocation = null;
+
     @Override
     public Location getLocation() {
-        if (player != null)
+        if (player != null) {
             return player.getLocation();
-        else return new Location(Bukkit.getWorlds().get(0), 1, 2, 3); //TODO ДОДЕЛАТЬ (ПАРСИТЬ ИНФУ ИЗ uuid.dat ? )
+        }
+        if (offlinePlayerLocation != null) {
+            return offlinePlayerLocation;
+        } else {
+            Location location = null;
+            File playerDatFile = null;
+            for (World world : Bukkit.getServer().getWorlds()) {
+                playerDatFile = new File(world.getWorldFolder() + "/playerdata/" + getUniqueId() + ".dat");
+                if (playerDatFile.exists()) {
+                    location = new Location(world, 0, 0, 0);
+                    break;
+                }
+            }
+            try {
+                NBTInputStream NBTIStream = new NBTInputStream(new FileInputStream(playerDatFile));
+                CompoundTag rootCompoundTag = (CompoundTag) NBTIStream.readTag();
+                ListTag position = (ListTag) rootCompoundTag.getValue().get("Pos");
+                ListTag rotation = (ListTag) rootCompoundTag.getValue().get("Rotation");
+                double x = (double) position.getValue().get(0).getValue();
+                double y = (double) position.getValue().get(1).getValue();
+                double z = (double) position.getValue().get(2).getValue();
+                float yaw = (float) rotation.getValue().get(0).getValue();
+                float pitch = (float) rotation.getValue().get(1).getValue();
+                location.setX(x);
+                location.setY(y);
+                location.setZ(z);
+                location.setYaw(yaw);
+                location.setPitch(pitch);
+            } catch (Exception ex) {
+                return null;
+            }
+            //DiscordBot.sendMessageChannel("location: "+location.toString());
+            offlinePlayerLocation = location;
+            return location;
+        }
     }
 
     @Override
     public Location getLocation(Location loc) {
-        if (player != null)
+        if (player != null) {
             return player.getLocation();
-        else return new Location(Bukkit.getWorlds().get(0), 1, 2, 3); //TODO ДОДЕЛАТЬ (ПАРСИТЬ ИНФУ ИЗ uuid.dat ? )
+        } else return getLocation();
     }
 
     @Override
@@ -2009,7 +2057,7 @@ public class FakePlayer extends FakePlayerCommandSender implements Player {
     public Set<PermissionAttachmentInfo> getEffectivePermissions() {
         if (isOnline()) {
             return player.getEffectivePermissions();
-        } else return new HashSet<PermissionAttachmentInfo>(); //TODO ДОДЕЛАТЬ
+        } else return Bukkit.getConsoleSender().getEffectivePermissions(); //TODO ДОДЕЛАТЬ, ВРЕМЕННО
 
     }
 
@@ -2041,7 +2089,7 @@ public class FakePlayer extends FakePlayerCommandSender implements Player {
         if (isOnline()) {
             return player.getListeningPluginChannels();
         }
-        return null;
+        return new HashSet<>();
     }
 
     @Override
