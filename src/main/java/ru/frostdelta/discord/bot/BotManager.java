@@ -37,7 +37,7 @@ public class BotManager extends ListenerAdapter {
                     prefix + "auth <nickname> - *привязать Discord к Minecraft аккаунту. Необходимо открыть личные сообщения от участников сервера!*\n" +
                     prefix + "command <command> - *выполнить команду на Minecraft сервере от своего имени*\n" +
                     prefix + "dispatch <command> - *выполнить команду на Minecraft сервере от имени консоли*\n" +
-                    prefix + "chat <message> - *написать сообщение в чат Minecraft (не работает)*\n" +
+                    prefix + "chat <message> - *написать сообщение в чат Minecraft*\n" +
                     prefix + "logs <date> - *получить логи сервера (Если указать latest, то вышлется latest.log; Дата в формате yyyy-mm-dd)*\n" +
                     prefix + "bot developers - *информация о разработчиках.*\n" +
                     prefix + "bot online - *просмотреть кто находится на сервере.*\n" +
