@@ -66,9 +66,18 @@
             <id>spigot-repo</id>
             <url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
         </repository>
+        <repository>
+            <id>turenar</id>
+            <url>https://turenar.xyz/maven/</url>
+        </repository>
     </repositories>
 
     <dependencies>
+        <dependency>
+            <groupId>org.jnbt</groupId>
+            <version>1.4</version>
+            <artifactId>jnbt</artifactId>
+        </dependency>
         <dependency>
             <groupId>org.apache.logging.log4j</groupId>
             <artifactId>log4j-core</artifactId>
