@@ -30,7 +30,7 @@ public class DiscordBot {
     private static boolean isWhitelistEnabled;
     private static String serverName;
     public static boolean errorLoggingEnabled;
-    private static String techAdminDiscordId;
+    public static String techAdminDiscordId;
     private static User techAdmin = null;
 
     public DiscordBot(String tokenBot, String channel) {
