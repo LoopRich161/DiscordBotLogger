@@ -14,7 +14,6 @@ import org.bukkit.conversations.ConversationAbandonedEvent;
 import org.bukkit.entity.*;
 import org.bukkit.entity.memory.MemoryKey;
 import org.bukkit.event.entity.EntityDamageEvent;
-import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.inventory.*;
 import org.bukkit.map.MapView;
@@ -224,13 +223,9 @@ public class FakePlayer extends FakePlayerCommandSender implements Player {
         if (isOnline()) {
             player.chat(msg);
         } else {
-
-            DiscordLogger.getInstance().getServer().getScheduler().runTaskAsynchronously(DiscordLogger.getInstance(), () -> {
-                AsyncPlayerChatEvent event = new AsyncPlayerChatEvent(true, thisFakePlayer, msg, getOnlinePlayerSet(msg));
-                pluginManager.callEvent(event);
-                DiscordBot.sendMessageChannel("message: " + event.getMessage()); //test
-                DiscordBot.sendMessageChannel("format: " + event.getFormat()); //test
-            });
+            for (Player player : getOnlinePlayerSet(msg)) {
+                player.sendMessage("§8[§3Discord§8] §f" + getName() + ": " + msg.replaceFirst("!", "").replaceAll("&", "§"));
+            }
         }
     }
 
