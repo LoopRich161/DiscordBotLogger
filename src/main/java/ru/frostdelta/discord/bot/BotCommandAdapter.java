@@ -99,7 +99,7 @@ public class BotCommandAdapter extends ListenerAdapter {
                 DiscordBot.sendServerResponse("Вы указали не верный тип даты \n " + DiscordBot.prefix + "logs <date> - *получить логи сервера (Если указать latest, то вышлется latest.log; Дата в формате yyyy-mm-dd)*");
                 return;
             }
-            if (!DiscordBot.getTechAdmin().getId().equalsIgnoreCase(event.getAuthor().getId())) {
+            if (!DiscordBot.techAdminDiscordId.equalsIgnoreCase(event.getAuthor().getId())) {
                 DiscordBot.sendServerResponse("У вас не достаточно прав!");
                 return;
             }
