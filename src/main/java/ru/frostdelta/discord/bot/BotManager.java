@@ -122,10 +122,10 @@ public class BotManager extends ListenerAdapter {
                     DiscordLogger.getInstance().getLogger().info("<" + who + "> issued discord command: " + DiscordBot.prefix + "bot toggle");
                     break;
                 case "version":
-                    event.getChannel().sendMessage("Версия бота: v" + DiscordLogger.getInstance().getDescription().getVersion()).queue();
+                    DiscordBot.sendImportantMessage("Версия бота: v" + DiscordLogger.getInstance().getDescription().getVersion());
                     break;
                 default:
-                    event.getChannel().sendMessage("Доступные команды: " + DiscordBot.getPrefix() + "bot <disable/restart/developers/online/toggle>").queue();
+                    DiscordBot.sendImportantMessage("Доступные команды: " + DiscordBot.getPrefix() + "bot <disable/restart/developers/online/toggle>");
                     break;
             }
         }
