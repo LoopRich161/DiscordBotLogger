@@ -2007,7 +2007,7 @@ public class FakePlayer extends FakePlayerCommandSender implements Player {
     public boolean hasPermission(String name) {
         if (isOnline()) {
             return player.hasPermission(name);
-        } else return permission.playerHas(Bukkit.getServer().getWorlds().get(0).getName(), offlinePlayer, name);
+        } else return FakePlayerPermissionManager.getFakePlayerPermissions().playerHas(Bukkit.getServer().getWorlds().get(0).getName(), offlinePlayer, name);
     }
 
     @Override
@@ -2015,7 +2015,7 @@ public class FakePlayer extends FakePlayerCommandSender implements Player {
         if (isOnline()) {
             return player.hasPermission(perm.getName());
         } else
-            return permission.playerHas(Bukkit.getServer().getWorlds().get(0).getName(), offlinePlayer, perm.getName());
+            return FakePlayerPermissionManager.getFakePlayerPermissions().playerHas(Bukkit.getServer().getWorlds().get(0).getName(), offlinePlayer, perm.getName());
     }
 
     @Override
